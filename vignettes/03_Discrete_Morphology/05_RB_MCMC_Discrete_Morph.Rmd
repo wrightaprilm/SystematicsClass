@@ -107,8 +107,8 @@ In this section you will begin the file and write the Rev commands for loading i
 RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix to the workspace from a formatted file. This function can be used for both molecular sequences and discrete morphological characters. Import the morphological character matrix and assign it the variable `morpho`. 
 
 
-```{rb, FreshChunkRB = TRUE}
-    morpho <- readDiscreteCharacterData("data/Cinctans.nex")
+```{rb}
+    morpho <- readDiscreteCharacterData("/home/dwbapst/workspace/Systematics2020/vignettes/data/Cinctans_for_RevBayes.nex")
 ```
 
 **Create Helper Variables**
