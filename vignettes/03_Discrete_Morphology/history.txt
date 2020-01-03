@@ -1,0 +1,99 @@
+q()
+cat
+cats
+Q := fnF81(cats)
+type(cats)
+q()
+m_morph
+q()
+morph_bystate
+morpho_bystate
+morpho_bystate[1]
+morpho_bystate[1].har()
+morpho_bystate[1].char()
+morpho_bystate[1].nchar()
+morpho_bystate[2].nchar()
+morpho_bystate[3].nchar()
+q()
+morpho_bystate
+morpho_bystate[2]
+m_morph
+morpho_bystate
+q()
+n_max_states <- 7
+morpho_bystate <- morpho.setNumStatesVector()
+for (i in 2:n_max_states) {
+    i
+    # make local tmp copy of data
+    # only keep character blocks with state space equal to size i
+AbstractHomologousDiscreteCharacterData# get number of characters per character size wth i-sized states
+    nc = morpho_bystate[i].nchar()
+    # for non-empty character blocks
+    if (nc > 0) {
+        beta_scale ~ dnLognormal( 0.0, sd=2*0.587405 )
+        moves.append( mvScale(beta_scale, lambda=1, weight=5.0 ) )
+        num_cats = 2
+        cats := fnDiscretizeBeta(beta_scale, beta_scale, num_cats)
+        for (i in 1:cats.size())
+        {
+            Q[i] := fnF81(simplex(abs(1-cats[i]), cats[i]))
+        }
+        matrix_probs <- simplex( rep(1, num_cats) )
+        m_morph[idx] ~ dnPhyloCTMC( tree=phylogeny,
+                                    Q=Q,
+                                    nSites=nc,
+                                    siteRates=rates_morpho,
+                                    siteMatrices=matrix_probs,
+                                    type="Standard")
+        # attach the data
+AbstractHomologousDiscreteCharacterData    m_morph[idx].clamp(morpho_bystate[i])
+AbstractHomologousDiscreteCharacterData    m_morph
+        idx = idx + 1
+}
+idx =1
+idx <-1
+morpho_bystate <- morpho.setNumStatesVector()
+for (i in 2:n_max_states) {
+    i
+    # make local tmp copy of data
+    # only keep character blocks with state space equal to size i
+AbstractHomologousDiscreteCharacterData# get number of characters per character size wth i-sized states
+    nc = morpho_bystate[i].nchar()
+    # for non-empty character blocks
+    if (nc > 0) {
+        beta_scale ~ dnLognormal( 0.0, sd=2*0.587405 )
+        moves.append( mvScale(beta_scale, lambda=1, weight=5.0 ) )
+        num_cats = 2
+        cats := fnDiscretizeBeta(beta_scale, beta_scale, num_cats)
+        for (i in 1:cats.size())
+        {
+            Q[i] := fnF81(simplex(abs(1-cats[i]), cats[i]))
+        }
+        matrix_probs <- simplex( rep(1, num_cats) )
+        m_morph[idx] ~ dnPhyloCTMC( tree=phylogeny,
+                                    Q=Q,
+                                    nSites=nc,
+                                    siteRates=rates_morpho,
+                                    siteMatrices=matrix_probs,
+                                    type="Standard")
+        # attach the data
+AbstractHomologousDiscreteCharacterData    m_morph[idx].clamp(morpho_bystate[i])
+AbstractHomologousDiscreteCharacterData    m_morph
+        idx = idx + 1
+q()
+()
+mymodel
+m_morph
+q()
+m_morph
+q()
+m_morph
+morph_bystate
+morpho_bystate
+q()
+Q()
+q()
+m_morph
+q()
+m_morph
+q()

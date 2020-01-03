@@ -1,0 +1,5 @@
+getwd()
+setwd("/home/april/Documents/Courses/Systematics2020/vignettes/")
+getwd()
+setwd("01_tutorial_structure/")
+q()
