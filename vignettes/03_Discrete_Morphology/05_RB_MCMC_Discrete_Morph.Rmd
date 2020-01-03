@@ -87,14 +87,14 @@ It is important to be aware that some PDF viewers may render some characters giv
 
 **Data and Files**
 
->On your own computer, there should be a directory called **PaleoSoc_phylo_short_course_2019**. The data for this tutorial are in the subdirectory **data**
+>On your own computer, there should be a directory called **Systematics2020**. The data for this tutorial are in the subdirectory **Systematics2020/vignettes/data**
 >This directory should contain: [`Cinctans_for_RevBayes.nex`](data/Cinctans_for_RevBayes.nex).
 
 **Getting Started**
 
->Create a new directory (in `PaleoSoc_phylo_short_course_2019`) called **scripts**.
+>Create a new directory (in `Systematics2020`) called **scripts**.
 
-When you execute RevBayes in this exercise, you will do so within the main directory  (`PaleoSoc_phylo_short_course_2019`), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the  working directory to, for example, **PaleoSoc_phylo_short_course_2019** if this is the directory you stored the scripts and data in.
+When you execute RevBayes in this exercise, you will do so within the main directory  (`Systematics2020`), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the  working directory to, for example, **Systematics2020** if this is the directory you stored the scripts and data in.
 
 **Creating Rev Files**
 
@@ -107,8 +107,8 @@ In this section you will begin the file and write the Rev commands for loading i
 RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix to the workspace from a formatted file. This function can be used for both molecular sequences and discrete morphological characters. Import the morphological character matrix and assign it the variable `morpho`. 
 
 
-```{rb, FreshChunkRB = TRUE}
-    morpho <- readDiscreteCharacterData("data/Cinctans.nex")
+```{rb}
+    morpho <- readDiscreteCharacterData("/home/dwbapst/workspace/Systematics2020/vignettes/data/Cinctans_for_RevBayes.nex")
 ```
 
 **Create Helper Variables**
@@ -401,7 +401,6 @@ discretized beta distribution for allowing variable state frequencies.
 >`mcmc_mk_dicretized.Rev`. This new script will
 >contain the new model parameters and models.
 
-
 We will use a discretized beta distribution to place a prior on the state frequencies. 
 The beta distribution has two parameters, $\alpha$ and $\beta$. These two
 parameters specify the shape of the distribution. State frequencies will
@@ -410,6 +409,7 @@ variation is evaluated according to the gamma distribution. The
 discretized distribution is split into multiple classes, each with it's
 own set of frequencies for the 0 and 1 characters. The number of classes
 can vary; we have chosen 4 for tractability. Note that we need to make sure that this discretization results in a symmetric model, therefore we will use only one parameter for the beta distribution: `beta_scale` such that $\alpha = \beta$.
+
 ```{rb, eval = F}
 num_cats = 4
 beta_scale ~ dnLognormal( 0.0, sd=2*0.587405 )
