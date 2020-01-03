@@ -83,13 +83,12 @@ Next, we will launch RevBayes in RStudio. Start a new executeable chunk by typin
 getwd()
 ```
 
-Now, enter the path to your tutorial in the bewlo parenthses:
+Now, enter the path to your tutorial in the below parentheses:
 
 ```{rb}
-setwd("~/Documents/Courses/Systematics2020/vignettes/01_tutorial_structure/")
+setwd("~/workspace/Systematics2020/vignettes/01_tutorial_structure/")
 
-```
- source("scripts/test.Rev")
+source("scripts/test.Rev")
 ```
 
 If everything has suceeded, you will see the following output:
