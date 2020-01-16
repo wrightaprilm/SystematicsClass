@@ -1,0 +1,8 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Rbuildignore
+.Rproj.user/shared/notebooks/patch-chunk-names
+.Rproj.user/shared/notebooks/paths
+.gitignore
