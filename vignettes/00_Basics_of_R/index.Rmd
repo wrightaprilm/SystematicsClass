@@ -189,20 +189,14 @@ Now we will use this function to load some data into R, via the Pandas library:
 ant_data <-  read.csv('data/Ants.csv')
 ```
 
-**Note for Pat and Andre: If you do this in your own workspaces, you'll need to do:**
-```UNIX
-ant_data = pd.read_csv('../Data/Ants.csv')
-```
 
-To view the data, type:
-
-```R
+```{R}
 ant_data
 ```
 
 What we see is the data. We are able to call up the data to view because the data have been
 saved to a variable, ant\_data, which was stored in memory as a dataframe when we called
-pd.read\_csv.
+read_csv.
 
 > ### Challenge:
 > Try this command again without saving it to a variable.
@@ -215,19 +209,19 @@ Let's take a closer look at the ant\_data object. On the face of it, it looks ve
 our Excel file. Now, we'll explore how to access data in this dataframe. Let's start by getting
 a look at all the names in the file. There are a couple ways we can do this:
 
-  ```R
-ant_data[[0]]
+```{R}
+ant_data$specimen
 ```
 
 or
 
-```R
-ant_data.specimen
+```{r}
+ant_data[[1]]
 ```
 
 In our first block of code, we call the dataframe object and use what is called indexing
 to get the first column. Now, you may be thinking, what is going on with the notation? The
-brackets indicate that we will be accessing a column. R counts from zero. This may be
+brackets indicate that we will be accessing a column.  This may be
 somewhat surprising - that the language doesn't start with one. It's actually quite natural-
   you weren't born at one year old, were you? But it still takes a little to get used to -
 programmers often verbally say the first item, but they mean the zeroeth item.
@@ -244,41 +238,20 @@ way to access the data. We gave attributes of the data names, why not use them?
 
 We can also select multiple columns at once using our column names.
 
-```R
-ant_data[['specimen', 'tribe']]
+```{r}
+library(tidyverse)
+ant_data %>% 
+  select(specimen, tribe)
 ```
 
-> ### Challenge
-> Try to access these same columns using their numerical index of columns. When you have an answer, highlight below to check it against my answer.
-> Remember, R indexes values from zero, not one!
 
->! ant_data[[0,3]]
+Selecting rows of data is also possible. The below code grab all rows in the fifth and sixth columns of the dataframe:
 
-Selecting rows of data is also possible. The below code grab all columns in the fifth row of the dataframe:
-
-```R
+```{r}
 ant_data[5:6]
 ```
 
 This introduces a couple of interesting concepts. The first is using inclusive and exclusive indexing. This is an example of the 5 being inclusive - we will get the fifth row of data. The six is exclusive - we will stop accessing data at the 6th row.
-
-You might notice that we are not using the specimen names as we access data. That is because, by default, Pandas assigns an index to the dataframe. We can alter this default behavior:
-
-```R
-ant_data = pd.read_csv('data/Ants.csv', index_col=0)
-```
-
-This behavior sets the index to be the zeroeth column in the dataframe, the specimen column. We can now use the names of our specimens to index:
-
-```R
-ant_data['Casaleia_eocenica':'Casaleia_eocenica']
-```
-
-When we accession this way, the indexing is no longer inclusive. This will return the same taxon is before. In the next chapter, we will look at more efficient ways of performing this selection and slicing.
-
-> ### Challenge
-
-> Try assigning a subset of columns to an object. Are the objects you assign what you expect, in terms of the number of rows and columns you select? Inclusive vs. exlcusive indexing can be challenging.
 
 ## Recap: Our Three Goals
 
@@ -292,65 +265,48 @@ In this chapter, we have discussed *data storage* using flat files, which can be
 
 When would we not want to use lists of columns and rows to select data out of a dataframe? When we have a lot of data, which is rapidly becoming the norm in biology. In order to process data at a large scale, we need better tools to allow us to do complex data filtering, selection and manipulation. By using R, we automatically create a log of all the operations we perform as we access our data. By the end of this chapter, you will understand:
 
-1. *Concept:* How the Pandas library operates to access data in a dataframe.
+1. *Concept:* How the R operates to access data in a dataframe.
 2. *Concept:* How accessing data programmatically leads to reproducible research by preserving a log of your work.
 3. *Hands-On:* Commands for using Pandas to perform common spreadsheet sorting and viewing functions.
 
 ## Data Accession
 
-We will now discuss using what is called 'slicing' to access swaths of data in our dataframe. To do this, we will introduce two new functions, loc and iloc. loc allows for data to be accessed via either the number of the column or row, or the name of the column or row. iloc allows for data to be accessed via the column or row number only.
+We often have an idea of the data we'd like to access. Perhaps we are interested to know what data we have for a specific genus, Oecophylla.
 
-As an example, let's try to access our same row the previous chapter:
+```{r}
+ant_data %>% 
+  filter(genus == "Oecophylla")
 
-  ```R
-ant_data.iloc[5:6]
-ant_data.loc['Casaleia_eocenica']
 ```
 
-These outputs have the same information, but they look rather different. Try assigning each output to a variable. Now, we will call the type function on each variable. For example, if I called my variables casa_iloc and casa_loc, I would type:
+These outputs have the same information, but they look rather different. Try assigning each output to a variable. Now, we will call the type function on each variable. 
 
-  ```R
-type(casa_iloc)
-type(casa_loc)
+```{r}
+typeof(ant_data)
+typeof(oeco)
 ```
 
-Type is a function that is built in to R. It allows us to know what sorts of objects our variables are, which in turn tells us about their properties. You will note that the output for the iloc function is a dataframe, with which we are familiar. The output of the loc function is a series, which we have not seen before.
+Type is a function that is built in to R. It allows us to know what sorts of objects our variables are, which in turn tells us about their properties. 
 
-A series is a Pandas object type. It is a one-dimensional array (i.e. not a matrix). In some ways, if a dataframe is like a spreadsheet, a series is like a single row of column in that sheet. More information on the series data type can be found by typing
+A list is an R object type. It is a one-dimensional array (i.e. not a matrix). In some ways, if a dataframe is like a spreadsheet, a series is like a single row of column in that sheet. More information on the series data type can be found by typing
 
-```R
-?c_e
+```{R}
+?list
+
 ```
 
 in your notebook.
 
-If you type
 
-```R
-c_e.
+Using these complex indexers, we can begin to make multiple selections of data. For example, this syntax will select all the examples of Formica that are at least 30 million years old.
+
+```{r}
+ant_data %>% 
+  filter(genus == "Formica") %>% 
+  filter(min_ma > 30)
+
 ```
 
-followed by a tab in your iR notebook, you will see a list of functions available to operate on series.
-
-> ### Challenge
-
-  > Try some of the functions available to the series and dataframe objects. When do you think it might be prefereable to use loc vs. iloc?
-
-  Using these complex indexers, we can begin to make multiple selections of data. For example, this syntax will select all values of the subfamily column:
-
-  ```R
-ant_data.loc[:, 'subfamily']
-```
-
-What happens if you plug in numbers on either side of the colon to get a selection of columns? Try it!
-
-  Pandas doesn't love mixed type indexing. But if you try:
-
-```R
-ant_data.loc[['Casaleia_eocenica','Myopopone_sinensis'], 'subfamily']
-```
-
-thereby passing in a list of rows that we're interested in getting info from, you can index the data this way.
 
 > ### Challenge
 
@@ -360,32 +316,35 @@ thereby passing in a list of rows that we're interested in getting info from, yo
 
 Something we might want to do is know which of our ants are at least as old as the KPg event, the end of the Cretaceous. Ants are thought to have arisen during the Cretaceous. We can do this easily and assign our sample of old ants to a new dataframe:
 
-  ```R
-old_ants  = ant_data[ant_data.min_ma > 65.5]
+```{r}
+old_ants  <- ant_data %>% 
+  select(specimen, min_ma, max_ma) %>% 
+  filter(min_ma > 65)
 ```
 The way this works is that we select all the values in the dataframe column min_ma that are larger than 65.5. By default, this will take the whole row. Then, we assign that to a new dataframe. We can write this dataframe to a csv file for storeage like so:
 
-  ```R
-pd.to_csv("output/filter_old.csv")
+```{r}
+write_csv(old_ants, "ants_old.csv")
 ```
 
 > ###Challenge
 
-  > - The syntax is a little weird. Can you explain why we have dataframe typed in twice?
   > - Try this again - how could we filter for ants that only existed after the end of the Creatceous? Can we use the same column?
   > - When you open the parentheses on a function argument and press tab, you can see all the *arguments*, or special options, available to that function. Try a couple, such as delimiters. Once you've chosen an argument, Shift+Tab will show you possible values for the argument.
 
 
 We can also use this type of indexing to compare columns. Our max_ma column should always be bigger than min_ma. We can check for rows where this isn't the case - these are errors.
 
-```R
-ant_data[ant_data.min_ma > ant_data.max_ma]
+```{r}
+ant_data %>%  
+  filter(min_ma > max_ma)
 ```
 
 In our data, we don't have any such errors, but if we did, we could drop them like so:
 
-```R
-ant_data = ant_data[ant_data.min_ma > ant_data.max_ma]
+```{r}
+ant_data %>%  
+  filter(min_ma > max_ma)
 ```
 
 Does anyone see a problem with what I did there?
@@ -429,86 +388,45 @@ One common task many researchers do with their data is break it into smaller chu
 
 We can group our data by subfamily like so:
 
-  ```R
-sub_fams = ant_data.groupby('subfamily')
+```{r}
+subfamilies <- ant_data %>% 
+  group_by('subfamily')
 ```
 
-Doing this creates a groupby object, or a list of chunks of our data, identified by the subfamily to which they belong. We can  view them like so:
+Doing this creates a groupby object, or a list of chunks of our data, identified by the subfamily to which they belong. 
 
-  ```R
-for fam in sub_fams:
-  print(fam)
-```
+```{r}
+subfamilies <- ant_data %>% 
+  count(subfamily)
 
-Congratulations, you've written your first loop. What this loop does is, for every object in sub_fams, R prints the object to the screen. print() is a R function available in all installations of R (version 3.0+). 'fam' is what is known as a *loop variable*. R automatically assumes that, if sub_fams is an object containing other objects, that fam will be the smallest unit of the sub_fams container. In other languages, you might have to assign the loop variable before using it, but R is pretty smart about figuring out what it is.
-
-Our original question was if all of the groups are about the same size. So let's answer it:
-
-  ```R
-sub_fams.size()
+subfamilies
 ```
 
 They are not. The samples of Formicinae and Dolichoderinae, for example, are much bigger than the rest. These are also the most specious groups of ants. Could the disparity in the sample be due to group speciousity? I've made a secodn spreadsheet with a rough guess at the species richness of each of the ant groups in this data set. Let's load it:
 
-  ```R
-sub_r = pd.read_csv('data/subfamilyRichness.csv', index_col=0)
+```{R}
+sub_r <- read_csv('data/subfamilyRichness.csv')
 ```
 
-You'll notice we've added a new option to reading in a csv file - index_col. This allows us to specifiy which column we would like to be the index. In this case, we want the subfamily names to be the index.
-
-To get these two data sources together, we need to do some massaging of our data. Groupby objects can be turned into dataframes in which the index is the groupname (in our case, the subfamily) and the data are the sizes of the group like so:
-
-  ```R
-sizes = pd.DataFrame(sub_fams.size())
-```
-
-But this actually gives us a multi-level index that is unsuitable for our purposes. I'm going to have us reset the index to the names of the subfamilies. We're going to do this first by looping over our groupby objects and getting the names of the groups (the subfamily) and putting those in a list. We do this by first creating the list. Then, we initialize our loop. And we take the first value in each groupby group, which is the name of the group.
-
-```R
-names = []
-for fam in sub_fams:
-  names.append(fam[0])
-sizes.reset_index
-sizes.index = names
-```
-
-Once we have executed the loop, we erase the index that exists and reset it to our group names.
-
->###Challenge
-
-  > - Try calling functions of the groupby objects, for example, mean() on the sub\_fams object. What would these types of functions be helpful for? Remember, once you've typed in sub\_fams. and hit tab, you can see available methods.
-
-## Merging and Using Data
-
-Now we have two dataframes, one with our observed data and one with the number of species that exist in nature. To do mathematical operations using both pieces of data, we will combine them. We will do this using a merge, which combines two datasets on a given column:
-
-```R
-new_sizes= sizes.merge(sub_r, left_index=True, right_index=True)
-
-```
+You'll notice we've added a new option to reading in a csv file - index_col. This allows us to specifiy which column we would like to be the index.  Now we have two dataframes, one with our observed data and one with the number of species that exist in nature. To do mathematical operations using both pieces of data, we will combine them. We will do this using a merge, which combines two datasets on a given column.
 
 In our case, we will merge sizes to sub\_r. We will use the nice indices we just created as our join columns. This is specified by 'left\_index', the index of the object before we call the merge function being set to true, and right_index, the index of the object after we call the merge being set to true. If we had called join with sub_r being first, it would be the left and sizes would be the right.
 
+
+
+```{r}
+merged <- merge(subfamilies, sub_r)
+```
+
+
 The output of this is a new dataframe, with two columns: one from sizes, one from sub_r. We can now divide out our two columns to see if we have sampled some clades more because they are more speciose. If this were true, we would expect to see roughly the same proportion of sampling, but not the same number of samples. We will assign the sampling proportion to a new column called 'proportion'.
 
-```R
-new_sizes['proportion'] = new_sizes.reps/new_sizes.size
+```{r}
+merged %>% 
+  mutate(proportion = n/size)
 ```
 
-Do these sizes look right? Your answer should be no. It turns out that 'size' is a reserve word, and calls a function called size. This function returns the size of each object in bytes. So instead of dividing each entry in reps by each entry in size we're dividing by bytes. But that's OK, we can rename our columns on the fly:
-
-```R
-new_sizes.columns = ['reps','num_spec','prop']
-```
-
-Now try it:
-
-```R
-new_sizes['proportion'] = new_sizes.reps/new_sizes.num_spec
-```
-
-Much better!
-
+Do these sizes look right? Your answer should be no. There might be some errors in this database.
 
 > ###Challenge
 > - Try some other mathematical operations. Subtract the columns!
@@ -528,167 +446,12 @@ build on the concepts seen here to further automate data management.
 
 So far, we've covered the nuts and bolts of programming. We've learned a little bit about how to control R, and it's time to think about controlling its environment. As you program more and more, you'll need to have maintainable pieces of code, and some framework to maintain them.
 
-In this chapter, we'll cover three core concepts. *Functions*, which are blocks of code that work together to achieve some purpose. We will discuss *scripts*, which may contain one or more functions and the comments needed to interpret and use them. And lastly, we will discuss *revision management*, the practice of using a defined system to track how and when changes are made to your code.
+In this chapter, we'll cover two core concepts. We will discuss *scripts*, which may contain one or more functions and the comments needed to interpret and use them. And lastly, we will discuss *revision management*, the practice of using a defined system to track how and when changes are made to your code.
 
 By the end of this chapter, you will be able to:
 
-1. *Concept:* Explain why and how functions can be used to make code more maintainable.
-2. *Concept:* How grouping functions into scripts can make it easier to understand and maintain code.
-3. *Concept & Hands-On:* Commands to use a revision management system to keep track of changes to your codebase.
-
-## Functions
-
-We've previously introduced functions in the context of calling functions from a package, like calling read_csv from Pandas. We're now going to discuss making our own functions to do everyday operations that we need.
-
-We can think of a function like an organ of the body - a function is a grouping of code that performs a task. For example, we might write a function that extracts relevant rows from a dataframe and writes them to a file. That's a great idea - let's do that here in a second.
-
-Why would we want to write functions, instead of just stuffing all our code into a file? There are several reasons. Functions provide a natural grouping for blocks of code. This makes it easier, just visually, to see what types of operations our code can do. And programming can be tricky - anything to make it easier will help us. Functions also have defined in and outputs. For example, a function that grabs columns from a dataframe might first check that the dataframe exists, and check that the file you're trying to write your data to doesn't exist so you don't overwrite good data. In this way, functions make it possible for us to better check that our code is working as expected.
-
-Let's start by defining our function. The definition statement names the function and tells us what toexpect as input to that function. Without the right input, the code will stop executing. A definition statement looks like this:
-
-```R
-def extract_rows(file, ant_names):
-
-```
-
-This definition statement is for a function named extract\_rows. This function takes as input a variable called data. I think you can guess where this is going  - data will be the name of a dataframe from which we will extract the rows. It also takes as input a list of names of ants that we would like to extract. Recall that our rows in the dataframe are ant species.
-
-The next thing that comes after the function definition is the docstring, or a comment that explains the purpose of the function.
-
-
-```R
-def extract_rows(data, ant_names):
-	'''A function to extract relevant data from dataframe'''
-```
-
-Next comes the body of the function, or the actual code. In the data directory, I have added a file called AntTestData.txt, containing a number of ant specimen names. These are the ants we would like to call out of our dataframe. We'll talk in a moment about how to read in a non-CSV text file. For now, write a little bit of code that will pull a single row based on an ant name - let's try Amblyopone_pallipes. Then check your answer below.
-
-
-```R
-def extract_rows(data, ant_names):
-	'''A function to extract relevant data from dataframe'''
-	new_data = data.loc['Amblyopone_pallipes']
-```
-
-But we don't just want one name, we want a bunch of names. And what we have done above is called *hard-coding*. Hard coding is undesireable because it means that every time we want to use different data, we have to change the code. That is dangerous. So what we want to do is rewrite this function to take a bunch of names and fetch them from our data frame.
-
-So let's get ourselves a list of ant names.
-
-```R
-def get_names(namefile):
-	'''Read in a file of names'''
-	with open(namefile, 'r') as f:
-   		ant_names = f.read().splitlines()
-	return(ant_names)
-```
-Above, we have added one more function piece - the return statement. The return statement allows us to preserve objects after the function is done running. In this case, we can pass the list of ant names out of the function. The above code does a lot of stuff. First, it takes as input a file of ant names. It uses a with statement to open the file, then uses a function called read to get the data out. Our data have newlines at the end - that's what causes each ant name to be on its own line when we open the file in a text editor. But that will cause the ant names to not be found in our dataframes, since the dataframe doesn't have newlines. Splitlines takes these off. Finally, we return the list of names.
-
-So now we have two functions, one to get our ant names and one to use the ant names to look up ants in the database. Let's rewrite our dataframe function to take a list of names.
-
-```R
-def extract_rows(data, ant_names):
-  '''A function to extract relevant data from dataframe'''
-new_data = data.loc[ant_names]
-return(new_data)
-```
-
-Our function is complete! We have two functions, both of which are doing use_ful_ and interesting things. Now, let's look at how to make them use_able_ by scripting them into a R program.
-
-## R Scripts
-
-We can write functions all day, but they don't run unless called - that is, unless we use their names to invoke them. Now, we will cover how to do this. As of right now, we have two functions:
-
-  ```R
-def extract_rows(data, ant_names):
-  '''A function to extract relevant data from dataframe'''
-new_data = data.loc[ant_names]
-return(new_data)
-
-def get_names(namefile):
-  '''Read in a file of names'''
-with open(namefile, 'r') as f:
-  ant_names = f.read().splitlines()
-return(ant_names)
-```
-
-Open your text editor and past in these two functions.
-
-Before your functions, include the line:
-
-  ```R
-import pandas as pd
-```
-
-to import Pandas for your script.
-
-Now, we will build our function calls.
-
-```R
-
-if __name__ == '__main__':
-  data = pd.read_csv('Data/Ants.csv' index_col=0)
-namefile = 'Data/AntTestData.txt'
-ant_names = get_names(namefile)
-new_dataframe = extract_rows(data, ant_names)
-new_dataframe.to_csv('Data/processed_ants.csv')
-```
-
-This is an odd-looking statement. But in a script the name statement allows us to tell R which functions to actually call. If we had extra functions that we didn't want to execute, we could just leave them out.
-
-Save this as first_script.py. In the git bash terminal, navigate to where you have saved the script (hopefully in the Spring2017 directory) and type:
-
-```R
-
-R first_script.py
-
-```
-
-You should see a 5-row dataframe pop out.
-
-But we've done something bad. Remember how we said that hard coding was not optimal? They still aren't. So let's think about how to get rid of the hard coding. See how I had you import a mystery modeule - sys? Sys allows us to pass in additional information from the command line. We can use the arg function to take in command-line arguments:
-  if __name__ == '__main__':
-  data = pd.read_csv(sys.argv[1] index_col=0)
-namefile = sys.argv[2]
-ant_names = get_names(namefile)
-new_dataframe = extract_rows(data, ant_names)
-new_dataframe.write_to_csv(sys.argv[3])
-```
-
-Now, when we call this script, we type:
-
-  ```R
-
-R first_script.py Data/Ants.csv Data/AntTestData.txt Data/ant_processed.csv
-
-```
-
-Now, if we want to change the name of the output file, we just change the last argument at the command line. Need a different set of ants? Change the taxon list. Easy. No changing the code for every analysis.
-
-One final thing. Remember that data are read-only? We really oughtn't be writing to our data directory. Let's add just one more function. Add an import statement for the os library, which allows us to manipulate file paths:
-
-  ```R
-import os
-```
-
-Now we will write a function to us os to check if an output directory exists, and if not, to create it:
-
-  ```R
-def check_dir(path):
-  check = path.split('/')[0]
-os.listdir(check)
-if 'output' in os.listdir(check):
-  return
-else:
-  os.mkdir('%s/output' % check)
-```
-
->### Challenge:
-  >
-  1. Add a function call for check_dir to the main statement.
-2. Explain why check_dir does not have a return statement at the very end.
-3. How will you need to modify your invocation of the R script to make sure your output is written to the right place.
-4. What is split doing?
-  5. Write a docstring for this function.
+1. *Concept:* How grouping functions into scripts can make it easier to understand and maintain code.
+2. *Concept & Hands-On:* Commands to use a revision management system to keep track of changes to your codebase.
 
 
 ## Revision Management
