@@ -274,7 +274,7 @@ When would we not want to use lists of columns and rows to select data out of a 
 We often have an idea of the data we'd like to access. Perhaps we are interested to know what data we have for a specific genus, Oecophylla.
 
 ```{r}
-ant_data %>% 
+oeco <- ant_data %>% 
   filter(genus == "Oecophylla")
 
 ```
