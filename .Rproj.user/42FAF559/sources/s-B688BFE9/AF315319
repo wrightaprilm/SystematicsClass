@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1578066232172.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3139276042",
+    "id" : "AF315319",
+    "lastKnownWriteTime" : 1578066362,
+    "last_content_update" : 1578066362,
+    "path" : "~/workspace/Systematics2020/vignettes/03_Discrete_Morphology/05_RB_MCMC_Discrete_Morph.Rmd",
+    "project_path" : "vignettes/03_Discrete_Morphology/05_RB_MCMC_Discrete_Morph.Rmd",
+    "properties" : {
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
