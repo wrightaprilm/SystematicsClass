@@ -1,7 +1,13 @@
+---
+title: "R Reminder"
+output: html_document
+author: April M. Wright
+
+---
+
 # Chapter One: An Introduction to Project Organization
 
-## Introduction: How can we maintain tractable data structures for use with phylogenetic
-projects?
+## Introduction: How can we maintain tractable data structures for use with phylogenetic projects?
 
   "I just wasted five hours running an analysis on the wrong input file."
 
