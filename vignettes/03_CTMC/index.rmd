@@ -146,7 +146,7 @@ in your Rev scripts or in the RevBayes console.
 
 To check your current working directory, use the function `getwd()`.
 
-```
+```{rb, engine.path="~/software/rb"}
 getwd()
 ```
 ```
@@ -241,7 +241,7 @@ magnitude), so we can define it as a constant variable. The function
 $n$ states. Since we use DNA data here, we create a 4x4
 instantaneous-rate matrix:
 
-```
+```{rb, engine.path="~/software/rb"}
 Q <- fnJC(4) 
 ```
 

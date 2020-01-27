@@ -38,10 +38,9 @@ Having a directory of data that contains all your data for a project, and a dire
 This allows you to stay organized and avoid misplacing crucial scripts in your data analysis pipeline.
 
 
-# aside Spaces In Filenames
-Most scientific programming languages and software does not deal well with spaces in file names.
-If you will be doing much scientific computing, it will be best to get in the habit of not using spaces in file and folder names.
-# endaside
+> ## Spaces In Filenames
+> Most scientific programming languages and software does not deal well with spaces in file names.
+> If you will be doing much scientific computing, it will be best to get in the habit of not using spaces in file and folder names.
 
 
 ## Preparing to Run RevBayes
@@ -73,20 +72,21 @@ The above directory structure would be written out like so:
 
 Note down where you have your tutorial stored.
 
-```{r, eval = FALSE}
-devtools::install_github("revbayes/RevKnitr@final_rb")
+```{r}
+devtools::install_local("~/projects/RevKnitr/")
 ```
 
 Next, we will launch RevBayes in RStudio. Start a new executeable chunk by typing the following:
 
 ```{rb}
+# library(RevKnitr)
 getwd()
 ```
 
 Now, enter the path to your tutorial in the below parentheses:
 
 ```{rb}
-setwd("~/workspace/Systematics2020/vignettes/01_tutorial_structure/")
+setwd("~/Documents/Courses/Systematics2020/vignettes/01_tutorial_structure/")
 
 source("scripts/test.Rev")
 ```

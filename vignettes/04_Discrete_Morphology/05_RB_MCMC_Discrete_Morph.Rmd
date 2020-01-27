@@ -108,7 +108,7 @@ RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix t
 
 
 ```{rb}
-    morpho <- readDiscreteCharacterData("/home/dwbapst/workspace/Systematics2020/vignettes/data/Cinctans_for_RevBayes.nex")
+    morpho <- readDiscreteCharacterData("data/Cinctans_for_RevBayes.nex")
 ```
 
 **Create Helper Variables**
@@ -281,7 +281,7 @@ Once we have set up our model, moves, and monitors, we can now create the worksp
 The MCMC object that we named `mymcmc` has a member method called `.run()`. This will execute our analysis and we will set the chain length to `10000` cycles using the `generations` option.
 
 
-```{rb, eval = FALSE}
+```{rb}
     mymcmc.run(generations=10000, tuningInterval=200)
 ```
 
