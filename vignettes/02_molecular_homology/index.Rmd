@@ -1,0 +1,43 @@
+---
+title: "MolecularHomology Assignment"
+output: html_document
+---
+
+## Progressive MSA
+
+Pairwise Multiple Sequence Alignment does exactly what we discussed above, for all your sequences. Typically, this is performed by first performing a pairwise MSA, as we did above, between the two sequences with the least differences. Then, sequences are added in the order of least differences. Progressive alignments score different alignment possibilities based on the alignment and user-specified scoring matrices, such as BLOSUM 62, or others. Clustal is an example of progressive alignment, but is known to be fairly innaccurate. Another example is T-COFFEE.
+
+## Iterative Approaches to MSA
+
+Progressive aligners make a set of assumptions, and apply those assumptions to the whole set of sequences across a phylogeny. But many datasets are fairly large, and may have different evolutionary dynamics across the tree. *Iterative aligners* use tree information to guide the process of making the alignment.  For example, PASTA, below, uses this approach. This is broadly similar to how we will approach alignment next week.
+
+![Diagram of Sate/PASTA Algorithm](img/pasta.jpg)
+
+## Coestimation of MSA and Phylogeny
+
+Phylogenetic esitmation generally assumes that we know the alignment without error. We've already seen in our examples cases where we do not get the same alignment between methods. This is particularly true in areas that are hard to align. For example, in the below paper, they estimate a tree for fungi, which are deeply-diverged, and very diverse. The alignment has many problematic regions. What they showed in this paper was that by not accounting for the alignment uncertainty, support was overestimated for their tree hypothesis.
+
+![Lutzoni paper](img/Lutzoni.png)
+
+
+We haven't talked about Bayesian estimation, so I'm going to say very little on joint estimation of alignment and topology. This is a method that allows for a wide range of models to be deployed in order to estimate both the alignment and the tree, and shows great promise for difficult alignment issues. We have a few floating open labs throughout the semester, so if this is a topic of interest to people, we can revisit it then.
+
+The primary software that performs this analysis is [Bali-Phy](http://www.bali-phy.org/Tutorial3.html), which is described [here](http://www.bali-phy.org/Redelings_and_Suchard_2005.pdf).
+
+## Alignment Homework
+
+### Some of these questions do not have a right answer.
+
+Fill out this worksheet (it can be opened in a plain text editor, like TextEdit [Mac] or TextWrangler [Mac] or Notepad [Windows]. Commit and push it to your copy of the course repo. I will pull your copies Friday at 5, and try to have comments for you by next class period, when we will discuss them. 
+
+Feel free to work in groups, and discuss the assignments as needed. However, I do expect you to turn in your own copy, with answers in your own words.
+
+1. Some algorithms treat a gap as a single penalty value, regardless of how large the gap is. Others assess a gap opening penalty, then a smaller gap extension penalty. When (i.e. what kind of biological scenarios) might you think it might be better to use one algorithm over the other?
+
+2. Breaking problems into subproblems is a common way to attack a tough problem. In the case of iterative alignments, we break the tree into smaller pieces. Are there biological questions for which you expect this would not be helpful? 
+
+3. Briefly describe what you're hoping to get out of this class. If you have empirical data, please explain what the data are, and what you'd like to do with them.
+
+
+
+
