@@ -1,20 +1,14 @@
----
-title: "Spring 2020"
-output: html_document
----
-
-
 # Systematics Spring 2020
 ### Instructor: Dr. April Wright
 ### Office: Ryan Hall 403
-### Officer hours: Will exist!
+### Officer hours: MW 9:15-11:15, Th 1-3
 
 
 Below is the schedule for spring semester
 
 | Date | Topic | Homework |
 |------|-------|----------|
-| Jan 20 | Orientation to Course Resources | Basics of R |
-| Jan 27 | Basics of Molecular Phylogenetic Models | RevBayes Directory Orientation  |
-| Feb 3 | Models Hands-On | Model Selection Activity |
-| Feb 10 | Morphological Data | Morphological Models Comparison | 
+| Jan 27 | Orientation to Course Resources | [Basics of R](https://wrightaprilm.github.io/Systematics2020/articles/00_Basics_of_R/index.html) |
+| Feb 3 | [Molecular Homology Assignment](https://wrightaprilm.github.io/Systematics2020/articles/02_molecular_homology/index.html)  | MSA homeowrk  |
+| Feb 10 | Models Hands-On | Model Selection Activity |
+| Feb 17 | Morphological Data | Morphological Models Comparison | 
