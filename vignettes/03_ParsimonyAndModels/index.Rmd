@@ -332,14 +332,15 @@ What is the score of this model?
 
 **Homework**: 
 
-1) How is the parsimony score impacted if you analysed more characters under our custom matrix (my_ctype)? Does this make sense to you? What happens if you try analyzing all characters under my_ctype? 
+I am an arrogant jerk, and I would like you to [read a paper I have accepted](https://github.com/graemetlloyd/ProjectWhalehead/blob/master/vignettes/MS.pdf) right now. Write a note for me if any of my arguments in the paper change your mind on the below questions.
 
-2) Compare and contrast the Jukes-Cantor model and an unweighted parsimony step matrix.
+1) We talked about heuristics Monday. Will a heuristic always find you the best tree? How are you, personally, going to make peace with this in your work?
 
 
-3) Let's say you have a dataset and want to analyze it under ML and parsimony. How can you compare the results? Can they be compared statistically? 
+2) One of the cases that Graeme and I make in the paper I made you read because I'm an arrogant jerk is that there are often a lot of trees that are plausible solutions for a particular analysis, and that researchers should consider multiple possible topologies when making inferences using trees. For you particular research question, do you think this will be an issue? How would you need to modify your dissertation analyses to accommodate multiple possible topologies? 
 
-I am an arrogant jerk, and I would like you to [read a paper I have accepted](https://github.com/graemetlloyd/ProjectWhalehead/blob/master/vignettes/MS.pdf) right now. Write a note for me if any of my arguments in the paper change your mind on the above questions.
+
+3) In assigning morphological homology, we often look at characters and decide which are homologous. Is there similar subjectivity in molecular homology assignment? Why or why not?
 
 
 
