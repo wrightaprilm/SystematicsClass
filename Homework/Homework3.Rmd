@@ -6,7 +6,7 @@ output: html_document
 Download this file with the command:
 
 ```{r, eval=FALSE}
-download.file(url = "https://wrightaprilm.github.io/Systematics2020/Homework/Homework3.Rmd", destfile = "Where you want to save it on your computer")
+download.file(url = "https://raw.githubusercontent.com/wrightaprilm/Systematics2020/master/Homework/Homework3.Rmd", destfile = "Where you want to save it on your computer")
 ```
 
 When you are done answering your questions in this document, email it to me.
