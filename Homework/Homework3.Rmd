@@ -1,0 +1,50 @@
+---
+title: "Homework3.Rmd"
+output: html_document
+---
+
+Download this file with the command:
+
+```{r, eval=FALSE}
+download.file(url = "https://wrightaprilm.github.io/Systematics2020/Homework/Homework3.Rmd", destfile = "Where you want to save it on your computer")
+```
+
+When you are done answering your questions in this document, email it to me.
+
+
+1. 5 pts. Try remaking the distributions from class, but with a lognormal function (use `rgamma`). In particular, have a look at the scale parameter and the rate parameter. What do these two parameters do? What does a high scale but low rate imply? A low scale bu high rate? Include your code below so I can reproduce the figures.
+
+```{r}
+# Code here
+
+```
+
+```
+# Descriptive answer here
+
+```
+
+
+2. 2 points. Have a look at [this](osf.io/jupva) paper. In the section "Assumptions about the evolutionary process," I make a few arguments about how Bayesian and parsimony methods are the same, and how they are different. Do you buy what I'm selling in this section? Why or why not?
+
+```
+# Answer here
+```
+
+
+3. 2 points. Something that a lot of researchers struggle with is how to set priors. Based on what you've read so far, how big a problem do you think that is, and do you think researchers can do anything to mitigate damaging effects of not having a strong intuition for the prior?
+
+```
+
+# Answer here
+
+```
+
+
+4. 1 pts. Continuous trait data aren't well used in phylogenetics right now. Do you think that should change?
+
+```
+
+# Answer here
+
+```
