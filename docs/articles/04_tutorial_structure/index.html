@@ -276,7 +276,7 @@ write(0,mu,"\n",file="archery_MH.log",append=TRUE)</a></code></pre>
 print("iteration","mu")
 print(0,mu)</a></code></pre>
 <pre><code>## [1] iteration    mu
-## [2] 0    1.005998</code></pre>
+## [2] 0    0.5705818</code></pre>
 </div>
 </div>
 <div id="writing-the-metropolis-hastings-algorithm" class="section level2">
@@ -289,7 +289,7 @@ printgen = 10</code></pre>
 <pre class="revbayes"><code>reps = 10000
 delta = 1
 for(rep in 1:reps){</code></pre>
-<pre><code>## [1] Processing of file ".rb40915f0ecd6d.Rev" completed
+<pre><code>## [1] Processing of file ".rb60cc25b16b42.Rev" completed
 ## [2] &gt;</code></pre>
 <p>In <code>Rev</code>, the contents of every <code>for</code> loop must be enclosed within a set of ‘curly braces’ . Our loop will not be complete until we finish it and add the closing brace. Additionally, it is good style to make our loops readable by indenting the contents within the curly braces. We recommend that you use 4 spaces to represent these indents.</p>
 <p>For our MCMC algorithm, the first thing we do is generate a new value of <span class="math inline">\(\mu^\prime\)</span> to evaluate (step 2 of the <a href="#sect:MH_algorithm">The Metropolis-Hastings Algorithm Section</a>). We’ll propose a new value of <span class="math inline">\(\mu\)</span> by drawing a random number from a uniform window and then adding this random number to the current value (<em>i.e.</em> centered on the previous value). The value of <code>delta</code> defines the width of the uniform window from which we draw new values. Thus, if <code>delta</code> is large, then the proposed values are more likely to be very different from the current value of <span class="math inline">\(\mu\)</span>. Conversely, if <code>delta</code> is small, then the proposed values are more likely to be very close to the current value of <span class="math inline">\(\mu\)</span>. By changing the value of <code>delta</code> we can tune the behavior of the proposal, and therefore <code>delta</code> is called a <em>tuning parameter</em>.</p>
@@ -354,74 +354,8 @@ if(u &lt; R){
 <ol style="list-style-type: decimal">
 <li><p>Rewrite your previous script to include these two different moves, and re-run the script to estimate the posterior distribution of <span class="math inline">\(\mu\)</span> again.</p></li>
 <li><p>Use only a single move and set <code>printgen=1</code>. Which move has the best ESS?</p></li>
-<li><p>How does the ESS change if you use tuning parameter values <code>delta=10</code> or <code>delta=0.1</code> for the sliding-window move? What about <code>lambda=10</code> or <code>lambda=0.1</code> for the scaling move?</p></li>
-<li><p>You can keep track of your results using the following table.</p></li>
 </ol>
 </div>
-<div id="the-metropolis-hastings-algorithm-with-the-real-revbayes" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-metropolis-hastings-algorithm-with-the-real-revbayes" class="anchor"></a>The Metropolis-Hastings Algorithm with the <em>Real</em> RevBayes</h3>
-<p>We’ll now specify the exact same model in <code>Rev</code> using the built-in modeling functionality and moves. It turns out that the ‘Rev‘ code to specify the above model is extremely simple and similar to the one we used before. Again, we start by “reading in” (<em>i.e.</em> making up) our data.</p>
-<pre class="revbayes"><code># Simulate some data (i.e. shoot some arrows)
-# First we need the number of arrows to shoot
-n = 10
-# Then we need some true mean distance
-mu_true = 1
-# Simulate the observed mean distance of the arrows we shot
-arrow_mean = rgamma(1, n, n/mu_true)[1]</code></pre>
-<p>Now we specify our prior model.</p>
-<pre class="revbayes"><code># Specify the prior distribution
-alpha &lt;- 1.0
-mu ~ dnExponential(alpha)</code></pre>
-<p>One difference between RevBayes and the MH algorithm that we wrote above is that many MCMC proposals are already built-in, but we have to specify them <em>before</em> we run the MCMC. We usually define (at least) one move per parameter immediately after we specify the prior distribution for that parameter.</p>
-<pre class="revbayes"><code># Define a move for our parameter, mu
-moves[1] = mvSlide(mu, delta=1, weight=1.0)</code></pre>
-<p>Next, our likelihood model.</p>
-<pre class="revbayes"><code># Specify the likelihood model
-d_bar ~ dnGamma(n, n/mu)
-d_bar.clamp(arrow_mean)</code></pre>
-<p>We wrap our full Bayesian model into one model object (this is a convenience to keep the entire model in a single object, and is more useful when we have very large models):</p>
-<pre class="revbayes"><code># Construct the full model
-my_model = model(mu)</code></pre>
-<p>We use “monitors” to keep track of parameters throughout the MCMC. The two kinds of monitors we use here are the <code>mnModel</code>, which writes parameters to a specified file, and the <code>mnScreen</code>, which simply outputs some parts of the model to screen (as a sort of progress bar).</p>
-<pre class="revbayes"><code># Make the monitors to keep track of the MCMC
-monitors[1] = mnModel(filename="archery_RB.log", printgen=10)
-monitors[2] = mnScreen(printgen=1000, mu)</code></pre>
-<p>Finally, we assemble the analysis object (which contains the model, the monitors, and the moves) and execute the run using the <code>.run</code> command:</p>
-<pre class="revbayes"><code># Make the analysis object
-analysis = mcmc(my_model, monitors, moves)
-# Run the MCMC
-analysis.run(100000)
-# Show how the moves performed
-analysis.operatorSummary()</code></pre>
-<p>Open the resulting <code>archery_RB.log</code> file in <code>Tracer</code>.</p>
-<p>Do the posterior distributions for the parameter <span class="math inline">\(\mu\)</span> look the same as the ones we got from our first analysis?</p>
-<p>Hopefully, you’ll note that this <code>Rev</code> model is substantially simpler and easier to read than the MH algorithm script we began with. Perhaps more importantly, this <code>Rev</code> analysis is <em>orders of magnitude</em> faster than our own script, because it makes use of extremely efficient probability calculations built-in to RevBayes (rather than the ones we hacked together in our own algorithm).</p>
-</div>
-</div>
-<div id="exercise-3" class="section level2">
-<h2 class="hasAnchor">
-<a href="#exercise-3" class="anchor"></a>Exercise 3</h2>
-<ol style="list-style-type: decimal">
-<li><p>Run the built-in MCMC and compare the results to your own MCMC. Are the posterior estimates the same? Are the acceptance rates of the moves similar?</p></li>
-<li><p>Add a second move <code>moves[2] = mvScale(mu,lambda=0.1,weight=1.0)</code></p></li>
-<li><p>Run the analysis again and compare the output.</p></li>
-<li><p>Have a look at how the acceptance rate changes for different values of the tuning parameters.</p></li>
-</ol>
-</div>
-<div id="influence-of-the-prior" class="section level2">
-<h2 class="hasAnchor">
-<a href="#influence-of-the-prior" class="anchor"></a>Influence of the Prior</h2>
-<p>So far we have used a fairly simple exponential prior with <span class="math inline">\(\alpha = 1\)</span>. However, we have not explored what impact this prior has on our estimate of <span class="math inline">\(\mu\)</span>, or whether it is an appropriate prior distribution. If the prior is very informative, then our posterior distribution will be relatively similar to our prior beliefs. In order to explore the informativeness of the prior, we can change the true value of <span class="math inline">\(\mu\)</span> so that it is very different from our prior belief. If we are still able to recover the correct value of <span class="math inline">\(\mu\)</span>, then we can say that our prior is fairly uninformative.</p>
-<p>If we find that our prior distribution is very informative, we have two options for minimizing sensitivity to the prior. First, we can use a less informative prior distribution. For example, since our data is exponentially distributed, a good choice for an uninformative prior is a <span class="math inline">\(Gamma(0,0)\)</span> distribution (this is the <a href="https://en.wikipedia.org/wiki/Jeffreys_prior">Jeffreys prior</a>). Unfortunately, this prior distribution is <em>improper</em> (it does not integrate to 1), and so we can’t use it in RevBayes. However we can approximate this prior distribution by using very small parameter values, e.g. <span class="math inline">\(Gamma(0.001, 0.001)\)</span>. As you can see in {% ref gamma_distribution %}, compared to the exponential distribution, the <span class="math inline">\(Gamma(0.001, 0.001)\)</span> distribution is much more “flat”.</p>
-<p>{% figure gamma_distribution %} <img src="figures/gamma.png"> {% figcaption %} Comparison of exponential distribution with <span class="math inline">\(\alpha = 1\)</span> and uninformative gamma distribution with parameters <span class="math inline">\(\alpha=0.001\)</span> and <span class="math inline">\(\beta=0.001\)</span>. {% endfigcaption %} {% endfigure %}</p>
-<p>The second and simplest way we can overcome the informativeness of the prior is to increase the amount of data we collect. We can do that in our example by increasing the number of arrows we shoot.</p>
-<p>Exercise 4</p>
-<ol style="list-style-type: decimal">
-<li><p>Increase the true mean arrow distance so that it is significantly larger than <span class="math inline">\(\alpha\)</span>. How does this impact your estimate of <span class="math inline">\(\mu\)</span>?</p></li>
-<li><p>Now use an uninformative <span class="math inline">\(Gamma(0.001, 0.001)\)</span> prior for <span class="math inline">\(\mu\)</span>. Did your estimate of <span class="math inline">\(\mu\)</span> improve?</p></li>
-<li><p>Increase the number of arrows shot. How does this change the shape and scale of the posterior distribution?</p></li>
-</ol>
 </div>
 </div>
   </div>
@@ -448,8 +382,6 @@ analysis.operatorSummary()</code></pre>
       <li><a href="#exercise-1">Exercise 1</a></li>
       <li><a href="#more-on-moves-tuning-and-weights">More on Moves: Tuning and Weights</a></li>
       <li><a href="#slide-move">Slide move</a></li>
-      <li><a href="#exercise-3">Exercise 3</a></li>
-      <li><a href="#influence-of-the-prior">Influence of the Prior</a></li>
       </ul>
 </li>
       </ul>
