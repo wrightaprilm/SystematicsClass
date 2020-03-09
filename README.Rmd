@@ -10,5 +10,7 @@ Below is the schedule for spring semester
 |------|-------|----------|
 | Jan 27 | Orientation to Course Resources | [Basics of R](https://wrightaprilm.github.io/Systematics2020/articles/00_Basics_of_R/index.html) |
 | Feb 3 | [Molecular Homology Assignment](https://wrightaprilm.github.io/Systematics2020/articles/02_molecular_homology/index.html)  | MSA homeowrk  |
-| Feb 10 | [Parsimony and Models](https://wrightaprilm.github.io/Systematics2020/articles/03_ParsimonyAndModels/index.html)| Model Selection Activity |
-| Feb 17 | Morphological Data | Morphological Models Comparison | 
+| Feb 10 | [Parsimony and Models](https://wrightaprilm.github.io/Systematics2020/articles/03_ParsimonyAndModels/index.html)| Homework |
+| March 2 | Intro Bayesian | [Homework](https://wrightaprilm.github.io/Systematics2020/articles/Homework/Homework3.html) |
+| March 9 | [Bayes and MCMC](https://wrightaprilm.github.io/Systematics2020/articles/04_tutorial_structure/index.html) | Homework |
+
