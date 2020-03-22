@@ -69,6 +69,12 @@
       <a href="../../articles/04_tutorial_structure/index.html">Tutorial Structure</a>
     </li>
     <li>
+      <a href="../../articles/05_pandemic_week/index.html">Pandemic Week</a>
+    </li>
+    <li>
+      <a href="../../articles/06_models/index.html">Nucleotide substitution models</a>
+    </li>
+    <li>
       <a href="../../articles/Homework/Homework3.html">Homework3.Rmd</a>
     </li>
   </ul>
@@ -276,7 +282,7 @@ write(0,mu,"\n",file="archery_MH.log",append=TRUE)</a></code></pre>
 print("iteration","mu")
 print(0,mu)</a></code></pre>
 <pre><code>## [1] iteration    mu
-## [2] 0    0.5705818</code></pre>
+## [2] 0    3.214789</code></pre>
 </div>
 </div>
 <div id="writing-the-metropolis-hastings-algorithm" class="section level2">
@@ -289,7 +295,7 @@ printgen = 10</code></pre>
 <pre class="revbayes"><code>reps = 10000
 delta = 1
 for(rep in 1:reps){</code></pre>
-<pre><code>## [1] Processing of file ".rb60cc25b16b42.Rev" completed
+<pre><code>## [1] Processing of file ".rb4588578e11f.Rev" completed
 ## [2] &gt;</code></pre>
 <p>In <code>Rev</code>, the contents of every <code>for</code> loop must be enclosed within a set of ‘curly braces’ . Our loop will not be complete until we finish it and add the closing brace. Additionally, it is good style to make our loops readable by indenting the contents within the curly braces. We recommend that you use 4 spaces to represent these indents.</p>
 <p>For our MCMC algorithm, the first thing we do is generate a new value of <span class="math inline">\(\mu^\prime\)</span> to evaluate (step 2 of the <a href="#sect:MH_algorithm">The Metropolis-Hastings Algorithm Section</a>). We’ll propose a new value of <span class="math inline">\(\mu\)</span> by drawing a random number from a uniform window and then adding this random number to the current value (<em>i.e.</em> centered on the previous value). The value of <code>delta</code> defines the width of the uniform window from which we draw new values. Thus, if <code>delta</code> is large, then the proposed values are more likely to be very different from the current value of <span class="math inline">\(\mu\)</span>. Conversely, if <code>delta</code> is small, then the proposed values are more likely to be very close to the current value of <span class="math inline">\(\mu\)</span>. By changing the value of <code>delta</code> we can tune the behavior of the proposal, and therefore <code>delta</code> is called a <em>tuning parameter</em>.</p>
