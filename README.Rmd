@@ -15,4 +15,5 @@ Below is the schedule for spring semester
 | March 9 | [Bayes and MCMC](https://wrightaprilm.github.io/Systematics2020/articles/04_tutorial_structure/index.html) | Homework |
 | March 16 | [Pandemic Week](https://wrightaprilm.github.io/Systematics2020/articles/05_pandemic_week/index.html) | Homework In lecture materials |
 | March 23 | [CTMC](https://wrightaprilm.github.io/Systematics2020/articles/06_models/index.html) | Homework In lecture materials |
+| March 30 | [Morphology](https://revbayes.github.io/tutorials/morph_tree/V2.html) | Homework to be assigned based on where we get to |
 
