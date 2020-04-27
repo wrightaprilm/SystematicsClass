@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -99,10 +103,25 @@
       <a href="../articles/02_molecular_homology/index.html">Molecular Homology Assignment</a>
     </li>
     <li>
+      <a href="../articles/03_CTMC/index.html">Nucleotide substitution models</a>
+    </li>
+    <li>
       <a href="../articles/03_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a>
     </li>
     <li>
-      <a href="../articles/Homework/Homework3.html">Homework3.Rmd</a>
+      <a href="../articles/03_tutorial_structure/index.html">Setting Up RevBayes</a>
+    </li>
+    <li>
+      <a href="../articles/04_Discrete_Morphology/05_RB_MCMC_Discrete_Morph.html">Discrete morphology - Models and Tree Inference</a>
+    </li>
+    <li>
+      <a href="../articles/04_tutorial_structure/index.html">Tutorial Structure</a>
+    </li>
+    <li>
+      <a href="../articles/05_pandemic_week/index.html">Pandemic Week</a>
+    </li>
+    <li>
+      <a href="../articles/06_models/index.html">Nucleotide substitution models</a>
     </li>
   </ul>
 </li>
@@ -129,13 +148,28 @@
       <h3>All vignettes</h3>
       <p class="section-desc"></p>
 
-      <ul>
-        <li><a href="00_Basics_of_R/index.html">R Reminder</a></li>
-        <li><a href="01_homology_assignment/index.html">Morphological Homology Assignment</a></li>
-        <li><a href="02_molecular_homology/index.html">Molecular Homology Assignment</a></li>
-        <li><a href="03_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a></li>
-        <li><a href="Homework/Homework3.html">Homework3.Rmd</a></li>
-      </ul>
+      <dl>
+        <dt><a href="00_Basics_of_R/index.html">R Reminder</a></dt>
+        <dd></dt>
+        <dt><a href="01_homology_assignment/index.html">Morphological Homology Assignment</a></dt>
+        <dd></dt>
+        <dt><a href="02_molecular_homology/index.html">Molecular Homology Assignment</a></dt>
+        <dd></dt>
+        <dt><a href="03_CTMC/index.html">Nucleotide substitution models</a></dt>
+        <dd></dt>
+        <dt><a href="03_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a></dt>
+        <dd></dt>
+        <dt><a href="03_tutorial_structure/index.html">Setting Up RevBayes</a></dt>
+        <dd></dt>
+        <dt><a href="04_Discrete_Morphology/05_RB_MCMC_Discrete_Morph.html">Discrete morphology - Models and Tree Inference</a></dt>
+        <dd></dt>
+        <dt><a href="04_tutorial_structure/index.html">Tutorial Structure</a></dt>
+        <dd></dt>
+        <dt><a href="05_pandemic_week/index.html">Pandemic Week</a></dt>
+        <dd></dt>
+        <dt><a href="06_models/index.html">Nucleotide substitution models</a></dt>
+        <dd></dt>
+      </dl>
     </div>
   </div>
 </div>
@@ -147,7 +181,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

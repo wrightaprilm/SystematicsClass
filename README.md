@@ -18,3 +18,4 @@ Below is the schedule for spring semester
 | March 30 | [Morphology](https://revbayes.github.io/tutorials/morph_tree/V2.html) | Homework to be assigned based on where we get to |
 | April 6 | [Molecular Clocks](https://dwbapst.github.io/PaleoSoc_phylo_short_course_2019/articles/module_07_TripartiteModel2_clock_models/Clock_models_for_character_data.html) | It's spring break. No homework |
 | April 20 | [FBD model](https://dwbapst.github.io/PaleoSoc_phylo_short_course_2019/articles/module_08_TripartiteModel3_Fossilized_Birth_death/RB_Total_Evidence_Tutorial.html) | TBD |
+| April 27 | [Phylogenetic Comparative Methods](https://dwbapst.github.io/PaleoSoc_phylo_short_course_2019/articles/module_09_worked_PCM_example/module_08.html) | TBD |
