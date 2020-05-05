@@ -1,0 +1,28 @@
+---
+title: "Final Project"
+author: "April Wright"
+date: "5/4/2020"
+output: html_document
+---
+
+# Final Project Guidelines
+
+## Before the final
+
+- 10 pts: Register your topic with me (you've all already done this)
+- 30 pts: Provide me with details of how you did your analysis, including:
+  - Details of software used
+  - Specific commands used
+  - Any data files
+  - This can be in whatever format you want (Word doc, text file, R Markdown)
+- 10 pts: I will try to reproduce what you've said you did. If it all works out, you get the full 50 points. 
+
+## Day of the final
+
+### Presentation: Aim for 12 minutes + 2 for questions
+  - 5 pts: Research question clearly states 
+  - 10 pts: Appropriate background provided to understand your research question
+  - 10 pts: Methods clearly explained
+  - 10 pts: Conclusions and interpretation appropriate for the data used and analysis conducted
+  - 5 pts: Be polite and ask questions of your classmates. They worked hard.
+  
