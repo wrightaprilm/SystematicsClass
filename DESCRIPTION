@@ -1,7 +1,7 @@
-Package: Systematics2020
+Package: SystematicsClass
 Type: Package
-Title: Systematics class spring 2020
-Version: 0.1.0
+Title: Systematics class spring 2022
+Version: 0.2.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
