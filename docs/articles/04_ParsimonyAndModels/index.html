@@ -119,8 +119,7 @@
  gunzip paup4a168_ubuntu64.gz 
 </code></pre>
 <p>Now, move into your lab_three directory. Make a Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository (<code>data/PAUPlab</code>). The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir.</p>
-<pre class="unix"><code>mkdir PAUPlab
-
+<pre class="unix"><code>
 cp __/data/PAUPlab ./Data</code></pre>
 </div>
 <div id="paup" class="section level2">
@@ -129,7 +128,7 @@ cp __/data/PAUPlab ./Data</code></pre>
 <p>Paup is one of the older phylogenetics software packages available, and Dave Swofford has put considerable effort into ensuring that the main mechanisms and models are correct. Many of us who do other software development use PAUP as a check on our own calculations.</p>
 <p>PAUP reads in data in the Nexus format. Go ahead and use nano to open the primate dataset.</p>
 <p>Next, we will open PAUP:</p>
-<pre class="unix"><code>paup</code></pre>
+<pre class="unix"><code>/cloud/project/software/paup4a168_ubuntu64</code></pre>
 <p>You should get something like the below:</p>
 <pre class="unix"><code>P A U P *
 Portable version 4.0b10 for Unix
@@ -147,7 +146,7 @@ Sat Feb 17 16:04:16 2018
 paup&gt;
 </code></pre>
 <p>Next, we will load in the data file, using the execute command. Execute is kind of PAUP’s catch-all for loading in data.</p>
-<pre class="unix"><code>execute data/primate-mtDNA.nex</code></pre>
+<pre class="unix"><code>execute primate-mtDNA.nex</code></pre>
 <p>Let’s have a look at the screen output. What information does it tell us?</p>
 <p>Some other useful commands are:</p>
 <pre><code>cstatus
@@ -167,7 +166,7 @@ log file="mylogfile"</code></pre>
 <p>Note that a heuristic is being applied. What is a heuristic?</p>
 <p>Did it make a difference to the score of the best tree? Why?</p>
 <p>Let’s try some data that are too large for an exhaustive search:</p>
-<pre><code>execute Data/BardenClean.nex</code></pre>
+<pre><code>execute BardenClean.nex</code></pre>
 <p>This is some of my research data. Try to execute alltrees now. What does this message mean? Now try the heuristic search.</p>
 <p>What is the score of the best tree you found _________. How many best trees were there? ________ Try one of the alternative swap measures (either NNI or SPR).</p>
 <pre><code>hsearch swap= ______</code></pre>
@@ -246,10 +245,10 @@ hsearch</code></pre>
 <h3 class="hasAnchor">
 <a href="#transitions-and-transversions" class="anchor"></a>Transitions and Transversions</h3>
 <div class="figure">
-<img src="../fig/Transitions-transversions-v2.png" alt=""><p class="caption">Image of Transitions and Transversions via Wikipedia</p>
+<img src="../fig/Q.png" alt=""><p class="caption">Image of Transitions and Transversions via Wikipedia</p>
 </div>
 <p>Exercise on board making this transition matrix, then in text editor.</p>
-<p>Apply the new matrix to the whole dataset (898 char), and perform an exhaustive parsimony search.</p>
+<p>Apply the new matrix to the whole primate dataset, and perform an exhaustive parsimony search.</p>
 <p>How has this changed the parismony score of the best tree found? Make a consensus tree and save it. Download and view the two trees we’ve made. Are they different?</p>
 <p><strong>Homework</strong>: Try the same analysis, except with a 3-1 weighting on transitions to transversions.</p>
 </div>
@@ -290,7 +289,7 @@ hsearch;</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>We talked about heuristics Monday. Will a heuristic always find you the best tree? How are you, personally, going to make peace with this in your work?</p></li>
 <li><p>One of the cases that Graeme and I make in the paper I made you read because I’m an arrogant jerk is that there are often a lot of trees that are plausible solutions for a particular analysis, and that researchers should consider multiple possible topologies when making inferences using trees. For you particular research question, do you think this will be an issue? How would you need to modify your dissertation analyses to accommodate multiple possible topologies?</p></li>
-<li><p>In assigning morphological homology, we often look at characters and decide which are homologous. Is there similar subjectivity in molecular homology assignment? Why or why not?</p></li>
+<li><p>In your own words, why do base frequencies matter?</p></li>
 </ol>
 </div>
   </div>

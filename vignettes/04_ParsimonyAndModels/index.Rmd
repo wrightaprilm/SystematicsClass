@@ -14,32 +14,22 @@ objectives:
 
 Today, we will use  PAUP* (Phylogenetic Analysis Using Parsimony [*and other methods]) to estimate a phylogeny using the maximum parsimony optimality criterion. We will also practice performing bootstrap and jackknife quantification of uncertainty. In the process, we will also see some of the basics of how phylogenetic software will read data and understand models.
 
-**A Note on Software Installs on LONI**: After we're done with a piece of software, if you can't see yourself using it again, feel free to delete it. I will make a note otherwise if I need you to retain it for future use. 
-
-Login using ssh
-
-Now, we will start an interactive session, since we'll be performing some sort of intense computations:
-
-```UNIX
-qsub -I -V -A loni_selu_sys -q single -l nodes=1:ppn=1,walltime=3:00:00
-``` 
 
 ## Download PAUP and Data
 
-Remain in your home directory. We will load PAUP via a provided module.
+I have already installed paup for you. But if you wanted to, you could do it like so.
 
 ```UNIX
-module load paup
+ curl -O  http://phylosolutions.com/paup-test/paup4a168_ubuntu64.gz
+ gunzip paup4a168_ubuntu64.gz 
+
 ```
 
-Now, move into your work directory. Go into the class repository and pull my changes (I have added several data files). 
-
-Exit the class repository. Make a folder for today's lab called "PAUPLab". Make Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository. The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir. 
+Now, move into your lab_three directory. Make a Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository (`data/PAUPlab`). The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir. 
 
 ```UNIX
-mkdir PAUPlab
 
-cp _____/SELUSys2018/data/PAUPlab/primate-mtDNA.nex ./data
+cp __/data/PAUPlab ./Data
 ``` 
 
 
@@ -53,7 +43,7 @@ PAUP reads in data in the Nexus format. Go ahead and use nano to open the primat
 Next, we will open PAUP:
 
 ```UNIX
-paup
+/cloud/project/software/paup4a168_ubuntu64
 ```
 
 You should get something like the below:
@@ -79,7 +69,7 @@ paup>
 Next, we will load in the data file, using the execute command. Execute is kind of PAUP's catch-all for loading in data.
 
 ```UNIX
-execute data/primate-mtDNA.nex
+execute primate-mtDNA.nex
 ```
 
 Let's have a look at the screen output. What information does it tell us?
@@ -125,7 +115,7 @@ Did it make a difference to the score of the best tree? Why?
 Let's try some data that are too large for an exhaustive search:
 
 ```
-execute Data/BardenClean.nex
+execute BardenClean.nex
 ```
 
 This is some of my research data. Try to execute alltrees now. What does this message mean? Now try the heuristic search.
@@ -266,11 +256,11 @@ Let's talk about different assumptions we can make about the way molecular seque
 
 ### Transitions and Transversions
 
-![Image of Transitions and Transversions via Wikipedia](../fig/Transitions-transversions-v2.png)
+![Image of Transitions and Transversions via Wikipedia](../fig/Q.png)
 
 Exercise on board making this transition matrix, then in text editor.
 
-Apply the new matrix to the whole dataset (898 char), and perform an exhaustive parsimony search. 
+Apply the new matrix to the whole primate dataset, and perform an exhaustive parsimony search. 
 
 How has this changed the parismony score of the best tree found? Make a consensus tree and save it. Download and view the two trees we've made. Are they different? 
 
@@ -340,7 +330,7 @@ I am an arrogant jerk, and I would like you to [read a paper I have accepted](ht
 2) One of the cases that Graeme and I make in the paper I made you read because I'm an arrogant jerk is that there are often a lot of trees that are plausible solutions for a particular analysis, and that researchers should consider multiple possible topologies when making inferences using trees. For you particular research question, do you think this will be an issue? How would you need to modify your dissertation analyses to accommodate multiple possible topologies? 
 
 
-3) In assigning morphological homology, we often look at characters and decide which are homologous. Is there similar subjectivity in molecular homology assignment? Why or why not?
+3) In your own words, why do base frequencies matter?
 
 
 

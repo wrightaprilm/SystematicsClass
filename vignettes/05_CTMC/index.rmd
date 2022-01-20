@@ -12,13 +12,9 @@ title-old: RB_CTMC_Tutorial
 redirect: false
 ---
 
+# Overview 
 
-
-
-{% section Overview %}
-
-This tutorial covers the first protocol from {% citet Hoehna2017a %}, 
-which demonstrates how to set up and perform analyses
+This tutorial demonstrates how to set up and perform analyses
 using common nucleotide substitution models. The substitution models
 used in molecular evolution are continuous time Markov models, which are
 fully characterized by their instantaneous-rate matrix:
@@ -56,27 +52,24 @@ parameters. We will provide comments on how to modify the tutorial if
 you wish to estimate rooted, clock-like trees. All the assumptions will
 be covered in more detail later in this tutorial.
 
-{% table tab_subst_models %}
-{% tabcaption %}
+
 Specific functions for substitution models available in RevBayes.
-{% endtabcaption %}
 
  |   **Model**      |        **Reference**        |  **Function**   |      **Parameters**     |
  |:----------------:|:---------------------------:|:---------------:|:-----------------------:|
- |   Jukes-Cantor   |    {% cite Jukes1969 %}     |      fnJC       |           -             |
- | K80 (a.k.a. K2P) |    {% cite Kimura1980 %}    |      fnK80      |        $\kappa$         |
- |  Felsenstein-81  | {% cite Felsenstein1981 %}  |      fnF81      |         $\pi$           |
- |        T92       |    {% cite Tamura1992 %}    |      fnT92      | $\pi_{GC}$, $\kappa$    |
- |        HKY       |   {% cite Hasegawa1985 %}   |      fnHKY      |     $\pi$, $\kappa$     |
- |        GTR       |    {% cite Tavare1986 %}    |      fnGTR      |     $\pi$, $\epsilon$   |
-
-{% endtable %}
+ |   Jukes-Cantor   |    @Jukes1969    |      fnJC       |           -             |
+ | K80 (a.k.a. K2P) |    @cite Kimura1980    |      fnK80      |        $\kappa$         |
+ |  Felsenstein-81  | @Felsenstein1981 |      fnF81      |         $\pi$           |
+ |        T92       |    @Tamura1992   |      fnT92      | $\pi_{GC}$, $\kappa$    |
+ |        HKY       |   @Hasegawa1985  |      fnHKY      |     $\pi$, $\kappa$     |
+ |        GTR       |    @Tavare1986   |      fnGTR      |     $\pi$, $\epsilon$   |
 
 
 
-{% section Example: Character Evolution under the Jukes-Cantor Substitution Model %}
 
-{% subsection Getting Started %}
+# Character Evolution under the Jukes-Cantor Substitution Model 
+
+## Getting Started
 
 The first section of this exercise involves: 
 1. setting up a Jukes-Cantor (JC) substitution model for an alignment of the cytochrome b subunit; 
@@ -84,15 +77,11 @@ The first section of this exercise involves:
 3. summarizing the MCMC output by computing the maximum *a posteriori* tree.
 
 
-{% figure jc_graphical_model %}
-<img src="figures/jc_graphical_model.png" /> 
-{% figcaption %} 
-Graphical model representation of a simple phylogenetic model. The graphical model shows the dependencies among parameters {% cite Hoehna2014b %}. Here, the rate matrix $Q$ is a constant variable because it is fixed and does not depend on any parameter. The only free parameters of this model, the Jukes-Cantor model, are the tree $\Psi$ including the branch lengths.
-{% endfigcaption %}
-{% endfigure %}
+![JC](figures/jc_graphical_model.png) 
+Graphical model representation of a simple phylogenetic model. The graphical model shows the dependencies among parameters @Hoehna2014b. Here, the rate matrix $Q$ is a constant variable because it is fixed and does not depend on any parameter. The only free parameters of this model, the Jukes-Cantor model, are the tree $\Psi$ including the branch lengths.
 
 We first consider the simplest substitution model described by 
-{% citet Jukes1969 %}. The instantaneous-rate matrix for the JC substitution
+@Jukes1969. The instantaneous-rate matrix for the JC substitution
 model is defined as
 
 $$Q_{JC69} = \begin{pmatrix} 
@@ -126,7 +115,7 @@ output the states of the Markov chain once the MCMC analysis begins.
 
 Ultimately, this is how you will execute most analyses in RevBayes, with the full specification of the model and analyses contained in the sourced files. You could easily run this entire analysis on your own data by substituting your data file name for that in the model-specification file. However, it is important to understand the components of the model to be able to take full advantage of the flexibility and richness of RevBayes. Furthermore, without inspecting the Rev scripts sourced in `mcmc_JC.Rev`, you may end up inadvertently performing inappropriate analyses on your dataset, which would be a waste of your time and CPU cycles. The next steps will walk you through the full specification of the model and MCMC analyses.
 
-{% subsection Loading the Data %}
+## Loading the Data
 
 >First create a directory for this tutorial and name it `RB_CTMC_Tutorial`, or any name
 >you like.
@@ -139,7 +128,7 @@ Ultimately, this is how you will execute most analyses in RevBayes, with the ful
 >Now start RevBayes from your working directory (`RB_CTMC_Tutorial`). 
 {:.instruction}
 
-{% aside Checking and Changing Your Working Directory %}
+Checking and Changing Your Working Directory
 For this tutorial and much of the work you will do in RevBayes, you will need to access files.
 It is important that you are aware of your current working directory if you use relative file paths
 in your Rev scripts or in the RevBayes console.
@@ -168,8 +157,6 @@ getwd()
 ```
 /Users/tombayes/Work/Tutorials/RB_CTMC_Tutorial
 ```
-{:.Rev-output}
-{% endaside %}
 
 First load in the sequences using the `readDiscreteCharacterData()`
 function.
@@ -225,12 +212,12 @@ You will later see that we use this operator more often, e.g., when we create mo
 
 With the data loaded, we can now proceed to specify our specifying the model.
 
-{% subsection Setting up the Graphical Model and MCMC %}
+## Setting up the Graphical Model and MCMC
 
 Estimating an unrooted tree under the JC model requires specification of two main components:
-(1) the {% ref subsub-JCMod %} and (2) the {% ref subsub-TreeBlMod %}.
+(1) Jukes Cantor model and the (2) branch length models.
 
-{% subsubsection Jukes-Cantor Substitution Model | subsub-JCMod %}
+### Jukes-Cantor Substitution Model
 
 A given substitution model is defined by its corresponding
 instantaneous-rate matrix, $Q$. The Jukes-Cantor substitution model does
@@ -241,7 +228,7 @@ magnitude), so we can define it as a constant variable. The function
 $n$ states. Since we use DNA data here, we create a 4x4
 instantaneous-rate matrix:
 
-```{rb, engine.path="~/software/rb"}
+```{rb}
 Q <- fnJC(4) 
 ```
 
@@ -256,14 +243,13 @@ Q
      0.3333, 0.3333, -1.0000, 0.3333 ] ,
      0.3333, 0.3333, 0.3333, -1.0000 ] ]
 ```
-{:.Rev-output}
 
 As you can see, all substitution rates are equal.
 
-{% subsubsection Tree Topology and Branch Lengths | subsub-TreeBlMod %}
+### Tree Topology and Branch Lengths | subsub-TreeBlMod
 
 The tree topology and branch lengths are stochastic nodes in our phylogenetic model. 
-In {% ref jc_graphical_model %}, the tree topology is denoted $\Psi$ and the 
+In @jc_graphical_model, the tree topology is denoted $\Psi$ and the 
 length of the branch leading to node $i$ is $bl_i$.
 
 We will assume that all possible labeled, unrooted tree topologies have equal probability. 
@@ -293,7 +279,7 @@ moves.append( mvNNI(topology, weight=num_taxa) )
 moves.append( mvSPR(topology, weight=num_taxa/10.0) )
 ```
 
-The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the MCMC Diagnosis tutorial for more details about moves and MCMC strategies (found in {% page_ref tutorials %}).
+The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the MCMC Diagnosis tutorial for more details about moves and MCMC strategies.
 
 Next we have to create a stochastic node representing the length of each of the $2N - 3$ branches in our tree (where $N=$ `n_species`). We can do this using a `for` loop — this is a plate in our graphical model. In this loop, we can create each of the branch-length nodes and assign each move. Copy this entire block of Rev code into the console:
 
@@ -316,7 +302,7 @@ Finally, we can create a *phylogram* (a phylogeny in which the branch lengths ar
 psi := treeAssembly(topology, br_lens)
 ```
 
-{% aside Alternative tree priors %}
+Alternative tree priors
 For large phylogenetic trees, i.e., with more than 200 taxa, it might be easier to specify a combined topology and branch length prior distribution.
 We can achieve this by simple using the distribution `dnUniformTopologyBranchLength()`.
 ```
@@ -328,16 +314,15 @@ moves.append( mvBranchLengthScale(psi, weight=num_branches) )
 ```
 You might think that this approach is in fact simpler than the `for` loop that we explained above.
 We still think that it is pedagogical to specify the prior on each branch length separately in this tutorial to emphasize all components of the model.
-{% endaside %}
 
-{% aside Alternative branch-length priors %}
-Some studies, *e.g.* {% citet Brown2010 Rannala2012 %}, 
+Alternative branch-length priors
+Some studies, *e.g.* Brown2010 Rannala2012, 
 have criticized the exponential prior distribution for branch lengths 
 because it induces a gamma-distributed tree-length and the mean of this gamma distribution
 grows with the number of taxa. As an alternative, we can instead use a specific gamma prior distribution 
 (or any other distribution defined on a positive real variable) for the tree length, 
 and then use a Dirichlet prior distribution to break the tree length into 
-the corresponding branch lengths {% cite Zhang2012 %}.
+the corresponding branch lengths @Zhang2012.
 
 First, specify a prior distribution on the tree length with your desired mean.
 For example, we use a gamma distribution as our prior on the tree length.
@@ -356,9 +341,8 @@ Finally, transform the relative branch lengths into actual branch lengths
 ```
 br_lens := rel_branch_lengths * TL
 ```
-{% endaside %}
 
-{% aside Alternative Prior on Time-Trees: Tree Topology and Node Ages %}
+Alternative Prior on Time-Trees: Tree Topology and Node Ages
 Alternatively, you may want to specify a prior on time-trees. 
 Here we will briefly indicate how to specify such an prior which will lead to inference of time trees.
 
@@ -366,7 +350,6 @@ The tree (the topology and node ages) is a stochastic node in our phylogenetic m
 For simplicity, we will assume a uniform prior on both topologies and node ages. 
 The distribution in RevBayes is `dnUniformTimeTree()`.
 
-Fore more information on tree priors, such as birth-death processes, please read the {% page_ref clocks %}.
 
 First, we need to specify the age of the tree:
 
@@ -374,7 +357,7 @@ First, we need to specify the age of the tree:
 root_age <- 10.0
 ```
 
-Here we simply assumed that the tree is 10.0 time units old. We could also specify a prior on the root age if we have fossil calibrations (see {% page_ref clocks %}). Next, we specify the `tree` stochastic variable by passing in the taxon information `taxa` to the `dnUniformTimeTree()` distribution:
+Here we simply assumed that the tree is 10.0 time units old. We could also specify a prior on the root age if we have fossil calibrations. Next, we specify the `tree` stochastic variable by passing in the taxon information `taxa` to the `dnUniformTimeTree()` distribution:
 
 ```
 psi ~ dnUniformTimeTree(rootAge=root_age, taxa=taxa)
@@ -386,7 +369,7 @@ multiple different moves for a given parameter to improve mixing
 (the efficiency of the MCMC simulation). In the case of our rooted tree, 
 for example, we can use both a nearest-neighbor interchange move without and with changing 
 the node ages (`mvNarrow` and `mvNNI`) and a fixed-node-height subtree-prune and regrafting 
-move (`mvFNPR`) and its Metropolized-Gibbs variant (`mvGPR`) {% cite Hoehna2008 Hoehna2012 %}. 
+move (`mvFNPR`) and its Metropolized-Gibbs variant (`mvGPR`) @Hoehna2008 Hoehna2012. 
 We also need moves that change the ages of the internal nodes, for example, `mvSubtreeScale` 
 and `mvNodeTimeSlideUniform`. These moves do not have tuning parameters associated with 
 them, thus you only need to pass in the `psi` node and proposal `weight`.
@@ -401,9 +384,9 @@ moves.append( mvNodeTimeSlideUniform(psi, weight=num_taxa) )
 ```
 
 
-The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the {% page_ref mcmc %} for more details about moves and MCMC strategies.
+The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. 
 
-{% subsubsection Molecular Clock %}
+## Molecular Clock
 
 Additionally, in the case of time-calibrated trees, we need to add a molecular clock rate parameter. For example, we know from empirical estimates that the molecular clock rate is about 0.01 (=1%) per million years per site. Nevertheless, we can estimate it here because we fixed the root age. We use a uniform prior on the log-transform clock rate. This specifies our lack of prior knowledge on the magnitude of the clock rate.
 
@@ -414,10 +397,9 @@ clock_rate := 10^log_clock_rate
 ```
 
 Instead, you could also fix the clock rate and estimate the root age. 
-For more information on molecular clocks please read the {% page_ref clocks %} tutorial.
-{% endaside %}
+For more information on molecular clocks please read the 
 
-{% subsubsection Putting it All Together %}
+### Putting it All Together
 
 We have fully specified all of the parameters of our phylogenetic
 model—the tree topology with branch lengths, and the substitution model
@@ -468,13 +450,13 @@ mymodel
 ```
 
 <!-- 
-{% subsubsection Performing an MCMC Analysis Under the Jukes-Cantor Model %}
+### Performing an MCMC Analysis Under the Jukes-Cantor Model
 
 In this section, we will describe how to set up the MCMC sampler and
 summarize the resulting posterior distribution of trees.
  -->
 
-{% subsubsection Specifying Monitors and Output Files %}
+### Specifying Monitors and Output Files
 
 For our MCMC analysis, we need to set up a vector of *monitors* to
 record the states of our Markov chain. The monitor functions are all
@@ -504,7 +486,7 @@ monitors.append( mnScreen(printgen=100, TL) )
 
 This monitor mostly helps us to see the progress of the MCMC run.
 
-{% subsubsection Initializing and Running the MCMC Simulation %}
+### Initializing and Running the MCMC Simulation
 
 With a fully specified model, a set of monitors, and a set of moves, we
 can now set up the MCMC algorithm that will sample parameter values in
@@ -514,14 +496,12 @@ create our MCMC object:
 ```
 mymcmc = mcmc(mymodel, monitors, moves)
 ```
-{% comment %}
 ```
 mymcmc = mcmc(mymodel, monitors, moves, nruns=2, combine="mixed")
 ```
 
 Notice that we also specified `nruns=2` which means that RevBayes will automatically run 2 independent MCMC runs. 
 You will find that the output is created in two files with extension `_run_1` and `_run_2` for each replicate and additionally the samples from both runs are combined into one file for more convenient post-processing.
-{% endcomment %}
 
 Now, run the MCMC:
 ```
@@ -530,7 +510,7 @@ mymcmc.run(generations=10000)
 
 When the analysis is complete, you will have the monitored files in your output directory.
 
-{% aside Saving and restarting analyses %}
+Saving and restarting analyses
 
 MCMC analyses can take a long time to converge, and it is usually difficult to predict how many generations will be needed to obtain results. In addition, many analyses are run on computer clusters with time limits, and so may be stopped by the cluster partway through. For all of these reasons, it is useful to save the state of the chain regularly through the analysis.
 ```
@@ -553,29 +533,24 @@ mymcmc.initializeFromCheckpoint("output/primates_cytb_JC.state") #comment this o
 mymcmc.run(generations=100000000, checkpointInterval=100, checkpointFile="output/primates_cytb_JC.state")
 ```
 
-{% endaside %}
 
-{% subsubsection Summarizing MCMC Samples %}
+### Summarizing MCMC Samples
 
 Methods for visualizing the marginal densities of parameter values are not currently available in RevBayes itself. 
-Thus, it is important to use programs like [Tracer](http://tree.bio.ed.ac.uk/software/tracer/) {% cite Rambaut2011 %} to evaluate mixing and non-convergence.
+Thus, it is important to use programs like [Tracer](http://tree.bio.ed.ac.uk/software/tracer/) @Rambaut2011to evaluate mixing and non-convergence.
 
 Look at the file called `output/primates_cytb_JC.log` in Tracer. 
 There you see the posterior distribution of the continuous parameters, *e.g.*, the tree length variable `TL`.
 
 
-{% figure jc_trace_tl %}
-<img src="figures/primates_cytb_JC_TL_Trace.png" width = "500" /> <img src="figures/primates_cytb_JC_TL_Distribution.png" width = "500" /> 
-{% figcaption %}
+![JC](../figures/primates_cytb_JC_TL_Trace.png)
 **Left:** Trace of tree-length samples for one MCMC run. The caterpillar-like look is a good sign.You will also see that the effective sample size is comparably large, i.e., much larger than 200. **Right:** Posterior distribution of the tree length of the primate phylogeny under a Jukes-Cantor substitution model.
-{% endfigcaption %}
-{% endfigure %}
+
 
 It is always important to carefully assess the MCMC samples for the various parameters in your analysis.
-You can read more about MCMC tuning and
-evaluating and improving mixing in the tutorials {% page_ref mcmc %}.
 
-{% subsection Exercise 1 %}
+
+## Exercise 1
 
 We are interested in the phylogenetic relationship of the Tarsiers.
 Therefore, we need to summarize the trees sampled from the posterior
@@ -594,24 +569,19 @@ maximum *a posteriori* tree to file:
 map_tree = mapTree(treetrace,"output/primates_cytb_JC_MAP.tree")
 ```
 
-{% figure jc_tree %}
-<img src="figures/primates_cytb_JC_tree.png" width="800" /> 
-{% figcaption %}
+![map](../figures/primates_cytb_JC_tree.png) width="800" 
 Maximum a posteriori estimate of the primate phylogeny under a Jukes-Cantor substitution model. The numbers at the nodes show the posterior probabilities for the clades. We have rooted the tree at the outgroup *Galeopterus_variegatus*
-{% endfigcaption %}
-{% endfigure %}
+
 
 
 
 Look at the file called `output/primates_cytb_JC_MAP.tree` in
-`FigTree`. We show it in {% ref jc_tree %}.
+`FigTree`. 
 
 Fill in the following table as you go through the tutorial.
 
-{% table tab_primates_posterior %}
-{% tabcaption %}
+
 Posterior probabilities under different analyses
-{% endtabcaption %}
 
  |    **Model**   |   **Lemuroidea**   |   **Lorisoidea**   |   **Platyrrhini**   |   **Catarrhini**    |
   ---------------:|:------------------:|:------------------:|:-------------------:|:-------------------:|
@@ -622,7 +592,6 @@ Posterior probabilities under different analyses
  |    GTR+Gamma   |                    |                    |                     |                     |
  |   GTR+Gamma+I  |                    |                    |                     |                     |
 
-{% endtable %}
 
 
 Note, you can query the posterior probability of a clade being
@@ -640,10 +609,8 @@ Lemuroidea <- clade("Cheirogaleus_major",
 treetrace.cladeProbability( Lemuroidea )
 ```
 
-{% table tab_primates %}
-{% tabcaption %}
+
 Primate and species relationships.
-{% endtabcaption %}
 
  |            **Species**          |     **Family**     |     **Parvorder**   |   **Suborder**  |
   -------------------------------- |:------------------:|:-------------------:|:---------------:|
@@ -670,11 +637,10 @@ Primate and species relationships.
  |         Tarsius syrichta        |       Tarsiidae    |     Tarsiiformes    |   Haplorrhini   |
  |    Varecia variegata variegata  |       Lemuridae    |       Lemuroidea    |   Strepsirrhini |
 
-{% endtable %}
-    
-{% aside Setting up the Kimura 1980 (K80 or K2P) substitution model %}
 
-The K80 model (AKA the K2P model) allows the rates of transition and transversion substitutions to be unequal {% cite Kimura1980 %}. 
+## Setting up the Kimura 1980 (K80 or K2P) substitution model
+
+The K80 model (AKA the K2P model) allows the rates of transition and transversion substitutions to be unequal @Kimura1980. 
 The parameter $\kappa$ describes the relative rate of transition to transversion substitutions (if $\kappa > 1$, transitions occur at a higher rate than transversions). The instantaneous-rate matrix for the K80 model is defined as:
 
 $$Q_{K80} = \begin{pmatrix}
@@ -693,10 +659,9 @@ moves.append( mvScale(kappa, weight=1.0) )
 Q := fnK80(kappa)
 ```
 
-{% endaside %}
 
 
-{% section The Hasegawa-Kishino-Yano (HKY) 1985 Substitution Model %}
+##  The Hasegawa-Kishino-Yano (HKY) 1985 Substitution Model
 
 The Jukes-Cantor model assumes that all substitution rates are equal,
 which also implies that the stationary frequencies of the four
@@ -705,7 +670,7 @@ reasonable, so we might wish to consider a more realistic substitution
 model that relaxes some of these assumptions. For example, we might
 allow stationary frequencies, $\pi$, to be unequal, and allow rates of
 transition and transversion substitutions to differ, $\kappa$. This
-corresponds to the substitution model proposed by {% citet Hasegawa1985 %},
+corresponds to the substitution model proposed by @Hasegawa1985,
 which is specified with the following instantaneous-rate matrix:
 
 $$Q_{HKY} = \begin{pmatrix} 
@@ -766,9 +731,9 @@ Q := fnHKY(kappa,pi)
 
 This should be all for the HKY model. Don’t forget to change the output file names, otherwise your old analyses files will be overwritten.
 
-{% subsection Exercise 2 %}
+## Exercise 2
 
--   With {% ref jc_graphical_model %} as your guide, draw the probabilistic
+-   With @jc_graphical_modelas your guide, draw the probabilistic
     graphical model of the HKY model.
 
 -   Download the file called [`mcmc_JC.Rev`](scripts/mcmc_JC.Rev) and rename it
@@ -792,21 +757,21 @@ This should be all for the HKY model. Don’t forget to change the output file n
 
 -   Like the HKY model, the Felsenstein 1981 (F81) substitution model
     has unequal stationary frequencies, but it assumes equal
-    transition-transversion rates {% cite Felsenstein1981 %}. 
+    transition-transversion rates @Felsenstein1981. 
     Can you set up the F81 model and run an analysis?
 
--   Complete the {% ref tab_primates_posterior %} by reporting the posterior
+-   Complete the @tab_primates_posteriorby reporting the posterior
     probabilities of phylogenetic relationships.
 
 
-{% section The General Time-Reversible (GTR) Substitution Model %}
+##  The General Time-Reversible (GTR) Substitution Model
 
 The HKY substitution model can accommodate unequal base frequencies and
 different rates of transition and transversion substitutions. Despite
 these extensions, the HKY model may still be too simplistic for many
 real datasets. Here, we extend the HKY model to specify the general time
-reversible (GTR) substitution model {% cite Tavare1986 %}, which allows all six
-exchangeability rates to differ ({% ref gtr_graphical_model %}).
+reversible (GTR) substitution model @Tavare1986, which allows all six
+exchangeability rates to differ (@gtr_graphical_model).
 
 The instantaneous-rate matrix for the GTR substitution model is:
 
@@ -820,12 +785,8 @@ $$ Q_{GTR} = \begin{pmatrix}
 where the six exchangeability parameters, $r_{ij}$, specify the relative
 rates of change between states $i$ and $j$.
 
-{% figure gtr_graphical_model %}
-<img src="figures/gtr_graphical_model.png" />
-{% figcaption %} 
+![](../figures/gtr_graphical_model.png)
 Graphical model representation of the general-time reversible (GTR) phylogenetic model.
-{% endfigcaption %}
-{% endfigure %}
 
 The GTR model requires that we define and specify a prior on the six
 exchangeability rates, which we will describe using a flat Dirichlet
@@ -842,26 +803,23 @@ prior distribution on the exchangeability rates. Now, we can create a
 stochastic node for the exchangeability rates using the `dnDirichlet()`
 function, which takes the vector of concentration-parameter values as an
 argument and the `~` operator. Together, these create a stochastic node
-named `er` ($\theta$ in {% ref gtr_graphical_model %}):
+named `er` ($\theta$ in @gtr_graphical_model):
 
 ```
 er ~ dnDirichlet(er_prior)
 ```
 
-The Dirichlet distribution assigns probability densities to a group of parameters: *e.g.*,  those that measure proportions and must sum to 1. Here, we have specified a six-parameter Dirichlet prior, where each value describes one of the six relative rates of the GTR model: (1) $A\leftrightarrows C$; (2) $A\leftrightarrows G$; (3) $A\leftrightarrows T$; (4) $C\leftrightarrows G$; (5) $C\leftrightarrows T$; (6) $G\leftrightarrows T$. The input parameters of a Dirichlet distribution are called shape (or concentration) parameters. The expectation and variance for each variable are related to the sum of the shape parameters. The prior we specified above is a ‘flat’ or symmetric Dirichlet distribution; all of the shape parameters are equal (1,1,1,1,1,1). This describes a model that allows for equal rates of change between nucleotides, such that the expected rate for each is equal to $\frac{1}{6}$ ({% ref dirichletFig %}a). 
+The Dirichlet distribution assigns probability densities to a group of parameters: *e.g.*,  those that measure proportions and must sum to 1. Here, we have specified a six-parameter Dirichlet prior, where each value describes one of the six relative rates of the GTR model: (1) $A\leftrightarrows C$; (2) $A\leftrightarrows G$; (3) $A\leftrightarrows T$; (4) $C\leftrightarrows G$; (5) $C\leftrightarrows T$; (6) $G\leftrightarrows T$. The input parameters of a Dirichlet distribution are called shape (or concentration) parameters. The expectation and variance for each variable are related to the sum of the shape parameters. The prior we specified above is a ‘flat’ or symmetric Dirichlet distribution; all of the shape parameters are equal (1,1,1,1,1,1). This describes a model that allows for equal rates of change between nucleotides, such that the expected rate for each is equal to $\frac{1}{6}$ (@dirichletFiga). 
 
-We might also parameterize the Dirichlet distribution such that all of the shape parameters were equal to 100, which would also specify a prior with an expectation of equal exchangeability rates ({% ref dirichletFig %}b). However, by increasing the values of the shape parameters, `er_prior <- v(100,100,100,100,100,100)`, the Dirichlet distribution will more strongly favor equal exchangeability rates; (*i.e.*, a relatively informative prior). 
+We might also parameterize the Dirichlet distribution such that all of the shape parameters were equal to 100, which would also specify a prior with an expectation of equal exchangeability rates (@dirichletFigb). However, by increasing the values of the shape parameters, `er_prior <- v(100,100,100,100,100,100)`, the Dirichlet distribution will more strongly favor equal exchangeability rates; (*i.e.*, a relatively informative prior). 
 
-Alternatively, we might consider an asymmetric Dirichlet parameterization that could reflect a strong prior belief that transition and transversion substitutions occur at different rates. For example, we might specify the prior density `er_prior <- v(4,8,4,4,8,4)`. Under this model, the expected rate for transversions would be $\frac{4}{32}$ and that for transitions would be $\frac{8}{32}$, and there would be greater prior probability on sets of GTR rates that matched this configuration ({% ref dirichletFig %}c). 
+Alternatively, we might consider an asymmetric Dirichlet parameterization that could reflect a strong prior belief that transition and transversion substitutions occur at different rates. For example, we might specify the prior density `er_prior <- v(4,8,4,4,8,4)`. Under this model, the expected rate for transversions would be $\frac{4}{32}$ and that for transitions would be $\frac{8}{32}$, and there would be greater prior probability on sets of GTR rates that matched this configuration (@dirichletFigc). 
 
-Yet another asymmetric prior could specify that each of the six GTR rates had a different value conforming to a Dirichlet(2,4,6,8,10,12). This would lead to a different prior probability density for each rate parameter ({% ref dirichletFig %}d). Without strong prior knowledge about the pattern of relative rates, however, we can better reflect our uncertainty by using a vague prior on the GTR rates. Notably, all patterns of relative rates have the same probability density under `er_prior <- v(1,1,1,1,1,1)`.
+Yet another asymmetric prior could specify that each of the six GTR rates had a different value conforming to a Dirichlet(2,4,6,8,10,12). This would lead to a different prior probability density for each rate parameter (@dirichletFigd). Without strong prior knowledge about the pattern of relative rates, however, we can better reflect our uncertainty by using a vague prior on the GTR rates. Notably, all patterns of relative rates have the same probability density under `er_prior <- v(1,1,1,1,1,1)`.
 
-{% figure dirichletFig %}
-<img src="figures/dirichlet_rates.png" width="600" />
-{% figcaption %}
+![dirichlet](figures/dirichlet_rates.png) 
 Four different examples of Dirichlet priors on exchangeability rates.
-{% endfigcaption %}
-{% endfigure %}
+
 
 For each stochastic node in our model, we must also specify a proposal mechanism if we wish to estimate that parameter. The Dirichlet prior on our parameter `er` creates a [*simplex*](http://en.wikipedia.org/wiki/Simplex) of values that sum to 1.
 
@@ -880,7 +838,7 @@ pi_prior <- v(1,1,1,1)
 pi ~ dnDirichlet(pi_prior)
 ```
 
-The node `pi` represents the $\pi$ node in {% ref gtr_graphical_model %}. Now add the simplex scale move on the stationary frequencies to the moves vector:
+The node `pi` represents the $\pi$ node in @gtr_graphical_model. Now add the simplex scale move on the stationary frequencies to the moves vector:
 
 ```
 moves.append( mvBetaSimplex(pi, weight=2) )
@@ -893,7 +851,7 @@ We can finish setting up this part of the model by creating a deterministic node
 Q := fnGTR(er,pi)
 ```
 
-{% subsection Exercise 3 %}
+## Exercise 3
 
 -   Use one of your previous analysis files—either the `mcmc_JC.Rev` or
     `mcmc_HKY.Rev`—to specify a GTR analysis in a new file called
@@ -904,44 +862,37 @@ Q := fnGTR(er,pi)
 
 -   Complete the table of the phylogenetic relationship of primates.
 
-{% section The Discrete Gamma Model of Among Site Rate Variation %}
+##  The Discrete Gamma Model of Among Site Rate Variation
 
-Members of the GTR family of substitution models assume that rates are homogeneous across sites, an assumption that is often violated by real data. We can accommodate variation in substitution rate among sites (ASRV) by adopting the discrete-gamma model {% cite Yang1994a %}. This model assumes that the substitution rate at each site is a random variable that is described by a discretized gamma distribution, which has two parameters: the shape parameter, $\alpha$, and the rate parameter, $\beta$. In order that we can interpret the branch lengths as the expected number of substitutions per site, this model assumes that the mean site rate is equal to 1. The mean of the gamma is equal to $\alpha/\beta$, so a mean-one gamma is specified by setting the two parameters to be equal, $\alpha=\beta$. This means that we can fully describe the gamma distribution with the single shape parameter, $\alpha$. The degree of among-site substitution rate variation is inversely proportional to the value of the $\alpha$-shape parameter. As the value of the $\alpha$-shape increases, the gamma distribution increasingly resembles a normal distribution with decreasing variance, which therefore corresponds to decreasing levels of ASRV ({% ref asrhGammaFig %}). By contrast, when the value of the $\alpha$-shape parameter is $< 1$, the gamma distribution assumes a concave distribution that concentrates most of the prior density on low rates, but retains some prior mass on sites with very high rates, which therefore corresponds to high levels of ASRV ({% ref asrhGammaFig %}). Note that, when $\alpha = 1$, the gamma distribution collapses to an exponential distribution with a rate parameter equal to $\beta$.
+Members of the GTR family of substitution models assume that rates are homogeneous across sites, an assumption that is often violated by real data. We can accommodate variation in substitution rate among sites (ASRV) by adopting the discrete-gamma model @Yang1994a. This model assumes that the substitution rate at each site is a random variable that is described by a discretized gamma distribution, which has two parameters: the shape parameter, $\alpha$, and the rate parameter, $\beta$. In order that we can interpret the branch lengths as the expected number of substitutions per site, this model assumes that the mean site rate is equal to 1. The mean of the gamma is equal to $\alpha/\beta$, so a mean-one gamma is specified by setting the two parameters to be equal, $\alpha=\beta$. This means that we can fully describe the gamma distribution with the single shape parameter, $\alpha$. The degree of among-site substitution rate variation is inversely proportional to the value of the $\alpha$-shape parameter. As the value of the $\alpha$-shape increases, the gamma distribution increasingly resembles a normal distribution with decreasing variance, which therefore corresponds to decreasing levels of ASRV (@asrhGammaFig). By contrast, when the value of the $\alpha$-shape parameter is $< 1$, the gamma distribution assumes a concave distribution that concentrates most of the prior density on low rates, but retains some prior mass on sites with very high rates, which therefore corresponds to high levels of ASRV (@asrhGammaFig). Note that, when $\alpha = 1$, the gamma distribution collapses to an exponential distribution with a rate parameter equal to $\beta$.
 
-{% figure asrhGammaFig %}
-<img src="figures/asrh_gamma.png" width="600" />
-{% figcaption %}
+![](figures/asrh_gamma.png)
 The probability density of mean-one gamma-distributed rates for different values of the $\alpha$-shape parameter.
-{% endfigcaption %}
-{% endfigure %}
+
 
 We typically lack prior knowledge regarding the degree of ASRV for a given alignment. 
 Accordingly, rather than specifying a precise value of $\alpha$, we can instead estimate the value of the $\alpha$-shape parameter from the data. This requires that we specify a diffuse (relatively ['uninformative'](http://andrewgelman.com/2013/11/21/hidden-dangers-noninformative-priors/)) prior on the $\alpha$-shape parameter. For this analysis, we will use a uniform distribution between 0 and 10.
 
-This approach for accommodating ASRV is another example of a hierarchical model ({% ref fig_gtrg %}). 
+This approach for accommodating ASRV is another example of a hierarchical model (@fig_gtrg). 
 That is, variation in substitution rates across sites is addressed by applying a site-specific rate multiplier to each of the $j$ sites, $r_j$. 
 These rate-multipliers are drawn from a discrete, mean-one gamma distribution; the shape of this prior distribution (and the corresponding degree of ASRV) is governed by the $\alpha$-shape parameter. The $\alpha$-shape parameter, in turn, is treated as a lognormal distributed random variable. Finally, the shape of the lognormal prior is governed by the mean and standard deviation parameters, which are set to fixed values.
 
-{% figure fig_gtrg %}
-![]( figures/gtrg_graphical_model.png) 
-{% figcaption %}
+![](../figures/gtrg_graphical_model.png) 
 Graphical model representation of the General Time Reversible (GTR) + Gamma phylogenetic model with invariable sites.
-{% endfigcaption %}
-{% endfigure %}
 
-{% subsubsection Setting up the Gamma Model in RevBayes %}
+
+### Setting up the Gamma Model in RevBayes
 
 Then create a stochastic node called `alpha` with a uniform prior distribution between 0.0 and $10$
 (this represents the stochastic node for the $\alpha$-shape parameter in
-{% ref fig_gtrg %}):
+@fig_gtrg):
 
 ```
 alpha ~ dnUniform( 0.0, 10 )
 ```
-{% comment %}
 Then create a stochastic node called `alpha` with a uniform prior distribution between 0.0 and $10^8$
 (this represents the stochastic node for the $\alpha$-shape parameter in
-{% ref fig_gtrg %}):
+@fig_gtrg):
 
 ```
 alpha ~ dnUniform( 0.0, 1E8 )
@@ -950,7 +901,6 @@ alpha.setValue(1.0)
 Note that we initialized the value of `alpha` to $1.0$. This is strictly speaking not necessary but helps tremendously the MCMC to converge.
 As a general rule, it is possible to initialize starting values for the MCMC using the *setValue( xx )* function, which is available for every stochastic variable,
 but it might also make your replicated MCMC runs to be more likely to get stuck in the same local area of parameters.
-{% endcomment %}
 
 The way the ASRV model is implemented involves discretizing the mean-one gamma distribution into a set number of rate categories, $k$. Thus, we can analytically marginalize over the uncertainty in the rate at each site. The likelihood of each site is averaged over the $k$ rate categories, where the rate multiplier is the mean (or median) of each of the discrete $k$ categories. To specify this, we need a deterministic node that is a vector that will hold the set of $k$ rates drawn from the gamma distribution with $k$ rate categories. The `fnDiscretizeGamma()` function returns this deterministic node and takes three arguments: the shape and rate of the gamma distribution and the number of categories. Since we want to discretize a mean-one gamma distribution, we can pass in `alpha` for both the shape and rate.
 
@@ -972,7 +922,7 @@ Remember that you need to call the `PhyloCTMC` constructor to include the new si
 seq ~ dnPhyloCTMC(tree=psi, Q=Q, siteRates=sr, type="DNA")
 ```
 
-{% subsection Exercise 4 %}
+## Exercise 4
 
 
 -   Modify the previous GTR analysis to specify the GTR+Gamma model. 
@@ -984,11 +934,11 @@ seq ~ dnPhyloCTMC(tree=psi, Q=Q, siteRates=sr, type="DNA")
 
 -   Complete the table of the phylogenetic relationship of primates.
 
-{% section Modeling Invariable Sites %}
+##  Modeling Invariable Sites
 
 All of the substitution models described so far assume that the sequence data are potentially variable. That is, we assume that the sequence data are random variables; specifically, we assume that they are realizations of the specified `PhyloCTMC` distribution. However, some sites may not be free to vary—when the substitution rate of a site is zero, it is said to be *invariable*. Invariable sites are often confused with *invariant* sites—when each species exhibits the same state, it is said to be invariant. The concepts are related but distinct. If a site is truly invariable, it will necessarily give rise to an invariant site pattern, as such sites will always have a zero substitution rate. However, an invariant site pattern may be achieved via multiple substitutions that happen to end in the same state for every species.
 
-Here we describe an extension to our phylogenetic model to accommodate invariable sites. Under the invariable-sites model {% cite Hasegawa1985 %}, each site is invariable with probability `p_inv`, and variable with probability $1-$`p_inv`.
+Here we describe an extension to our phylogenetic model to accommodate invariable sites. Under the invariable-sites model @Hasegawa1985, each site is invariable with probability `p_inv`, and variable with probability $1-$`p_inv`.
 
 First, let’s have a look at the data and see how many invariant sites we have:
 
@@ -1019,7 +969,7 @@ new `p_inv` parameter:
 seq ~ dnPhyloCTMC(tree=psi, Q=Q, siteRates=sr, pInv=p_inv, type="DNA")
 ```
 
-{% subsection Exercise 5 %}
+## Exercise 5
 
 -   Extend the GTR model to account for invariable sites and run
     an analysis.
@@ -1034,3 +984,5 @@ seq ~ dnPhyloCTMC(tree=psi, Q=Q, siteRates=sr, pInv=p_inv, type="DNA")
 -   What is the estimated probability of invariable sites now?
 
 -   Complete the table of the phylogenetic relationship of primates.
+
+
