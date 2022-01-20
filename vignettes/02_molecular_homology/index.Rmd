@@ -7,27 +7,7 @@ output: html_document
 
 Pairwise Multiple Sequence Alignment does exactly what we discussed last week, for all your sequences. Typically, this is performed by first performing a pairwise MSA, as we did above, between the two sequences with the least differences. Then, sequences are added in the order of least differences. Progressive alignments score different alignment possibilities based on the alignment and user-specified scoring matrices, such as BLOSUM 62, or others. Clustal is an example of progressive alignment, but is known to be fairly innaccurate. Below, we use T-COFFEE to get an alignment. 
 
-First, we will download and compile T_Coffee. Log in to LONI. LONI is a UNIX-based file system. First, we will start an interactive session, which allows us to have more memory.
-
-```
-qsub -I -A loni_antfbd -q workq -l nodes=1:ppn=20,walltime=3:00:00 
-```
-
-Once the prompt is returned to you, use change directory, `cd` to move into your user work directory.
-
-```
-cd /work/<your username>
-```
-
-Now, we will build T-Coffee:
-
-
-```
-https://github.com/cbcrg/tcoffee.git
-cd tcoffee/t_coffee/src
-make t_coffee
-```
-
+First, we will download [T_COFFEE](https://tcoffee.org/Projects/tcoffee/#DOWNLOAD).
 
 We haven't played with any software yet in this class, so I'll now have you create a single location for all your software to live. Change directories into your home. Copy t-coffee into your user home.
 
