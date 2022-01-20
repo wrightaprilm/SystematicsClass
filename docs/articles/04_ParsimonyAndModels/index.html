@@ -63,7 +63,7 @@
       <a href="../../articles/02_molecular_homology/index.html">Molecular Homology Assignment</a>
     </li>
     <li>
-      <a href="../../articles/03_massive_homology/index.html">03_massive_homology.Rmd</a>
+      <a href="../../articles/03_massive_homology/index.html">Genome-Scale Homology</a>
     </li>
     <li>
       <a href="../../articles/04_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a>
@@ -110,21 +110,18 @@
 <h2 class="hasAnchor">
 <a href="#maximum-parsimony-analysis-using-paup" class="anchor"></a>Maximum Parsimony Analysis Using PAUP</h2>
 <p>Today, we will use PAUP* (Phylogenetic Analysis Using Parsimony [*and other methods]) to estimate a phylogeny using the maximum parsimony optimality criterion. We will also practice performing bootstrap and jackknife quantification of uncertainty. In the process, we will also see some of the basics of how phylogenetic software will read data and understand models.</p>
-<p><strong>A Note on Software Installs on LONI</strong>: After we’re done with a piece of software, if you can’t see yourself using it again, feel free to delete it. I will make a note otherwise if I need you to retain it for future use.</p>
-<p>Login using ssh</p>
-<p>Now, we will start an interactive session, since we’ll be performing some sort of intense computations:</p>
-<pre class="unix"><code>qsub -I -V -A loni_selu_sys -q single -l nodes=1:ppn=1,walltime=3:00:00</code></pre>
 </div>
 <div id="download-paup-and-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#download-paup-and-data" class="anchor"></a>Download PAUP and Data</h2>
-<p>Remain in your home directory. We will load PAUP via a provided module.</p>
-<pre class="unix"><code>module load paup</code></pre>
-<p>Now, move into your work directory. Go into the class repository and pull my changes (I have added several data files).</p>
-<p>Exit the class repository. Make a folder for today’s lab called “PAUPLab”. Make Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository. The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir.</p>
+<p>I have already installed paup for you. But if you wanted to, you could do it like so.</p>
+<pre class="unix"><code> curl -O  http://phylosolutions.com/paup-test/paup4a168_ubuntu64.gz
+ gunzip paup4a168_ubuntu64.gz 
+</code></pre>
+<p>Now, move into your lab_three directory. Make a Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository (<code>data/PAUPlab</code>). The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir.</p>
 <pre class="unix"><code>mkdir PAUPlab
 
-cp _____/SELUSys2018/data/PAUPlab/primate-mtDNA.nex ./data</code></pre>
+cp __/data/PAUPlab ./Data</code></pre>
 </div>
 <div id="paup" class="section level2">
 <h2 class="hasAnchor">
