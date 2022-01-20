@@ -1,0 +1,146 @@
+---
+title: "03_massive_homology.Rmd"
+author: "April Wright"
+date: "1/20/2022"
+output: html_document
+---
+# Homology in massive datasets
+
+Homology is difficult to assess in massive datasets, particularly those from genomic data. For example, ddRAD sequencing is common in the life sciences. It is common because it's fairly cost effective and obtains a sample of loci from across the genome. If you're working with this data, I really do recommend having a look at [this](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135) paper describing the method. The salient figure is below:
+
+
+![ddRAD from Peterson et al.](fig/ddRAD.png)
+
+
+
+We'll be using the iPyRad software from Deren Eaton's lab. You can see the [paper](https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/btz966/5697088?redirectedFrom=fulltext) for the software, or look at the [source code.](https://github.com/dereneaton/ipyrad/) On the board, let's draw the workflow of iPyRad. This tutorial heavily borrows from one of Deren's.
+
+```
+# The curl command is used to download the installer from the web. Take note
+# that the -O flag is a capital o not a zero.
+wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+
+# Install miniconda into $HOME/miniconda3
+bash Miniconda3-latest-Linux-x86_64.sh -b
+
+# Initialize and activate your conda install
+/home/rstudio-user/miniconda3/bin/conda init bash
+bash
+
+# test that conda is installed. Will print info about your conda install.
+conda info
+
+conda install ipyrad -c conda-forge -c bioconda
+
+```
+
+Now, we'll download some test data. This is plant data collected by the author of iPyRad, Deren Eaton.
+
+```
+curl -LkO https://eaton-lab.org/data/ipsimdata.tar.gz
+tar -xvzf ipsimdata.tar.gz
+```
+
+Change directories into the data folder and have a look at these data. What is in this folder?
+
+Try this:
+
+```
+gunzip -c ./ipsimdata/rad_example_R1_.fastq.gz | head -n 12
+```
+
+What does this show? Why do we need to zip this sort of data? What do you think these four lines are?
+
+What does the below line do?
+
+```
+cat ./ipsimdata/rad_example_barcodes.txt
+```
+
+What do these barcodes mean?
+
+
+Now, we will begin to analyse the data. Move into the lab_two folder (or create it if you don't have it):
+
+
+```
+ipyrad -n iptest
+```
+
+Above, we created a new parameter file. This file will hold any input we want to have on our analysis. Let's open this file with `nano` and look at it.
+
+**Edit lines two and three to contain the paths to your raw fastq files and your barcodes file.**
+
+
+The first step in assembling a matrix from ddRAD data is to separate the reads by bardcode. :
+
+```
+ /home/rstudio-user/miniconda3/bin/ipyrad -p params-iptest.txt -s 1
+```
+
+What is the end result of this step? Take a look at this command to figure it out. Where else have you seen the alpha-numeric codes at the start of the file names:
+
+```
+ls iptest_fastqs
+```
+
+We can view stats on the number of reads we retained with this command:
+
+```
+ipyrad -p params-iptest.txt -r
+ 
+ ```
+ 
+Now, we filter our reads based on quality score.
+
+```
+
+ipyrad -p params-iptest.txt -s 2
+
+```
+
+Filtering can be subjective. Some relevant parameters in here are maximum number of low-quality bases in a read and what Phred Quality score to be the lowest base score (33 is an emerging consensus value).
+
+Next, we find all the copies of the same locus within each sample. Line 14 specifies the clustering threshold - 85%. This means reads with 85%+ similarity will be assumed to represent the same locus. More stringent, and you might assume reads that are the same are actually different loci (i.e., inflate your number of loci). Too loose and you may lose loci. Remember that 85% may sound low, but next-gen sequencing is generally more error-prone than Sanger sequencing.
+
+```
+ipyrad -p params-iptest.txt -s 3
+```
+ Our next step will estimate two things: heterozygosity (which alternate reads are genuinely different alleles) and error (which are due to sequencing error). People generally tend to look at this as such: say you have three different 'alleles' in your stack of reads. Two of them are present in 999 out of 1000 samples. The third one is two base pairs different from allele two, and only observed once. Do you think that's a genuine third allele?
+ 
+```
+ipyrad -p params-iptest.txt -s 4
+```
+
+We then take this info, and use it to come up with consensus reads for each locus:
+
+```
+ipyrad -p params-iptest.txt -s 5
+```
+
+The next thing we need to do is try to merge the stacks of loci for each sample with the stacks for other samples:
+
+```
+ipyrad -p params-iptest.txt -s 6
+```
+
+We're trying to match the loci at one sample to others. After all, we want to be able to have shared loci across samples so we can build a tree.
+
+And finally, we write it all out:
+
+```
+ipyrad -p params-iptest.txt -s 7
+```
+
+This sounds like t should be an easy step, but it can actually be quite challenging. There are a number of parameters in the params file that apply here - number of SNPs, number of indels, accepted number of alleles at a locus. You may want to examine these values for your data. The final files will be in iptest_outfiles. Have a look at the .phy file. Does it look familiar?
+
+# Massive scale homology homework
+
+1.  Step 2 allows you to adjust the phred score. Try doing this. Does this alter how much data you retain? 
+
+2. Step 3 allows you to change how many errors you allow. Try changing this. How does your output change with it? 
+
+1/2 a. You may choose a different variable to alter if neither of the above interest you.
+
+3. Have a look at the [Stacks](http://catchenlab.life.illinois.edu/stacks/) software. Briefly compare and contrast Stacks and PyRad.
+

@@ -5,12 +5,11 @@ articles:
   00_Basics_of_R/index: index.html
   01_homology_assignment/index: index.html
   02_molecular_homology/index: index.html
-  03_CTMC/index: index.html
-  03_ParsimonyAndModels/index: index.html
-  03_tutorial_structure/index: index.html
-  04_Discrete_Morphology/05_RB_MCMC_Discrete_Morph: 05_RB_MCMC_Discrete_Morph.html
-  04_tutorial_structure/index: index.html
+  03_massive_homology/index: index.html
+  04_ParsimonyAndModels/index: index.html
+  05_CTMC/index: index.html
+  06_Discrete_Morphology/05_RB_MCMC_Discrete_Morph: 05_RB_MCMC_Discrete_Morph.html
   06_models/index: index.html
   08_final/index: index.html
-last_built: 2022-01-20T18:01Z
+last_built: 2022-01-20T19:53Z
 
