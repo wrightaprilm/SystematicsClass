@@ -8,8 +8,14 @@ articles:
   03_massive_homology/index: index.html
   04_ParsimonyAndModels/index: index.html
   05_CTMC/index: index.html
-  06_Discrete_Morphology/05_RB_MCMC_Discrete_Morph: 05_RB_MCMC_Discrete_Morph.html
-  06_models/index: index.html
+  05_models/index: index.html
+  06_Bayes_and_MCMC/index: index.html
+  07_Discrete_Morphology/index: index.html
+  08_Partitioned_data/index: index.html
   08_final/index: index.html
-last_built: 2022-01-20T21:02Z
+  09_Molecular_Clock/index: index.html
+  10_FBD/RB_Total_Evidence_Tutorial: RB_Total_Evidence_Tutorial.html
+  12_Comparative_Methods/index: index.html
+  13_biogeography/index: index.html
+last_built: 2022-01-22T16:33Z
 
