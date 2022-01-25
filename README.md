@@ -22,4 +22,4 @@ Below is the schedule for spring semester
 | April 11 | [Phylogenetic Comparative Methods](https://wrightaprilm.github.io/SystematicsClass/articles/12_Molecular_Clock/index.html) | TBD | 
 | April 25 | [Phylogenetic Comparative Methods](https://wrightaprilm.github.io/SystematicsClass/articles/12_Comparative_Methods/index.html) | TBD | [Ree and Smith](https://academic.oup.com/sysbio/article/57/1/4/1703014?login=true), [Landis et al](https://onlinelibrary.wiley.com/doi/full/10.1111/evo.13594?casa_token=h16ZKs9d9c0AAAAA%3AM5veWProl8cwBAKyLIZnm6bw-qobYTVM02ULP5n0I_pFqFvaZu8oadWmSenHMFZ9jduaGeS3xrcjJA), [Landis](https://academic.oup.com/sysbio/article/66/2/128/2669985)| 
 | May 2 | [Biogeography](https://wrightaprilm.github.io/SystematicsClass/articles/13_biogeography/index.html) | TBD |
-| Monday, May 9, 12:30 p.m. - 2:30 p.m. | [Final](https://wrightaprilm.github.io/SystematicsClass/articles/08_final/index.html) | TBD |
+| Monday, May 9, 12:30 p.m. - 2:30 p.m. | [Final](https://wrightaprilm.github.io/SystematicsClass/articles/14_Final/index.html) | TBD |

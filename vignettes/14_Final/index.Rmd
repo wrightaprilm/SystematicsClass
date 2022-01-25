@@ -1,0 +1,30 @@
+---
+title: "FinalExam"
+author: "April Wright"
+date: "1/25/2022"
+output: html_document
+---
+
+### For the final: 
++ Estimate a phylogeny. 
+    - Group of your choosing 
+    - Data of your choosing (molecular, morphological) 
++ Do a more sophisticated analysis with it 
+    - Divergence time estimation 
+    - Comparative method 
+    - Something else 
+
+## Points: 100 points
+
+### Analysis
++ 5 points: Topic choice
++ 20 points: Scripts: I will try to reproduce
++ 15 points: Data preparation (appropriate formats for the analysis)
++ 10 points: Appropriate notes that allow me to reproduce your work from your scripts/commands
+
+### Presentation
++ 10 points: Appropriate background given to understand your question and why it is good
++ 10 points: Method is described accruately and with enough information to understand.
++ 10 points: Results are contextualized so others can understand what they mean both for the analysis and for the group
++ 10 points: Presenter is well-prepared and speaks clearly
++ 10 points: Presenter is a conscientious and kind participant in others' presentations
