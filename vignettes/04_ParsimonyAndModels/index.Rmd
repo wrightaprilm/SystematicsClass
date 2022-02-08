@@ -21,7 +21,7 @@ I have already installed paup for you. But if you wanted to, you could do it lik
 
 ```UNIX
  curl -O  http://phylosolutions.com/paup-test/paup4a168_centos64.gz
- gunzip paup4a168_ubuntu64.gz 
+ gunzip paup4a168_centos64.gz 
 
 ```
 
@@ -43,7 +43,7 @@ PAUP reads in data in the Nexus format. Go ahead and use nano to open the primat
 Next, we will open PAUP:
 
 ```UNIX
-/cloud/project/software/paup4a168_ubuntu64
+./paup4a168_centos64
 ```
 
 You should get something like the below:
@@ -69,7 +69,7 @@ paup>
 Next, we will load in the data file, using the execute command. Execute is kind of PAUP's catch-all for loading in data.
 
 ```UNIX
-execute primate-mtDNA.nex
+execute pauplab/primate-mtDNA.nex
 ```
 
 Let's have a look at the screen output. What information does it tell us?

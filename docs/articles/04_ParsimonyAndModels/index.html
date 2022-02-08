@@ -137,7 +137,7 @@
 <a href="#download-paup-and-data" class="anchor"></a>Download PAUP and Data</h2>
 <p>I have already installed paup for you. But if you wanted to, you could do it like so.</p>
 <pre class="unix"><code> curl -O  http://phylosolutions.com/paup-test/paup4a168_centos64.gz
- gunzip paup4a168_ubuntu64.gz 
+ gunzip paup4a168_centos64.gz 
 </code></pre>
 <p>Now, move into your lab_three directory. Make a Data, Results, and Scripts subdirectories inside of it. Enter the Data directory. Copy the data from class repository (<code>data/PAUPlab</code>). The following is a fill in the blank - figure out how you get from your data directory to the classroom data dir.</p>
 <pre class="unix"><code>
@@ -149,7 +149,7 @@ cp __/data/PAUPlab ./Data</code></pre>
 <p>Paup is one of the older phylogenetics software packages available, and Dave Swofford has put considerable effort into ensuring that the main mechanisms and models are correct. Many of us who do other software development use PAUP as a check on our own calculations.</p>
 <p>PAUP reads in data in the Nexus format. Go ahead and use nano to open the primate dataset.</p>
 <p>Next, we will open PAUP:</p>
-<pre class="unix"><code>/cloud/project/software/paup4a168_ubuntu64</code></pre>
+<pre class="unix"><code>./paup4a168_centos64</code></pre>
 <p>You should get something like the below:</p>
 <pre class="unix"><code>P A U P *
 Portable version 4.0b10 for Unix
@@ -167,7 +167,7 @@ Sat Feb 17 16:04:16 2018
 paup&gt;
 </code></pre>
 <p>Next, we will load in the data file, using the execute command. Execute is kind of PAUP’s catch-all for loading in data.</p>
-<pre class="unix"><code>execute primate-mtDNA.nex</code></pre>
+<pre class="unix"><code>execute pauplab/primate-mtDNA.nex</code></pre>
 <p>Let’s have a look at the screen output. What information does it tell us?</p>
 <p>Some other useful commands are:</p>
 <pre><code>cstatus
