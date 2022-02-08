@@ -20,7 +20,7 @@ Today, we will use  PAUP* (Phylogenetic Analysis Using Parsimony [*and other met
 I have already installed paup for you. But if you wanted to, you could do it like so.
 
 ```UNIX
- curl -O  http://phylosolutions.com/paup-test/paup4a168_ubuntu64.gz
+ curl -O  http://phylosolutions.com/paup-test/paup4a168_centos64.gz
  gunzip paup4a168_ubuntu64.gz 
 
 ```
