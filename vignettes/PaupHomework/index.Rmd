@@ -1,0 +1,18 @@
+---
+title: "PAUPHomework"
+author: "April Wright"
+date: "2/9/2022"
+output: html_document
+---
+1. Load in the primates mitochondrial DNA dataset. Provide your command for doing so.
+
+
+2. Do a heuristic search with each of the different swap schemes (NNI, SPR, TBR). Do we get the same best tree(s) each time? Is it the same tree as the exhaustive search?
+
+
+3. Do a bootstrap search. You can work in groups, since this takes a little while. Do you get better support for one of the two most parsimonious trees? How would you interpret this result?
+
+
+
+4. Everything we've talked about so far is equal weights parsimony, i.e., parsimony in which no change between states is considered more likely than any other change. When do you think this will be a good model? When do you think it will be a bad one?
+
