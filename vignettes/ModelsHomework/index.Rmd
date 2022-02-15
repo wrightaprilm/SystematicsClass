@@ -1,0 +1,28 @@
+---
+title: "Models Homework"
+author: "April Wright"
+date: "2/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. We did some model exercises with the molecular data in PAUP. Try applying some of these models to the Barden morphological dataset. What nst values can you use?
+
+
+
+2. If you look at the model output, it says the state space is variable. Take a look at the Barden data file. To what does the "variable" state space refer?
+
+
+
+3. Try choosing a different base frequency. What does PAUP tell you? Try doing as it suggests. Can you figure out what 'genFreq' is?
+
+
+
+4. What is the score of the best tree you found? No right answers; winner gets nothing.
+
+
+
+5. We talked about heuristics this week and last. Is a heuristic guaranteed find you the best tree? How are you, personally, going to make peace with this in your work?
