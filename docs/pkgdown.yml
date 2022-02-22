@@ -1,24 +1,25 @@
 pandoc: 2.10.1
-pkgdown: 1.6.1
+pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  00_Basics_of_R/index: index.html
-  01_homology_assignment/index: index.html
-  02_molecular_homology/index: index.html
-  03_massive_homology/index: index.html
-  04_ParsimonyAndModels/index: index.html
-  05_CTMC/index: index.html
-  05_models/index: index.html
-  06_Bayes_and_MCMC/index: index.html
-  07_Discrete_Morphology/index: index.html
-  08_Partitioned_data/index: index.html
-  08_final/index: index.html
-  09_Molecular_Clock/index: index.html
-  10_FBD/RB_Total_Evidence_Tutorial: RB_Total_Evidence_Tutorial.html
-  12_Comparative_Methods/index: index.html
-  13_biogeography/index: index.html
-  14_Final/index: index.html
-  ModelsHomework/index: index.html
-  PaupHomework/index: index.html
-last_built: 2022-02-15T21:35Z
+  index: 00_Basics_of_R/index.html
+  index: 01_homology_assignment/index.html
+  index: 02_molecular_homology/index.html
+  index: 03_massive_homology/index.html
+  index: 04_ParsimonyAndModels/index.html
+  index: 05_CTMC/index.html
+  index: 05_models/index.html
+  index: 06_Bayes_and_MCMC/index.html
+  index: 07_Discrete_Morphology/index.html
+  index: 08_Partitioned_data/index.html
+  index: 08_final/index.html
+  index: 09_Molecular_Clock/index.html
+  RB_Total_Evidence_Tutorial: 10_FBD/RB_Total_Evidence_Tutorial.html
+  index: 12_Comparative_Methods/index.html
+  index: 13_biogeography/index.html
+  index: 14_Final/index.html
+  LikelihoodCalc: LCalc/LikelihoodCalc.html
+  index: ModelsHomework/index.html
+  index: PaupHomework/index.html
+last_built: 2022-02-22T17:30Z
 

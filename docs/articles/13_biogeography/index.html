@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">SystematicsClass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../../reference/index.html">Reference</a>
 </li>
@@ -102,6 +98,9 @@
       <a href="../../articles/14_Final/index.html">FinalExam</a>
     </li>
     <li>
+      <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
+    </li>
+    <li>
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
@@ -120,11 +119,11 @@
 
       
 
-      </header><script src="index_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to Phylogenetic Models of Discrete Biogeography</h1>
-            <h3 class="subtitle">Overview of the Dispersal-Extirpation-Cladogenesis (DEC) model</h3>
+            <h3 data-toc-skip class="subtitle">Overview of the Dispersal-Extirpation-Cladogenesis (DEC) model</h3>
             
       
       
@@ -151,16 +150,16 @@ useful to work within a single directory.
 > you simply have to type `rb` in your Terminal to run the program. 
 {:.instruction}
  -->
-<div id="overview-of-the-dispersal-extinction-cladogenesis-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#overview-of-the-dispersal-extinction-cladogenesis-model" class="anchor"></a>Overview of the Dispersal-Extinction-Cladogenesis Model</h1>
+<div class="section level2">
+<h2 id="overview-of-the-dispersal-extinction-cladogenesis-model">Overview of the Dispersal-Extinction-Cladogenesis Model<a class="anchor" aria-label="anchor" href="#overview-of-the-dispersal-extinction-cladogenesis-model"></a>
+</h2>
 <p>The Dispersal-Extinction-Cladogenesis (DEC) process models range evolution as a discrete-valued process {% cite Ree2005 Ree2008 %}. There are three key components to understanding the DEC model: range characters, anagenetic range evolution, and cladogenetic range evolution (Figure, below).</p>
 <p><img src="figures/fig_range_evol_events.png" width="75%"></p>
 <p>Cartoon of behavior of the DEC model.Two anagenetic events (a,b) and five cladogenetic (c–g) events are shown for a system with two areas.Areas are shaded when inhabited by a given lineage and left blank when uninhabited.Time proceeds from left to right. (a) Dispersal: a new area to be added to the species range. (b) Extirpation (or local extinction): the species range loses a previously inhabited area. (c) Narrow sympatry: When the ancestral range contains one area, both daughter lineages inherit that area. (d) Subset sympatry: When the ancestral range is widespread, one daughter inherits the ancestral range and the other daughter inherits only one area. (e) Allopatry (or vicariance): When the ancestral range is widespread, one daughter lineage inherits a subset of the ancestral areas while the other daughter inherits all remaining ancestral areas. (f) Widespread sympatry: When the ancestral range is widespread, both daughters inherit the ancestral range. (g) Jump dispersal (or founder speciation): One daughter inherits the ancestral range while the other daughter inherits a new unoccupied area.</p>
 </div>
-<div id="discrete-range-characters" class="section level1">
-<h1 class="hasAnchor">
-<a href="#discrete-range-characters" class="anchor"></a>Discrete Range Characters</h1>
+<div class="section level2">
+<h2 id="discrete-range-characters">Discrete Range Characters<a class="anchor" aria-label="anchor" href="#discrete-range-characters"></a>
+</h2>
 <p>DEC interprets taxon ranges as presence-absence data, that is, where a species is observed or not observed across multiple discrete areas. For example, say there are three areas, A, B, and C. If a species is present in areas A and C, then its range equals AC, which can also be encoded into the length-3 bit vector, 101. Bit vectors may also be transformed into (decimal) integers, <em>e.g.</em>, the binary number 101 equals the decimal number 5.</p>
 <table class="table">
 <caption>Example of discrete range representations for an analysis with areas A, B, and C.</caption>
@@ -245,24 +244,24 @@ useful to work within a single directory.
 <p>Alternatively, if you are on a Unix system, and have added RevBayes to your path, you simply have to type <code>rb</code> in your Terminal to run the program. {:.instruction}</p>
 </blockquote>
 <p>Assume you have three areas</p>
-<pre><code>n_areas &lt;- 3</code></pre>
+<pre><code><span class="va">n_areas</span> <span class="op">&lt;-</span> <span class="fl">3</span></code></pre>
 <p>First, create a matrix of dispersal rates between area pairs, with rates <span class="math inline">\(d_{AB} = d_{AC} = \ldots = d_{CB} = 1\)</span>.</p>
-<pre><code>for (i in 1:n_areas) {
-    for (j in 1:n_areas) {
-        dr[i][j] &lt;- 1.0
-    }
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_areas</span><span class="op">)</span> <span class="op">{</span>
+    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_areas</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">dr</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1.0</span>
+    <span class="op">}</span>
+<span class="op">}</span></code></pre>
 <p>Next, let’s create the extirpation rates with values <span class="math inline">\(e_A=e_B=e_C=1\)</span></p>
-<pre><code>for (i in 1:n_areas) {
-    for (j in 1:n_areas) {
-        er[i][j] &lt;- 0.0
-    }
-    er[i][i] &lt;- 1.0
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_areas</span><span class="op">)</span> <span class="op">{</span>
+    <span class="kw">for</span> <span class="op">(</span><span class="va">j</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_areas</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">er</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">[</span><span class="va">j</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">0.0</span>
+    <span class="op">}</span>
+    <span class="va">er</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1.0</span>
+<span class="op">}</span></code></pre>
 <p>When the extirpation rate matrix is a diagonal matrix (i.e. all non-diagonal entries are zero), extirpation rates are mutually independent as in (<span class="citation">@Ree2005</span>). More complex models that penalize widespread ranges that span disconnected areas are explored in later sections.</p>
 <p>To continue, create the DEC rate matrix from the dispersal rates (dr) and extirpation rates (er).</p>
-<pre><code>Q_DEC := fnDECRateMatrix(dispersalRates=dr, extirpationRates=er)
-Q_DEC</code></pre>
+<pre><code><span class="va">Q_DEC</span> <span class="op">:=</span> <span class="fu">fnDECRateMatrix</span><span class="op">(</span>dispersalRates<span class="op">=</span><span class="va">dr</span>, extirpationRates<span class="op">=</span><span class="va">er</span><span class="op">)</span>
+<span class="va">Q_DEC</span></code></pre>
 <pre><code>    [ [ 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000 ] ,
         1.0000, -3.0000, 0.0000, 0.0000, 1.0000, 1.0000, 0.0000, 0.0000 ] ,
         1.0000, 0.0000, -3.0000, 0.0000, 1.0000, 0.0000, 1.0000, 0.0000 ] ,
@@ -272,8 +271,8 @@ Q_DEC</code></pre>
         0.0000, 0.0000, 1.0000, 1.0000, 0.0000, 0.0000, -4.0000, 2.0000 ] ,
         0.0000, 0.0000, 0.0000, 0.0000, 1.0000, 1.0000, 1.0000, -3.0000 ] ]</code></pre>
 <p>Compute the anagenetic transition probabilities for a branch of length 0.2.</p>
-<pre><code>tp_DEC &lt;- Q_DEC.getTransitionProbabilities(rate=0.2)
-tp_DEC</code></pre>
+<pre><code><span class="va">tp_DEC</span> <span class="op">&lt;-</span> <span class="fu">Q_DEC.getTransitionProbabilities</span><span class="op">(</span>rate<span class="op">=</span><span class="fl">0.2</span><span class="op">)</span>
+<span class="va">tp_DEC</span></code></pre>
 <pre><code>    [ [ 1.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, 0.000],
       [ 0.000, 0.673, 0.013, 0.013, 0.123, 0.123, 0.005, 0.050],
       [ 0.000, 0.013, 0.673, 0.013, 0.123, 0.005, 0.123, 0.050],
@@ -284,11 +283,11 @@ tp_DEC</code></pre>
       [ 0.000, 0.021, 0.021, 0.021, 0.107, 0.107, 0.107, 0.616]]</code></pre>
 <p>Notice how the structure of the rate matrix is reflected in the transition probability matrix. For example, ranges that are separated by multiple dispersal and extirpation events are the most improbable: transitioning from going from A to BC takes a minimum of three events and has probability 0.005.</p>
 <p>Also note that the probability of entering or leaving the null range is zero. By default, the RevBayes conditions the anagenetic range evolution process on never entering the null range when computing the transition probabilities (<code>nullRange="CondSurv"</code>). This allows the model to both simulate and infer using the same transition probabilities. (Massana2015) first noted that the null range—an unobserved absorbing state—results in abnormal extirpation rate and range size estimates. Their proposed solution to eliminate the null range from the state space is enabled with the <code>nullRange="Exclude"</code> setting. The <code>nullRange="Include"</code> setting provides no special handling of the null range, and produces the raw probabilities of (Ree2005).</p>
-<div id="cladogenetic-range-evolution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cladogenetic-range-evolution" class="anchor"></a>Cladogenetic Range Evolution</h2>
+<div class="section level3">
+<h3 id="cladogenetic-range-evolution">Cladogenetic Range Evolution<a class="anchor" aria-label="anchor" href="#cladogenetic-range-evolution"></a>
+</h3>
 <p>The cladogenetic component of the DEC model describes evolutionary change accompanying speciation events (Below, c–g). In the context of range evolution, daughter species do not necessarily inherit their ancestral range in an identical manner. For each internal node in the reconstructed tree, one of several cladogenetic events can occur, some of which are described below.</p>
-<p>Beginning with the simplest case first, suppose the range of a species is <span class="math inline">\(A\)</span> the moment before speciation occurs at an internal phylogenetic node. Since the species range is size one, both daughter lineages necessarily inherit the ancestral species range (<span class="math inline">\(A\)</span>). In DEC parlance, this is called a narrow sympatry event ({% ref dec_cartoon %}c). Now, suppose the ancestral range is <span class="math inline">\(ABC\)</span>. Under subset sympatry, one lineage identically inherits the ancestral species range, <span class="math inline">\(ABC\)</span>, while the other lineage inherits only a single area, i.e. only <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> or <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}d). Under allopatric cladogenesis, the ancestral range is split evenly among daughter lineages, e.g. one lineage may inherit <span class="math inline">\(AB\)</span> and the other inherits <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}e). For widespread sympatric cladogenesis, both lineages inherit the ancestral range, <span class="math inline">\(ABC\)</span> ({% ref dec_cartoon %}f). Finally, supposing the ancestral range is <span class="math inline">\(A\)</span>, jump dispersal cladogenesis results in one daughter lineage inheriting the ancestral range <span class="math inline">\(A\)</span>, and the other daughter lineage inheriting a previously uninhabited area, <span class="math inline">\(B\)</span> or <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}g). See {% citet Matzke2012 %} for an excellent overview of the cladogenetic state transitions described in the literature (specifically see this <a href="http://phylo.wikidot.com/biogeobears#BioGeoBEARS_supermodel_graphic">figure</a>).</p>
+<p>Beginning with the simplest case first, suppose the range of a species is <span class="math inline">\(A\)</span> the moment before speciation occurs at an internal phylogenetic node. Since the species range is size one, both daughter lineages necessarily inherit the ancestral species range (<span class="math inline">\(A\)</span>). In DEC parlance, this is called a narrow sympatry event ({% ref dec_cartoon %}c). Now, suppose the ancestral range is <span class="math inline">\(ABC\)</span>. Under subset sympatry, one lineage identically inherits the ancestral species range, <span class="math inline">\(ABC\)</span>, while the other lineage inherits only a single area, i.e. only <span class="math inline">\(A\)</span> or <span class="math inline">\(B\)</span> or <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}d). Under allopatric cladogenesis, the ancestral range is split evenly among daughter lineages, e.g. one lineage may inherit <span class="math inline">\(AB\)</span> and the other inherits <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}e). For widespread sympatric cladogenesis, both lineages inherit the ancestral range, <span class="math inline">\(ABC\)</span> ({% ref dec_cartoon %}f). Finally, supposing the ancestral range is <span class="math inline">\(A\)</span>, jump dispersal cladogenesis results in one daughter lineage inheriting the ancestral range <span class="math inline">\(A\)</span>, and the other daughter lineage inheriting a previously uninhabited area, <span class="math inline">\(B\)</span> or <span class="math inline">\(C\)</span> ({% ref dec_cartoon %}g). See {% citet Matzke2012 %} for an excellent overview of the cladogenetic state transitions described in the literature (specifically see this <a href="http://phylo.wikidot.com/biogeobears#BioGeoBEARS_supermodel_graphic" class="external-link">figure</a>).</p>
 <p>Make the cladogenetic probability event matrix</p>
 <pre><code>clado_event_types = [ "s", "a" ]
 clado_event_probs &lt;- simplex( 1, 1 )
@@ -297,7 +296,7 @@ P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
                          numCharacters=n_areas)</code></pre>
 <p><code>clado_event_types</code> defines what cladogenetic event types are used. <code>"a"</code> and <code>"s"</code> indicate allopatry and subset sympatry, as described in {% citet Ree2005 %}. Other cladogenetic events include jump dispersal <code>["j"]</code> {% cite Matzke2014 %} and full sympatry <code>["f"]</code> {% cite Landis2013a %}. The cladogenetic event probability matrix will assume that <code>eventProbs</code> and <code>eventTypes</code> share the same order.</p>
 <p>Print the cladogenetic transition probabilities</p>
-<pre><code>P_DEC</code></pre>
+<pre><code><span class="va">P_DEC</span></code></pre>
 <pre><code>       [
          ( 1 -&gt; 1, 1 ) = 1.0000,
          ( 2 -&gt; 2, 2 ) = 1.0000,
@@ -309,9 +308,9 @@ P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
        ]</code></pre>
 <p>The cladogenetic probability matrix becomes very sparse for large numbers of areas, so only non-zero values are shown. Each row reports a triplet of states—the ancestral state and the two daughter states—with the probability associated with that event. Since these are proper probabilities, the sum of probabilities for a given ancestral state over all possible cladogenetic outcomes equals one.</p>
 </div>
-<div id="things-to-consider" class="section level2">
-<h2 class="hasAnchor">
-<a href="#things-to-consider" class="anchor"></a>Things to Consider</h2>
+<div class="section level3">
+<h3 id="things-to-consider">Things to Consider<a class="anchor" aria-label="anchor" href="#things-to-consider"></a>
+</h3>
 <p>The probabilities of anagenetic change along lineages must account for all combinations of starting states and ending states. For 3 areas, there are 8 states, and thus <span class="math inline">\(8 \times 8 = 64\)</span> probability terms for pairs of states. For cladogenetic change, we need transition probabilities for all combinations of states before cladogenesis, after cladogenesis for the left lineage, and after cladogenesis for the right lineage. Like above, for three areas, there are 8 states, and <span class="math inline">\(8 \times 8 \times 8 = 512\)</span> cladogenetic probability terms.</p>
 <p>Of course, this model can be specified for more than three areas. Let’s consider what happens to the size of <strong>Q</strong> when the number of areas <span class="math inline">\(N\)</span> becomes large. For three areas, <strong>Q</strong> is of size <span class="math inline">\(8 \times 8\)</span>. For ten areas, <strong>Q</strong> is of size <span class="math inline">\(2^{10} \times 2^{10} = 1024 \times 1024\)</span>, which approaches the largest size matrices that can be exponentiated in a practical amount of time. For twenty areas, <strong>Q</strong> is size <span class="math inline">\(2^{20} \times 2^{20} \approx 10^6 \times 10^6\)</span> and exponentiation is not viable. Thus, selecting the discrete areas for a DEC analysis should be done with regard to what one hopes to learn through the analysis itself.</p>
 <blockquote>
@@ -333,11 +332,13 @@ P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p></p>
+<p>Developed by The package maintainer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -345,6 +346,8 @@ P_DEC := fnDECCladoProbs(eventProbs=clado_event_probs,
 
   
 
+
+  
 
   </body>
 </html>

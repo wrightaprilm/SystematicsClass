@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">SystematicsClass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../../reference/index.html">Reference</a>
 </li>
@@ -102,6 +98,9 @@
       <a href="../../articles/14_Final/index.html">FinalExam</a>
     </li>
     <li>
+      <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
+    </li>
+    <li>
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
@@ -120,7 +119,7 @@
 
       
 
-      </header><script src="index_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>PAUP, parsimony, and nucletoide substitution models</h1>
@@ -133,14 +132,14 @@
 
     
     
-<div id="maximum-parsimony-analysis-using-paup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#maximum-parsimony-analysis-using-paup" class="anchor"></a>Maximum Parsimony Analysis Using PAUP</h2>
+<div class="section level2">
+<h2 id="maximum-parsimony-analysis-using-paup">Maximum Parsimony Analysis Using PAUP<a class="anchor" aria-label="anchor" href="#maximum-parsimony-analysis-using-paup"></a>
+</h2>
 <p>Today, we will use PAUP* (Phylogenetic Analysis Using Parsimony [*and other methods]) to estimate a phylogeny using the maximum parsimony optimality criterion. We will also practice performing bootstrap and jackknife quantification of uncertainty. In the process, we will also see some of the basics of how phylogenetic software will read data and understand models.</p>
 </div>
-<div id="download-paup-and-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#download-paup-and-data" class="anchor"></a>Download PAUP and Data</h2>
+<div class="section level2">
+<h2 id="download-paup-and-data">Download PAUP and Data<a class="anchor" aria-label="anchor" href="#download-paup-and-data"></a>
+</h2>
 <p>I have already installed paup for you. But if you wanted to, you could do it like so.</p>
 <pre class="unix"><code> curl -O  http://phylosolutions.com/paup-test/paup4a168_centos64.gz
  gunzip paup4a168_centos64.gz 
@@ -149,13 +148,13 @@
 <pre class="unix"><code>
 cp __/data/PAUPlab ./Data</code></pre>
 </div>
-<div id="paup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#paup" class="anchor"></a>PAUP</h2>
+<div class="section level2">
+<h2 id="paup">PAUP<a class="anchor" aria-label="anchor" href="#paup"></a>
+</h2>
 <p>Paup is one of the older phylogenetics software packages available, and Dave Swofford has put considerable effort into ensuring that the main mechanisms and models are correct. Many of us who do other software development use PAUP as a check on our own calculations.</p>
 <p>PAUP reads in data in the Nexus format. Go ahead and use nano to open the primate dataset.</p>
 <p>Next, we will open PAUP:</p>
-<pre class="unix"><code>./paup4a168_centos64</code></pre>
+<pre class="unix"><code><span class="va">.</span><span class="op">/</span><span class="va">paup4a168_centos64</span></code></pre>
 <p>You should get something like the below:</p>
 <pre class="unix"><code>P A U P *
 Portable version 4.0b10 for Unix
@@ -183,13 +182,13 @@ showdist
 log file="mylogfile"</code></pre>
 <p>Try each command. What is it telling you? If any of them are still unclear, you can add a question mark after the command to get more info.</p>
 <p>First, we will compute a parsimony tree using the command all trees:</p>
-<pre class="unix"><code>alltrees;</code></pre>
+<pre class="unix"><code><span class="va">alltrees</span>;</code></pre>
 <p>This will take a moment. Let’s talk about parsimony, and the alltrees command. What is that command doing? What is parsimony doing? [go to board exercise]</p>
 <p>Look at the best tree with the command showtree:</p>
-<pre class="unix"><code>showtree;</code></pre>
+<pre class="unix"><code><span class="va">showtree</span>;</code></pre>
 <p>Are we surprised by the length of the tree, given the number of characters?</p>
 <p>Next, we will try heuristic searching:</p>
-<pre class="unix"><code>hsearch</code></pre>
+<pre class="unix"><code><span class="va">hsearch</span></code></pre>
 <p>Note that a heuristic is being applied. What is a heuristic?</p>
 <p>Did it make a difference to the score of the best tree? Why?</p>
 <p>Let’s try some data that are too large for an exhaustive search:</p>
@@ -210,26 +209,26 @@ savetrees from=2 to=2 file=Results/tree1.tre;</code></pre>
 <p>If you look at the help for the consensus tree function, you see that there are several options for how to compute the consensus tree. The default is <strong>strict:</strong> the tree which contains only groups found in all trees. <strong>Semistrict</strong> is similar, containing all compatible groups. This tree may contain clades that are not present in all trees, but are not contradicted by them either. <strong>Majority Rule</strong> is a common display setting, showing groups that are present in more than 50% of trees. An <strong>Adams Consensus Tree</strong> will place taxa that vary in their placement in the most inclusive sport within the group.</p>
 <p>Try a couple of these tree types. How do they differ in terms of their tree representation?</p>
 </div>
-<div id="the-bootstrap" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-bootstrap" class="anchor"></a>The Bootstrap</h2>
+<div class="section level2">
+<h2 id="the-bootstrap">The Bootstrap<a class="anchor" aria-label="anchor" href="#the-bootstrap"></a>
+</h2>
 <p>We will now bootstrap our data. The bootstrap analysis generates a number of matrices (in our case, 100) from the original data matrix. Every taxon is represented in every matrix. Columns, however, are drawn, with replacement up until the original size of the matrix is obtained (i.e., the matrices are resampled with replacement). This process randomizes which characters are in the matrix, and measures repeatability. Typically more than 100 bootstraps will be run, and will generate support values for a node that run from 0-100.</p>
 <p>Reload the primate data. Now, begin a bootstrap run:</p>
 <pre class="unix"><code>bootstrap nreps=100 search=heuristic /addseq=random;</code></pre>
 <p>Save the tree:</p>
 <pre class="unix"><code>savetrees from=1 to=1 savebootp=nodelabels file=output/bootstrap.tre;</code></pre>
 </div>
-<div id="the-jackknife" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-jackknife" class="anchor"></a>The Jackknife</h2>
+<div class="section level2">
+<h2 id="the-jackknife">The Jackknife<a class="anchor" aria-label="anchor" href="#the-jackknife"></a>
+</h2>
 <p>The jackknife is similar to the bootstrap, but is performed without replacement. Therefore, each dataset is smaller.</p>
 <pre class="unix"><code>jackknife nreps=100 search=heuristic /addseq=random;</code></pre>
 <p>Why would this be useful?</p>
 <pre class="unix"><code>savetrees from=1 to=1 savebootp=nodelabels file=output/jackknife.tre;</code></pre>
 </div>
-<div id="what-is-parsimony-doing-anyway" class="section level2">
-<h2 class="hasAnchor">
-<a href="#what-is-parsimony-doing-anyway" class="anchor"></a>What is parsimony doing anyway?</h2>
+<div class="section level2">
+<h2 id="what-is-parsimony-doing-anyway">What is parsimony doing anyway?<a class="anchor" aria-label="anchor" href="#what-is-parsimony-doing-anyway"></a>
+</h2>
 <p>What assumption does parsimony make about how characters evolve?</p>
 <p>Go ahead, log into LONI, start an interactive sessions and load paup.</p>
 <p>Now, we’ll start paup and read in the data.</p>
@@ -262,15 +261,15 @@ hsearch</code></pre>
 <p>Let’s draw it on the board. What kind of data do you think would fit this data? What kind of data would fit parsimony?</p>
 <p>How does this impact the parsimony score of the data? Why does this make sense? What does this mean for how we conceive of these models?</p>
 </div>
-<div id="modeling-sequence-evolution" class="section level2">
-<h2 class="hasAnchor">
-<a href="#modeling-sequence-evolution" class="anchor"></a>Modeling Sequence Evolution</h2>
+<div class="section level2">
+<h2 id="modeling-sequence-evolution">Modeling Sequence Evolution<a class="anchor" aria-label="anchor" href="#modeling-sequence-evolution"></a>
+</h2>
 <p>Load in the primate-mtDNA.nex file. What does a step matrix look like for parsimony for nucleotide sequence data?</p>
 <p>Perform an exhaustive parsimony search. Build a consensus tree and save it.</p>
 <p>Let’s talk about different assumptions we can make about the way molecular sequences evolve.</p>
-<div id="transitions-and-transversions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#transitions-and-transversions" class="anchor"></a>Transitions and Transversions</h3>
+<div class="section level3">
+<h3 id="transitions-and-transversions">Transitions and Transversions<a class="anchor" aria-label="anchor" href="#transitions-and-transversions"></a>
+</h3>
 <div class="figure">
 <img src="../fig/Q.png" alt=""><p class="caption">Image of Transitions and Transversions via Wikipedia</p>
 </div>
@@ -279,16 +278,16 @@ hsearch</code></pre>
 <p>How has this changed the parismony score of the best tree found? Make a consensus tree and save it. Download and view the two trees we’ve made. Are they different?</p>
 <p><strong>Homework</strong>: Try the same analysis, except with a 3-1 weighting on transitions to transversions.</p>
 </div>
-<div id="base-frequencies" class="section level3">
-<h3 class="hasAnchor">
-<a href="#base-frequencies" class="anchor"></a>Base Frequencies</h3>
+<div class="section level3">
+<h3 id="base-frequencies">Base Frequencies<a class="anchor" aria-label="anchor" href="#base-frequencies"></a>
+</h3>
 <p>This is where we will transition from thinking about parsimony to thinking about other methods. Think about a dataset that you have. Do you think that nucleotide bases occur at equal frequencies in those data?</p>
 <p>On board: show how the probability of observing a change changes as a function of base frequency.</p>
 </div>
 </div>
-<div id="so-what-is-likelihood-anyway" class="section level2">
-<h2 class="hasAnchor">
-<a href="#so-what-is-likelihood-anyway" class="anchor"></a>So what is likelihood anyway?</h2>
+<div class="section level2">
+<h2 id="so-what-is-likelihood-anyway">So what is likelihood anyway?<a class="anchor" aria-label="anchor" href="#so-what-is-likelihood-anyway"></a>
+</h2>
 <p>First, let’s review probability. Dice rolling activity.</p>
 <p>Next, let’s look at how probability applies to phylogenetics. On board: tree, with ancestral states and probabilities labeled on them.</p>
 <p>Now, let’s work out the probability of this sequence under JC69.</p>
@@ -312,7 +311,7 @@ lset nst=2 basefreq=emp;
 hsearch;</code></pre>
 <p>What is the score of this model?</p>
 <p><strong>Homework</strong>:</p>
-<p>I am an arrogant jerk, and I would like you to <a href="https://github.com/graemetlloyd/ProjectWhalehead/blob/master/vignettes/MS.pdf">read a paper I have accepted</a> right now. Write a note for me if any of my arguments in the paper change your mind on the below questions.</p>
+<p>I am an arrogant jerk, and I would like you to <a href="https://github.com/graemetlloyd/ProjectWhalehead/blob/master/vignettes/MS.pdf" class="external-link">read a paper I have accepted</a> right now. Write a note for me if any of my arguments in the paper change your mind on the below questions.</p>
 <ol style="list-style-type: decimal">
 <li><p>We talked about heuristics Monday. Will a heuristic always find you the best tree? How are you, personally, going to make peace with this in your work?</p></li>
 <li><p>One of the cases that Graeme and I make in the paper I made you read because I’m an arrogant jerk is that there are often a lot of trees that are plausible solutions for a particular analysis, and that researchers should consider multiple possible topologies when making inferences using trees. For you particular research question, do you think this will be an issue? How would you need to modify your dissertation analyses to accommodate multiple possible topologies?</p></li>
@@ -332,11 +331,13 @@ hsearch;</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p></p>
+<p>Developed by The package maintainer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -344,6 +345,8 @@ hsearch;</code></pre>
 
   
 
+
+  
 
   </body>
 </html>

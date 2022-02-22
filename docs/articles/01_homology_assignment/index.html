@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">SystematicsClass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../../reference/index.html">Reference</a>
 </li>
@@ -102,6 +98,9 @@
       <a href="../../articles/14_Final/index.html">FinalExam</a>
     </li>
     <li>
+      <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
+    </li>
+    <li>
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
@@ -120,7 +119,7 @@
 
       
 
-      </header><script src="index_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Morphological Homology Assignment</h1>
@@ -146,14 +145,14 @@
 <img src="img/Fig5.png" alt=""><p class="caption">Fig. 1: Different character concepts</p>
 </div>
 <p>Knowing whether or not a character in one organism is homologous to a character in another forms the basis of phylogenetics. If a character isn’t homologous, we can’t model it’s evolution over time, whether we’re doing parsimony modeling or likelihood or Bayesian.</p>
-<div id="activity-break" class="section level2">
-<h2 class="hasAnchor">
-<a href="#activity-break" class="anchor"></a>Activity break</h2>
+<div class="section level2">
+<h2 id="activity-break">Activity break<a class="anchor" aria-label="anchor" href="#activity-break"></a>
+</h2>
 <p>In front of you are skulls. Each group of two gets two skulls. In small groups, look at the skulls and pick one feature on the skull. Decide what character stat each skull has for that character, and note this down, along with the diagnoses of each character.</p>
 </div>
-<div id="molecular-homology-assessment" class="section level2">
-<h2 class="hasAnchor">
-<a href="#molecular-homology-assessment" class="anchor"></a>Molecular Homology Assessment</h2>
+<div class="section level2">
+<h2 id="molecular-homology-assessment">Molecular Homology Assessment<a class="anchor" aria-label="anchor" href="#molecular-homology-assessment"></a>
+</h2>
 <p>Morphological homology assignment isn’t easy. People often work for years to develop the skills to do it. Continuous characters, such as geometric morphometric landmarks, often have more technical tricks to collect. Technologies to collect these automatically are also being developed.</p>
 <p>In the same way that morphological homology forms the basis of morphological phylogenetics, molecular homology forms the basis of molecular phylogenetics. Instead of the homology of physical structures, however, we are often assessing the homology of sites in the genome. In the 80s, 90s and 2000s, this often meant figuring out which sites in a known gene are homologous. For example, is site 132 in COII in <em>Canis lupus</em> homologous to site 132 in <em>Nerodia rhombifer</em>? Or have insertions and deletions meant that site 132 in dogs is homologous with site 363 in water snakes? Increasingly, we no longer even have the name of the gene to help us - we may be using data sources such as ddRADseq or targeted capture to try to find homology. These data are far too large for a human to manually or by-eye assess homology.</p>
 <p>So what are the algorithms for homology detection in molecular data? You’ve probably heard the term <em>alignment</em> before. This is where we’ll begin.</p>
@@ -198,14 +197,14 @@
 <img src="img/Lutzoni.png" alt=""><p class="caption">Lutzoni paper</p>
 </div>
 <p>We haven’t talked about Bayesian estimation, so I’m going to say very little on joint estimation of alignment and topology. This is a method that allows for a wide range of models to be deployed in order to estimate both the alignment and the tree, and shows great promise for difficult alignment issues. We have a few floating open labs throughout the semester, so if this is a topic of interest to people, we can revisit it then.</p>
-<p>The primary software that performs this analysis is <a href="http://www.bali-phy.org/Tutorial3.html">Bali-Phy</a>, which is described <a href="http://www.bali-phy.org/Redelings_and_Suchard_2005.pdf">here</a>.</p>
+<p>The primary software that performs this analysis is <a href="http://www.bali-phy.org/Tutorial3.html" class="external-link">Bali-Phy</a>, which is described <a href="http://www.bali-phy.org/Redelings_and_Suchard_2005.pdf" class="external-link">here</a>.</p>
 </div>
-<div id="alignment-homework" class="section level2">
-<h2 class="hasAnchor">
-<a href="#alignment-homework" class="anchor"></a>Alignment Homework</h2>
-<div id="some-of-these-questions-do-not-have-a-right-answer-" class="section level3">
-<h3 class="hasAnchor">
-<a href="#some-of-these-questions-do-not-have-a-right-answer-" class="anchor"></a>Some of these questions do not have a right answer.</h3>
+<div class="section level2">
+<h2 id="alignment-homework">Alignment Homework<a class="anchor" aria-label="anchor" href="#alignment-homework"></a>
+</h2>
+<div class="section level3">
+<h3 id="some-of-these-questions-do-not-have-a-right-answer-">Some of these questions do not have a right answer.<a class="anchor" aria-label="anchor" href="#some-of-these-questions-do-not-have-a-right-answer-"></a>
+</h3>
 <p>Fill out this worksheet (it can be opened in a plain text editor, like TextEdit [Mac] or TextWrangler [Mac] or Notepad [Windows]. Commit and push it to your copy of the course repo. I will pull your copies Friday at 5, and try to have comments for you by next class period, when we will discuss them.</p>
 <p>Feel free to work in groups, and discuss the assignments as needed. However, I do expect you to turn in your own copy, with answers in your own words.</p>
 <ol style="list-style-type: decimal">
@@ -228,11 +227,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p></p>
+<p>Developed by The package maintainer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -240,6 +241,8 @@
 
   
 
+
+  
 
   </body>
 </html>

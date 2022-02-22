@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">SystematicsClass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../../reference/index.html">Reference</a>
 </li>
@@ -102,6 +98,9 @@
       <a href="../../articles/14_Final/index.html">FinalExam</a>
     </li>
     <li>
+      <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
+    </li>
+    <li>
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
@@ -120,11 +119,11 @@
 
       
 
-      </header><script src="index_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Partitioned data analysis</h1>
-            <h3 class="subtitle">Current Protocols in Bioinformatics - Phylogenetic Inference using RevBayes (Protocol #2)</h3>
+            <h3 data-toc-skip class="subtitle">Current Protocols in Bioinformatics - Phylogenetic Inference using RevBayes (Protocol #2)</h3>
             
       
       
@@ -134,13 +133,13 @@
 
     
     
-<p>This tutorial comes with a recorded video walkthrough, available here: <a href="https://youtu.be/LPPYGUP1FZc">Walkthrough playlist</a>. The video corresponding to each section of the exercise is linked next to the section title.</p>
-<p><a href="https://youtu.be/LPPYGUP1FZc">Walkthrough video</a></p>
+<p>This tutorial comes with a recorded video walkthrough, available here: <a href="https://youtu.be/LPPYGUP1FZc" class="external-link">Walkthrough playlist</a>. The video corresponding to each section of the exercise is linked next to the section title.</p>
+<p><a href="https://youtu.be/LPPYGUP1FZc" class="external-link">Walkthrough video</a></p>
 <p>This tutorial provides the second protocol from our recent publication (Hoehna2017a).</p>
 <p>This tutorial demonstrates how to accommodate variation in the substitution process across sites of an alignment. In the preceding tutorials, we assumed that all sites in an alignment evolved under an identical substitution process. This assumption is likely to be violated biologically, since different nucleotide sites are subject to different selection pressures, such as depending on which gene or codon position the site belongs to. Here, we will demonstrate how to specify—and select among—alternative <em>data partition schemes</em> using ‘RevBayes‘. This is commonly referred to as partitioned-data analysis, where two or more subsets of sites in our alignment are assumed to evolve under distinct processes.</p>
 <p>This tutorial will construct three multi-gene models. The first model, Partition_uniform, assumes all genes evolve under the same process parameters. The second model, Partition_gene, assumes all genes evolve according to the same process, but each gene has it’s own set of process parameters. The third model, Partition_codon, partitions the data not only by gene, but also by codon position. Each analysis will generate a <em>maximum a posteriori</em> tree to summarize the inferred phylogeny. An advanced exercise introduces how to compute Bayes factors to select across various partitioning schemes.</p>
 <p>All of the files for this analysis are provided for you and you can run these without significant effort using the ‘source‘ function in the ‘RevBayes‘ console, <em>e.g.,</em></p>
-<pre><code><a href="https://rdrr.io/r/base/source.html">source("scripts/mcmc_Partition_uniform.Rev")</a></code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/mcmc_Partition_uniform.Rev"</span><span class="op">)</span></code></pre>
 <p>If everything loaded properly, then you should see the program begin running the Markov chain Monte Carlo analysis needed for estimating the posterior distribution. If you continue to let this run, then you will see it output the states of the Markov chain once the MCMC analysis begins.</p>
 <p>Overview Introduction &amp; Background</p>
 <p>Variation in the evolutionary process across the sites of nucleotide sequence alignments is well established, and is an increasingly pervasive feature of datasets composed of gene regions sampled from multiple loci and/or different genomes. Inference of phylogeny from these data demands that we adequately model the underlying process heterogeneity; failure to do so can lead to biased estimates of phylogeny and other parameters {% cite Brown2007 %}.</p>
@@ -150,15 +149,15 @@
 <blockquote>
 <p><img src="figures/pipeline.png"> The analysis pipeline for Exercise 1. We will explore three partition schemes for the primates dataset.The first model (the ‘uniform model’, <span class="math inline">\(M_0\)</span>) assumes that all sites evolved under a common GTR+<span class="math inline">\(\Gamma\)</span> substitution model.The second model (the ‘moderately partitioned’ model, <span class="math inline">\(M_1\)</span>) invokes two data subsets corresponding to the two gene regions (cytB and cox2), and assumes each subset of sites evolved under an independent GTR+<span class="math inline">\(\Gamma\)</span> model.The final partition model (the ‘highly partitioned’ model, <span class="math inline">\(M_2\)</span>) invokes four data subsets—the first two subsets corresponds to the cytB gene region, where the first and second codon position sites are combined into one subset distinct from the third codon position sites, and the cox2 gene has two subsets of its own, partitioned by codon positions in the same way—and each data subset is assumed evolved under an independent GTR+<span class="math inline">\(\Gamma\)</span> substitution model.Note that we assume that all sites share a common tree topology, <span class="math inline">\(\Psi\)</span>, and branch-length proportions, for each of the candidate partition schemes.We perform two separate sets of analyses for each partition model—a MCMC simulation to approximate the joint posterior probability density of the partition-model parameters, and a ‘power-posterior’ MCMC simulation to approximate the marginal likelihood for each mixed model.The resulting marginal-likelihood estimates are then evaluated using Bayes factors to assess the fit of the data to the three candidate partition models.</p>
 </blockquote>
-<p>Concatenated, Non-partitioned <a href="https://youtu.be/LPPYGUP1FZc#t=2m48s">[Walkthrough video]{: height=“36” width=“36”}</a></p>
+<p>Concatenated, Non-partitioned <a href="https://youtu.be/LPPYGUP1FZc#t=2m48s" class="external-link">[Walkthrough video]{: height=“36” width=“36”}</a></p>
 <p>Our first exercise is to construct a multi-gene analysis where all genes evolve under the same process and parameters.</p>
 <p>Setting up the model</p>
 <p>Loading and preparing the data</p>
 <p>To begin, load in the sequences using the ‘readDiscreteCharacterData‘ function.</p>
-<pre><code>data_cox2 = readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
-data_cytb = readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")</code></pre>
+<pre><code><span class="va">data_cox2</span> <span class="op">=</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cox2.nex"</span><span class="op">)</span>
+<span class="va">data_cytb</span> <span class="op">=</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cytb.nex"</span><span class="op">)</span></code></pre>
 <p>Since the first step in this exercise is to assume a single model across genes, we need to combine the two datasets using concatenate</p>
-<pre><code>data = concatenate( data_cox2, data_cytb )</code></pre>
+<pre><code><span class="va">data</span> <span class="op">=</span> <span class="fu">concatenate</span><span class="op">(</span> <span class="va">data_cox2</span>, <span class="va">data_cytb</span> <span class="op">)</span></code></pre>
 <p>Typing ‘data‘ reports the dimensions of the concatenated matrix, this provides information about the alignment:</p>
 <pre><code>       DNA character matrix with 23 taxa and 1852 characters
        =====================================================
@@ -169,102 +168,102 @@ data_cytb = readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")<
        Number of included characters: 1852
        Datatype:                      DNA</code></pre>
 <p>For later use, we will store the taxon information (‘taxa‘) and the number of taxa and branches.</p>
-<pre><code>n_taxa &lt;- data.ntaxa
-num_branches &lt;- 2 * n_taxa - 3
-taxa &lt;- data.taxa</code></pre>
+<pre><code><span class="va">n_taxa</span> <span class="op">&lt;-</span> <span class="va">data.ntaxa</span>
+<span class="va">num_branches</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">n_taxa</span> <span class="op">-</span> <span class="fl">3</span>
+<span class="va">taxa</span> <span class="op">&lt;-</span> <span class="va">data.taxa</span></code></pre>
 <p>Additionally, we will create our move and monitor vectors.</p>
-<pre><code>moves    = VectorMoves
-monitors = VectorMonitors</code></pre>
+<pre><code><span class="va">moves</span>    <span class="op">=</span> <span class="va">VectorMoves</span>
+<span class="va">monitors</span> <span class="op">=</span> <span class="va">VectorMonitors</span></code></pre>
 <p>Substitution model</p>
 <p>Now we can proceed with building our GTR<span class="math inline">\(+\Gamma\)</span> model. First, we will define and specify a prior on the exchangeability rates of the GTR model</p>
-<pre><code>er_prior &lt;- v(1,1,1,1,1,1) 
-er ~ dnDirichlet( er_prior )</code></pre>
+<pre><code><span class="va">er_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span> 
+<span class="va">er</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span> <span class="va">er_prior</span> <span class="op">)</span></code></pre>
 <p>and assign its moves</p>
-<pre><code>moves.append( mvBetaSimplex(er, alpha=10, tune=true, weight=3) )
-moves.append( mvDirichletSimplex(er, alpha=10.0, tune=true, weight=1.0) )</code></pre>
+<pre><code><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">er</span>, alpha<span class="op">=</span><span class="fl">10</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">er</span>, alpha<span class="op">=</span><span class="fl">10.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">1.0</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>We can use the same type of distribution as a prior on the 4 stationary frequencies (<span class="math inline">\(\pi_A, \pi_C, \pi_G, \pi_T\)</span>) since these parameters also represent proportions. Specify a flat Dirichlet prior density on the base frequencies:</p>
-<pre><code>pi_prior &lt;- v(1,1,1,1) 
-pi ~ dnDirichlet( pi_prior )</code></pre>
+<pre><code><span class="va">pi_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span> 
+<span class="va">pi</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span> <span class="va">pi_prior</span> <span class="op">)</span></code></pre>
 <p>Now add the simplex scale move on the stationary frequencies to the moves vector</p>
-<pre><code>moves.append( mvBetaSimplex(pi, alpha=10, tune=true, weight=2) )
-moves.append( mvDirichletSimplex(pi, alpha=10.0, tune=true, weight=1.0) )</code></pre>
+<pre><code><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">pi</span>, alpha<span class="op">=</span><span class="fl">10</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">pi</span>, alpha<span class="op">=</span><span class="fl">10.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">1.0</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>We can finish setting up this part of the model by creating a deterministic node for the GTR rate matrix ‘Q‘. The ‘fnGTR‘ function takes a set of exchangeability rates and a set of base frequencies to compute the rate matrix used when calculating the likelihood of our model.</p>
-<pre><code>Q := fnGTR(er,pi)</code></pre>
+<pre><code><span class="va">Q</span> <span class="op">:=</span> <span class="fu">fnGTR</span><span class="op">(</span><span class="va">er</span>,<span class="va">pi</span><span class="op">)</span></code></pre>
 <p>{% subsubsection Among site rate variation %}</p>
 <p>We will also assume that the substitution rates vary among sites according to an one-parametric gamma distribution, i.e., where the shape equals the rate (<span class="math inline">\(\alpha=\beta\)</span>) and thus with mean 1.0 {% cite Yang1994a %}. Since we do not have good prior knowledge about the variance in site rates, we apply a uniform distribution between <span class="math inline">\(1\)</span> and <span class="math inline">\(10^8\)</span>. Then create a stochastic node called ‘alpha‘ with a uniform prior:</p>
-<pre><code>alpha ~ dnUniform( 0, 1E8 )</code></pre>
+<pre><code><span class="va">alpha</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span> <span class="fl">0</span>, <span class="fl">1E8</span> <span class="op">)</span></code></pre>
 <p>The way the ASRV model is implemented involves discretizing the mean-one gamma distribution into a set number of rate categories. Thus, we can analytically marginalize over the uncertainty in the rate at each site. To do this, we need a deterministic node that is a vector of rates calculated from the gamma distribution and the number of rate categories. The ‘fnDiscretizeGamma‘ function returns this deterministic node and takes three arguments: the shape and rate of the gamma distribution and the number of categories. Since we want to discretize a mean-one gamma distribution, we can pass in ‘alpha‘ for both the shape and rate.</p>
 <p>Initialize the ‘gamma_rates‘ deterministic node vector using the ‘fnDiscretizeGamma‘ function with ‘4‘ bins:</p>
-<pre><code>gamma_rates := fnDiscretizeGamma( alpha, alpha, 4, false )</code></pre>
+<pre><code><span class="va">gamma_rates</span> <span class="op">:=</span> <span class="fu">fnDiscretizeGamma</span><span class="op">(</span> <span class="va">alpha</span>, <span class="va">alpha</span>, <span class="fl">4</span>, <span class="va">false</span> <span class="op">)</span></code></pre>
 <p>The random variable that controls the rate variation is the stochastic node ‘alpha‘. This variable is a single, real positive value (‘RevType = RealPos‘). We will apply a simple scale move to this parameter. The scale move’s tuning parameter is called ‘lambda‘ and this value dictates the size of the proposal.</p>
-<pre><code>moves.append( mvScale(alpha, lambda=0.1, tune=false, weight=4.0) )</code></pre>
+<pre><code><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">alpha</span>, lambda<span class="op">=</span><span class="fl">0.1</span>, tune<span class="op">=</span><span class="va">false</span>, weight<span class="op">=</span><span class="fl">4.0</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>{% section Invariant sites %}</p>
 <p>Invariant sites (sites that remain fixed throughout their evolutionary history) may be seen as an extreme case of among-site rate variation. In contrast to <span class="math inline">\(+ \Gamma\)</span> models, the <span class="math inline">\(+I\)</span> model allows site some probability of having substitution rate equal to zero. Here, we give the probability of a site being invariant with ‘pinvar‘</p>
-<pre><code>pinvar ~ dnBeta(1,1)
-moves.append( mvBetaProbability(pinvar, delta=10.0, tune=true, weight=2.0) )</code></pre>
+<pre><code><span class="va">pinvar</span> <span class="op">~</span> <span class="fu">dnBeta</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaProbability</span><span class="op">(</span><span class="va">pinvar</span>, delta<span class="op">=</span><span class="fl">10.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>Tree prior</p>
 <p>The tree topology and branch lengths are also stochastic nodes in our model. For simplicity, we will use the same prior distribution on the tree topology, a uniform topology prior, and branch lengths, independent exponential prior distributions, as done in the The CTMC lesson.</p>
 <p>We will assume that all possible labeled, unrooted tree topologies have equal probability. This is the ‘dnUniformTopology‘ distribution in ‘RevBayes‘. Note that in ‘RevBayes‘ it is advisable to specify the outgroup for your study system if you use an unrooted tree prior, whereas other software, e.g.,<code>MrBayes</code> uses the first taxon in the data matrix file as the outgroup. Specify the ‘topology‘ stochastic node by passing in the tip labels ‘names‘ to the ‘dnUniformTopology‘ distribution:</p>
-<pre><code>out_group = clade("Galeopterus_variegatus")
-topology ~ dnUniformTopology(taxa, outgroup=out_group)</code></pre>
+<pre><code><span class="va">out_group</span> <span class="op">=</span> <span class="fu">clade</span><span class="op">(</span><span class="st">"Galeopterus_variegatus"</span><span class="op">)</span>
+<span class="va">topology</span> <span class="op">~</span> <span class="fu">dnUniformTopology</span><span class="op">(</span><span class="va">taxa</span>, outgroup<span class="op">=</span><span class="va">out_group</span><span class="op">)</span></code></pre>
 <p>To update the unrooted tree topology, we can use both a nearest-neighbor interchange move (‘mvNNI‘) and a subtree-prune and regrafting move (‘mvSPR‘). These moves do not have tuning parameters associated with them, thus you only need to pass in the ‘topology‘ node and proposal ‘weight‘.</p>
-<pre><code>moves.append( mvNNI(topology, weight=n_taxa/2.0) )
-moves.append( mvSPR(topology, weight=n_taxa/10.0) )</code></pre>
-<p>The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the <a href="https://github.com/revbayes/revbayes_tutorial/raw/master/tutorial_TeX/RB_MCMC_Tutorial/RB_MCMC_Tutorial.pdf">MCMC Diagnosis tutorial</a> for more details about moves and MCMC strategies.</p>
+<pre><code><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNNI</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">n_taxa</span><span class="op">/</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvSPR</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">n_taxa</span><span class="op">/</span><span class="fl">10.0</span><span class="op">)</span> <span class="op">)</span></code></pre>
+<p>The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the <a href="https://github.com/revbayes/revbayes_tutorial/raw/master/tutorial_TeX/RB_MCMC_Tutorial/RB_MCMC_Tutorial.pdf" class="external-link">MCMC Diagnosis tutorial</a> for more details about moves and MCMC strategies.</p>
 <p>Next we have to create a stochastic node for each of the <span class="math inline">\(2N-3\)</span> branches in our tree (where <span class="math inline">\(N=\)</span> ‘n_species‘). We can do this using a ‘for‘ loop — this is a plate in our graphical model. In this loop, we can create each of the branch-length nodes and assign each move. Copy this entire block of ‘Rev‘ code into the console:</p>
-<pre><code>for (i in 1:num_branches) {
-    br_lens[i] ~ dnExponential(10.0)
-    moves.append( mvScale(br_lens[i]) )
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">num_branches</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">br_lens</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnExponential</span><span class="op">(</span><span class="fl">10.0</span><span class="op">)</span>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">br_lens</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>It is convenient for monitoring purposes to add the tree length as deterministic variable. The tree length is simply the sum of all branch lengths. . Accordingly, the tree length can be computed using the ‘sum‘ function, which calculates the sum of any vector of values.</p>
-<pre><code>TL := sum(br_lens)</code></pre>
+<pre><code><span class="va">TL</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">br_lens</span><span class="op">)</span></code></pre>
 <p>Finally, we can create a <em>phylogram</em> (a phylogeny in which the branch lengths are proportional to the expected number of substitutions/site) by combining the tree topology and branch lengths. We do this using the ‘treeAssembly‘ function, which applies the value of the <span class="math inline">\(i^{th}\)</span> member of the ‘br_lens‘ vector to the branch leading to the <span class="math inline">\(i^{th}\)</span> node in ‘topology‘. Thus, the ‘psi‘ variable is a deterministic node:</p>
-<pre><code>psi := fnTreeAssembly(topology, br_lens)</code></pre>
+<pre><code><span class="va">psi</span> <span class="op">:=</span> <span class="fu">fnTreeAssembly</span><span class="op">(</span><span class="va">topology</span>, <span class="va">br_lens</span><span class="op">)</span></code></pre>
 <p>{% subsection Putting it All Together %}</p>
 <p>We now have all the parameters needed to model the phylogenetic molecular substitution process</p>
-<pre><code>seq ~ dnPhyloCTMC(tree=psi, Q=Q,  siteRates=gamma_rates, pInv=pinvar, type="DNA")</code></pre>
+<pre><code><span class="va">seq</span> <span class="op">~</span> <span class="fu">dnPhyloCTMC</span><span class="op">(</span>tree<span class="op">=</span><span class="va">psi</span>, Q<span class="op">=</span><span class="va">Q</span>,  siteRates<span class="op">=</span><span class="va">gamma_rates</span>, pInv<span class="op">=</span><span class="va">pinvar</span>, type<span class="op">=</span><span class="st">"DNA"</span><span class="op">)</span></code></pre>
 <p>To compute the likelihood, we condition the process on the data observed at the tips of the tree</p>
-<pre><code>seq.clamp(data)</code></pre>
+<pre><code><span class="fu">seq.clamp</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre>
 <p>Since the model is now specified, we wrap the components in a Model object.</p>
-<pre><code>my_model = model(Q)</code></pre>
-<div id="specifying-monitors" class="section level3">
-<h3 class="hasAnchor">
-<a href="#specifying-monitors" class="anchor"></a>Specifying Monitors</h3>
+<pre><code><span class="va">my_model</span> <span class="op">=</span> <span class="fu">model</span><span class="op">(</span><span class="va">Q</span><span class="op">)</span></code></pre>
+<div class="section level4">
+<h4 id="specifying-monitors">Specifying Monitors<a class="anchor" aria-label="anchor" href="#specifying-monitors"></a>
+</h4>
 <p>For our MCMC analysis we need to set up a vector of <em>monitors</em> to save the states of our Markov chain. The monitor functions are all called ‘mn*‘, where ‘*‘ is the wildcard representing the monitor type. First, we will initialize the model monitor using the ‘mnModel‘ function. This creates a new monitor variable that will output the states for all model parameters when passed into a MCMC function.</p>
-<pre><code>monitors.append( mnModel(filename="output/PS_uniform.log",printgen=10) )</code></pre>
+<pre><code><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnModel</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/PS_uniform.log"</span>,printgen<span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>The ‘mnFile‘ monitor will record the states for only the parameters passed in as arguments. We use this monitor to specify the output for our sampled trees and branch lengths.</p>
-<pre><code>monitors.append( mnFile(psi, filename="output/PS_uniform.trees", printgen=10) )</code></pre>
+<pre><code><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnFile</span><span class="op">(</span><span class="va">psi</span>, filename<span class="op">=</span><span class="st">"output/PS_uniform.trees"</span>, printgen<span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>Finally, create a screen monitor that will report the states of specified variables to the screen with ‘mnScreen‘:</p>
-<pre><code>monitors.append( mnScreen(alpha, pinvar, TL, printgen=1000) )</code></pre>
+<pre><code><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnScreen</span><span class="op">(</span><span class="va">alpha</span>, <span class="va">pinvar</span>, <span class="va">TL</span>, printgen<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>{% subsubsection Initializing and Running the MCMC Simulation %}</p>
 <p>With a fully specified model, a set of monitors, and a set of moves, we can now set up the MCMC algorithm that will sample parameter values in proportion to their posterior probability. The ‘mcmc‘ function will create our MCMC object:</p>
-<pre><code>mymcmc = mcmc(my_model, monitors, moves, nruns=2, combine="mixed")</code></pre>
+<pre><code><span class="va">mymcmc</span> <span class="op">=</span> <span class="fu">mcmc</span><span class="op">(</span><span class="va">my_model</span>, <span class="va">monitors</span>, <span class="va">moves</span>, nruns<span class="op">=</span><span class="fl">2</span>, combine<span class="op">=</span><span class="st">"mixed"</span><span class="op">)</span></code></pre>
 <p>Note that this will automatically run two independent replicated MCMC simulations because we specified ‘nruns=2‘.</p>
 <p>Now, run the MCMC:</p>
-<pre><code>mymcmc.run(generations=30000, tuningInterval=200)</code></pre>
+<pre><code><span class="fu">mymcmc.run</span><span class="op">(</span>generations<span class="op">=</span><span class="fl">30000</span>, tuningInterval<span class="op">=</span><span class="fl">200</span><span class="op">)</span></code></pre>
 <p>When the analysis is complete, you will have the monitor files in your output directory.</p>
 <p>‘RevBayes‘ can also summarize the tree samples by reading in the tree-trace file:</p>
-<pre><code>treetrace = readTreeTrace("output/PS_uniform.trees", treetype="non-clock")
-treetrace.summarize</code></pre>
+<pre><code><span class="va">treetrace</span> <span class="op">=</span> <span class="fu">readTreeTrace</span><span class="op">(</span><span class="st">"output/PS_uniform.trees"</span>, treetype<span class="op">=</span><span class="st">"non-clock"</span><span class="op">)</span>
+<span class="va">treetrace.summarize</span></code></pre>
 <p>The ‘mapTree‘ function will summarize the tree samples and write the maximum a posteriori tree to file:</p>
-<pre><code>map_tree = mapTree(treetrace,"output/PS_uniform_map.tre")</code></pre>
+<pre><code><span class="va">map_tree</span> <span class="op">=</span> <span class="fu">mapTree</span><span class="op">(</span><span class="va">treetrace</span>,<span class="st">"output/PS_uniform_map.tre"</span><span class="op">)</span></code></pre>
 <p>This completes the uniform partition analysis. The next two sections will implement more complex partitioning schemes in a similar manner.</p>
 </div>
-<div id="partitioning-by-gene-region" class="section level2">
-<h2 class="hasAnchor">
-<a href="#partitioning-by-gene-region" class="anchor"></a>Partitioning by Gene Region</h2>
-<p><a href="https://youtu.be/LPPYGUP1FZc#t=17m06s">[Walkthrough video]{: height=“36” width=“36”}</a></p>
+<div class="section level3">
+<h3 id="partitioning-by-gene-region">Partitioning by Gene Region<a class="anchor" aria-label="anchor" href="#partitioning-by-gene-region"></a>
+</h3>
+<p><a href="https://youtu.be/LPPYGUP1FZc#t=17m06s" class="external-link">[Walkthrough video]{: height=“36” width=“36”}</a></p>
 <p>The uniform model used in the previous section assumes that all sites in the alignment evolved under the same process described by a shared tree, branch length proportions, and parameters of the GTR+<span class="math inline">\(\Gamma\)</span> substitution model. However, our alignment contains two distinct gene regions—cytB and cox2—so we may wish to explore the possibility that the substitution process differs between these two gene regions. This requires that we first specify the data partitions corresponding to these two genes, then define an independent substitution model for each data partition.</p>
 <p>First, we’ll clear the workspace of all declared variables</p>
-<pre><code>clear</code></pre>
+<pre><code><span class="va">clear</span></code></pre>
 <p>Since we wish to avoid individually specifying each parameter of the GTR+<span class="math inline">\(\Gamma\)</span> model for each of our data partitions, we can <em>loop</em> over our datasets and create vectors of nodes. To do this, we begin by creating a vector of data file names:</p>
-<pre><code>filenames &lt;- v("data/primates_and_galeopterus_cox2.nex", "data/primates_and_galeopterus_cytb.nex")</code></pre>
+<pre><code><span class="va">filenames</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cox2.nex"</span>, <span class="st">"data/primates_and_galeopterus_cytb.nex"</span><span class="op">)</span></code></pre>
 <p>Set a variable for the number of partitions:</p>
-<pre><code>n_data_subsets &lt;- filenames.size</code></pre>
+<pre><code><span class="va">n_data_subsets</span> <span class="op">&lt;-</span> <span class="va">filenames.size</span></code></pre>
 <p>And create a vector of data matrices called ‘data‘:</p>
-<pre><code>for (i in 1:n_data_subsets){
-    data[i] = readDiscreteCharacterData(filenames[i])
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span><span class="op">{</span>
+    <span class="va">data</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">=</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="va">filenames</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>Next, we can initialize some important variables. This does require, however, that both of our alignments have the same number of species and matching tip names.</p>
 <pre><code>taxa &lt;- data[1].taxa
 n_taxa &lt;- data[1].ntaxa
@@ -276,114 +275,114 @@ monitors = VectorMonitors</code></pre>
 <p>We can avoid creating unique names for every node in our model if we use a ‘for‘ loop to iterate over our partitions. Thus, we will only have to type in our entire GTR+<span class="math inline">\(\Gamma\)</span> model parameters once. This will produce a vector for each of the unlinked parameters —e.g., there will be a vector of ‘alpha‘ nodes where the stochastic node for the first partition (cytB) will be ‘alpha[1]‘ and the stochastic node for the second partition (cox2) will be called ‘alpha[2]‘.</p>
 <p>The script for the model, RevBayes_scripts/mcmc_Partition_gene.Rev, creates the model parameters for each partition in one large loop. Here, we will split the loop into smaller parts to achieve the same end.</p>
 <p>First, we will create the GTR rate matrix for partition <span class="math inline">\(i\)</span> by first creating exchangeability rates</p>
-<pre><code>for (i in 1:n_data_subsets) {
-    er_prior[i] &lt;- v(1,1,1,1,1,1)
-    er[i] ~ dnDirichlet(er_prior[i])
-    moves.append( mvBetaSimplex(er[i], alpha=10, tune=true, weight=3) )
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">er_prior</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+    <span class="va">er</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">er_prior</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">er</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, alpha<span class="op">=</span><span class="fl">10</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>and stationary frequencies</p>
-<pre><code>for (i in 1:n_data_subsets) {
-    pi_prior[i] &lt;- v(1,1,1,1)
-    pi[i] ~ dnDirichlet(pi_prior[i])
-    moves.append( mvBetaSimplex(pi[i], alpha=10, tune=true, weight=2) )
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">pi_prior</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+    <span class="va">pi</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">pi_prior</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">pi</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, alpha<span class="op">=</span><span class="fl">10</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>then passing those parameters into a rate matrix function</p>
-<pre><code>for (i in 1:n_data_subsets) {
-    Q[i] := fnGTR(er[i],pi[i]) 
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">Q</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">:=</span> <span class="fu">fnGTR</span><span class="op">(</span><span class="va">er</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,<span class="va">pi</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> 
+<span class="op">}</span></code></pre>
 <p>which states the rate matrix (Q[i]) for partition <span class="math inline">\(i\)</span> is determined by the exchangeability rates (er[i]) and stationary frequencies (pi[i]) also defined for partition <span class="math inline">\(i\)</span>. Following this format, we construct the remaining partition parameters: the <span class="math inline">\(+\Gamma\)</span> mixture model</p>
-<pre><code>for (i in 1:n_data_subsets) {
-    alpha[i] ~ dnUniform( 0.0, 1E8 )
-    gamma_rates[i] := fnDiscretizeGamma( alpha[i], alpha[i], 4, false )
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">alpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span> <span class="fl">0.0</span>, <span class="fl">1E8</span> <span class="op">)</span>
+    <span class="va">gamma_rates</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">:=</span> <span class="fu">fnDiscretizeGamma</span><span class="op">(</span> <span class="va">alpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">alpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fl">4</span>, <span class="va">false</span> <span class="op">)</span>
 
-    moves.append( mvScale(alpha[i],weight=2) )
-}</code></pre>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">alpha</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>the <span class="math inline">\(+I\)</span> invariant sites model</p>
-<pre><code>for (i in 1:n_data_subsets) {
-    pinvar[i] ~ dnBeta(1,1)
-    moves.append( mvBetaProbability(pinvar[i], delta=10.0, tune=true, weight=2.0) )
-}</code></pre>
+<pre><code><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">pinvar</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnBeta</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaProbability</span><span class="op">(</span><span class="va">pinvar</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, delta<span class="op">=</span><span class="fl">10.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span></code></pre>
 <p>and the per-partition substitution rate multipliers</p>
-<pre><code># specify a rate multiplier for each partition
-part_rate_mult ~ dnDirichlet( rep(1.0, n_data_subsets) )
-moves.append( mvBetaSimplex(part_rate_mult, alpha=1.0, tune=true, weight=n_data_subsets) )
-moves.append( mvDirichletSimplex(part_rate_mult, alpha=1.0, tune=true, weight=2.0) )
+<pre><code><span class="co"># specify a rate multiplier for each partition</span>
+<span class="va">part_rate_mult</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">part_rate_mult</span>, alpha<span class="op">=</span><span class="fl">1.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="va">n_data_subsets</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">part_rate_mult</span>, alpha<span class="op">=</span><span class="fl">1.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span>
 
-# note that we use here a vector multiplication, 
-# i.e., multiplying each element of part_rate_mult by n_data_subsets
-part_rate := part_rate_mult * n_data_subsets</code></pre>
-<div id="different-substitution-models-for-each-gene" class="section level3">
-<h3 class="hasAnchor">
-<a href="#different-substitution-models-for-each-gene" class="anchor"></a>Different Substitution Models for each Gene</h3>
+<span class="co"># note that we use here a vector multiplication, </span>
+<span class="co"># i.e., multiplying each element of part_rate_mult by n_data_subsets</span>
+<span class="va">part_rate</span> <span class="op">:=</span> <span class="va">part_rate_mult</span> <span class="op">*</span> <span class="va">n_data_subsets</span></code></pre>
+<div class="section level4">
+<h4 id="different-substitution-models-for-each-gene">Different Substitution Models for each Gene<a class="anchor" aria-label="anchor" href="#different-substitution-models-for-each-gene"></a>
+</h4>
 <p>Alternatively, we might be interested in applying different substitution models for each gene independently instead of assuming the same substitution albeit with different parameters for each gene. In this two gene case this is rather simple to do by specifying the substitution model for each gene independently. For many genes this might become lengthy and you might want to write a script to generate this section (note: we may provide such scripts soon).</p>
 <p>For simplicity and sake of demonstration, we assume that the cytochrome b region evolves under a Jukes-Cantor substitution model and the COX-II gene under an HKY substitution model. We begin with the cytochrome b gene and the Jukes-Cantor substitution model:</p>
-<pre><code># specify the JC rate matrix
-Q[1] &lt;- fnJC(4)</code></pre>
+<pre><code><span class="co"># specify the JC rate matrix</span>
+<span class="va">Q</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">fnJC</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></code></pre>
 <p>Second, we specify the HKY substitution model for the COX-II gene:</p>
-<pre><code>pi_prior &lt;- v(1,1,1,1) 
-pi ~ dnDirichlet(pi_prior)
+<pre><code><span class="va">pi_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span> 
+<span class="va">pi</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">pi_prior</span><span class="op">)</span>
 
-# specify a move to propose updates to on pi
-moves.append( mvBetaSimplex(pi, weight=2) )
-moves.append( mvDirichletSimplex(pi, weight=1) )
+<span class="co"># specify a move to propose updates to on pi</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">)</span>
 
-# specify a lognormal distribution as the prior distribution on kappa
-kappa ~ dnLognormal(0.0,1.25)
+<span class="co"># specify a lognormal distribution as the prior distribution on kappa</span>
+<span class="va">kappa</span> <span class="op">~</span> <span class="fu">dnLognormal</span><span class="op">(</span><span class="fl">0.0</span>,<span class="fl">1.25</span><span class="op">)</span>
 
-# a simple scaling move to update kappa
-moves.append( mvScale(kappa) )
+<span class="co"># a simple scaling move to update kappa</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">kappa</span><span class="op">)</span> <span class="op">)</span>
 
-# Finally, create the HKY rate matrix
-Q[2] := fnHKY(kappa,pi)</code></pre>
+<span class="co"># Finally, create the HKY rate matrix</span>
+<span class="va">Q</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">:=</span> <span class="fu">fnHKY</span><span class="op">(</span><span class="va">kappa</span>,<span class="va">pi</span><span class="op">)</span></code></pre>
 <p>Note that we specified manually in this way our vector of rate matrices ‘Q‘. We can thus specify any substitution model manually for a given gene. We hope that this brief example conveys the idea how to specify gene-specific substitution models. You can add rate-variation among sites and/or probabilities for a site being invariant for each gene too. Finally, you can then either loop over all genes to create the ‘dnPhyloCTMC‘ distribution (see below) if the structure of the model allows it (<em>i.e.,</em>if all models have a variable for site-rate-variation and probabilities for invariant site), or you efficiently set these variables to default values (<em>e.g.,</em>‘pinvar[i]=0.0‘ if there is no probability for a site being invariant for this gene), or you create the ‘seq[i] <span class="math inline">\(\sim\)</span> dnPhyloCTMC(…)‘ manually outside a loop as well.</p>
 <p>Tree prior</p>
 <p>We assume that both genes evolve along the same tree. Hence, we need to specify a random variable for our tree parameter which is the same as was specified for mcmc_Partition_uniform.Rev.</p>
-<pre><code>out_group = clade("Galeopterus_variegatus")
-# Prior distribution on the tree topology   
-topology ~ dnUniformTopology(taxa, outgroup=out_group)
-moves.append( mvNNI(topology, weight=n_taxa/2.0) )
-moves.append( mvSPR(topology, weight=n_taxa/10.0) )
+<pre><code><span class="va">out_group</span> <span class="op">=</span> <span class="fu">clade</span><span class="op">(</span><span class="st">"Galeopterus_variegatus"</span><span class="op">)</span>
+<span class="co"># Prior distribution on the tree topology   </span>
+<span class="va">topology</span> <span class="op">~</span> <span class="fu">dnUniformTopology</span><span class="op">(</span><span class="va">taxa</span>, outgroup<span class="op">=</span><span class="va">out_group</span><span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNNI</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">n_taxa</span><span class="op">/</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvSPR</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">n_taxa</span><span class="op">/</span><span class="fl">10.0</span><span class="op">)</span> <span class="op">)</span>
 
-# Branch length prior
-for (i in 1:n_branches) {
-    bl[i] ~ dnExponential(10.0)
-    moves.append( mvScale(bl[i]) )
-}
+<span class="co"># Branch length prior</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_branches</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">bl</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnExponential</span><span class="op">(</span><span class="fl">10.0</span><span class="op">)</span>
+    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">bl</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">)</span>
+<span class="op">}</span>
 
-TL := sum(bl)
+<span class="va">TL</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">bl</span><span class="op">)</span>
     
-psi := treeAssembly(topology, bl)</code></pre>
+<span class="va">psi</span> <span class="op">:=</span> <span class="fu">treeAssembly</span><span class="op">(</span><span class="va">topology</span>, <span class="va">bl</span><span class="op">)</span></code></pre>
 </div>
 </div>
-<div id="putting-it-all-together" class="section level2">
-<h2 class="hasAnchor">
-<a href="#putting-it-all-together" class="anchor"></a>Putting it all together</h2>
+<div class="section level3">
+<h3 id="putting-it-all-together">Putting it all together<a class="anchor" aria-label="anchor" href="#putting-it-all-together"></a>
+</h3>
 <p>Since we have a rate matrix and a site-rate model for each partition, we must create a phylogenetic CTMC for each gene. Additionally, we must fix the values of these nodes by attaching their respective data matrices. These two nodes are linked by the ‘psi‘ node and their log-likelihoods are added to get the likelihood of the whole DAG.</p>
 <pre><code>for (i in 1:n_data_subsets) {
     seq[i] ~ dnPhyloCTMC(tree=psi, Q=Q[i], branchRates=part_rate_mult[i], siteRates=gamma_rates[i], pInv=pinvar[i], type="DNA")
     seq[i].clamp(data[i])
 }</code></pre>
 <p>The remaining steps should be familiar: wrap the model components in a model object</p>
-<pre><code>my_model = model(psi)</code></pre>
-<div id="create-monitors" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-monitors" class="anchor"></a>Create monitors</h3>
+<pre><code><span class="va">my_model</span> <span class="op">=</span> <span class="fu">model</span><span class="op">(</span><span class="va">psi</span><span class="op">)</span></code></pre>
+<div class="section level4">
+<h4 id="create-monitors">Create monitors<a class="anchor" aria-label="anchor" href="#create-monitors"></a>
+</h4>
 <p>create the monitors</p>
-<pre><code>monitors.append( mnModel(filename="output/PS_gene.log",printgen=10) )
-monitors.append( mnFile(psi, filename="output/PS_gene.trees", printgen=100) )
-monitors.append( mnScreen(TL, printgen=1000) )</code></pre>
+<pre><code><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnModel</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/PS_gene.log"</span>,printgen<span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnFile</span><span class="op">(</span><span class="va">psi</span>, filename<span class="op">=</span><span class="st">"output/PS_gene.trees"</span>, printgen<span class="op">=</span><span class="fl">100</span><span class="op">)</span> <span class="op">)</span>
+<span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnScreen</span><span class="op">(</span><span class="va">TL</span>, printgen<span class="op">=</span><span class="fl">1000</span><span class="op">)</span> <span class="op">)</span></code></pre>
 <p>configure and run the MCMC analysis</p>
-<pre><code>mymcmc = mcmc(my_model, moves, monitors, nruns=2, combine="mixed")
-mymcmc.run(30000,tuningInterval=200)</code></pre>
+<pre><code><span class="va">mymcmc</span> <span class="op">=</span> <span class="fu">mcmc</span><span class="op">(</span><span class="va">my_model</span>, <span class="va">moves</span>, <span class="va">monitors</span>, nruns<span class="op">=</span><span class="fl">2</span>, combine<span class="op">=</span><span class="st">"mixed"</span><span class="op">)</span>
+<span class="fu">mymcmc.run</span><span class="op">(</span><span class="fl">30000</span>,tuningInterval<span class="op">=</span><span class="fl">200</span><span class="op">)</span></code></pre>
 <p>and summarize the posterior density of trees with a MAP tree</p>
-<pre><code>treetrace = readTreeTrace("output/PS_gene.trees", treetype="non-clock")
-treetrace.summarize
-mapTree(treetrace,"output/PS_gene_MAP.tre")</code></pre>
-<p>{% section Partitioning by Codon Position and by Gene %} <a href="https://youtu.be/LPPYGUP1FZc#t=25m37s">[Walkthrough video]{: height=“36” width=“36”}</a></p>
+<pre><code><span class="va">treetrace</span> <span class="op">=</span> <span class="fu">readTreeTrace</span><span class="op">(</span><span class="st">"output/PS_gene.trees"</span>, treetype<span class="op">=</span><span class="st">"non-clock"</span><span class="op">)</span>
+<span class="va">treetrace.summarize</span>
+<span class="fu">mapTree</span><span class="op">(</span><span class="va">treetrace</span>,<span class="st">"output/PS_gene_MAP.tre"</span><span class="op">)</span></code></pre>
+<p>{% section Partitioning by Codon Position and by Gene %} <a href="https://youtu.be/LPPYGUP1FZc#t=25m37s" class="external-link">[Walkthrough video]{: height=“36” width=“36”}</a></p>
 <p>Because of the genetic code, we often find that different positions within a codon (first, second, and third) evolve at different rates. Thus, using our knowledge of biological data, we can devise a third approach that further partitions our alignment. For this exercise, we will partition sites within the cytB and cox2 gene by codon position.</p>
-<pre><code>clear
-data_cox2 &lt;- readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
-data_cytb &lt;- readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")</code></pre>
+<pre><code><span class="va">clear</span>
+<span class="va">data_cox2</span> <span class="op">&lt;-</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cox2.nex"</span><span class="op">)</span>
+<span class="va">data_cytb</span> <span class="op">&lt;-</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cytb.nex"</span><span class="op">)</span></code></pre>
 <p>We must now add our codon-partitions to the ‘data‘ vector. The first and second elements in the data vector will describe cytB data, and the third and fourth elements will describe cox2 data. Moreover, the first and third elements will describe the evolutionary process for the first and second codon position sites, while the second and fourth elements describe the process for the third codon position sites alone.</p>
 <p>We can create this by calling the helper function ‘setCodonPartition‘, which is a member function of the data matrix. We are assuming that the gene is <em>in frame</em>, meaning the first column in your alignment is a first codon position. The ‘setCodonPartition‘ function takes a single argument, the position of the alignment you wish to extract. It then returns every third column, starting at the index provided as an argument.</p>
 <p>Before we can use the use the ‘setCodonPartition‘ function, we must first populate the position in the ‘data‘ matrix with some sequences. Then we call the member function of ‘data[1]‘ to exclude all but the 1<span class="math inline">\(^{st}\)</span> and 2<span class="math inline">\(^{nd}\)</span> positions for cox2.</p>
@@ -401,10 +400,10 @@ data[4].setCodonPartition( 3 )</code></pre>
 <p>Don’t forget to rename the output files!</p>
 </div>
 </div>
-<div id="exercises" class="section level1">
-<h1 class="hasAnchor">
-<a href="#exercises" class="anchor"></a>Exercises</h1>
-<p><a href="https://youtu.be/LPPYGUP1FZc#t=29m11s">[Walkthrough video]{: height=“36” width=“36”}</a></p>
+<div class="section level2">
+<h2 id="exercises">Exercises<a class="anchor" aria-label="anchor" href="#exercises"></a>
+</h2>
+<p><a href="https://youtu.be/LPPYGUP1FZc#t=29m11s" class="external-link">[Walkthrough video]{: height=“36” width=“36”}</a></p>
 <ol style="list-style-type: decimal">
 <li>
 <p><strong>Reviewing posterior estimates.</strong> Open the PS_codon.log file in <code>Tracer</code>. Remember that data subsets 1 and 2 are for cox2, partitions 3 and 4 are for cytB, subsets 1 and 3 are for sites in the first and second codon positions (per gene), and subsets 2 and 4 are for sites in the third and fourth codon positions (per gene).</p>
@@ -416,15 +415,15 @@ data[4].setCodonPartition( 3 )</code></pre>
 <p><strong>Partitioned model selection.</strong> Bayes factors are computed as the ratio of marginal likelihoods (see {% page_ref model_selection_bayes_factors/bf_intro %} for more details). Rather than constructing the analysis with an mcmc object, marginal likelihood computations rely on output from a powerPosterior object.</p>
 <p>Copy mcmc_Partition_uniform.Rev to ml_Partition_uniform.Rev. In ml_Partition_uniform.Rev, delete all lines after the model function is called, so the MCMC is never run and the MAP tree is never computed.</p>
 <p>Instead, configure and run a power posterior analysis</p>
-<pre><code>pow_p = powerPosterior(mymodel, moves, monitors, "output/model_uniform.out", cats=127)
-pow_p.burnin(generations=5000,tuningInterval=200)
-pow_p.run(generations=2000)</code></pre>
+<pre><code><span class="va">pow_p</span> <span class="op">=</span> <span class="fu">powerPosterior</span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">moves</span>, <span class="va">monitors</span>, <span class="st">"output/model_uniform.out"</span>, cats<span class="op">=</span><span class="fl">127</span><span class="op">)</span>
+<span class="fu">pow_p.burnin</span><span class="op">(</span>generations<span class="op">=</span><span class="fl">5000</span>,tuningInterval<span class="op">=</span><span class="fl">200</span><span class="op">)</span>
+<span class="fu">pow_p.run</span><span class="op">(</span>generations<span class="op">=</span><span class="fl">2000</span><span class="op">)</span></code></pre>
 <p>then compute the marginal likelihood using the stepping stone sampler</p>
-<pre><code>ss = steppingStoneSampler(file="output/model_uniform.out", powerColumnName="power", likelihoodColumnName="likelihood")
-ss.marginal</code></pre>
+<pre><code><span class="va">ss</span> <span class="op">=</span> <span class="fu">steppingStoneSampler</span><span class="op">(</span>file<span class="op">=</span><span class="st">"output/model_uniform.out"</span>, powerColumnName<span class="op">=</span><span class="st">"power"</span>, likelihoodColumnName<span class="op">=</span><span class="st">"likelihood"</span><span class="op">)</span>
+<span class="va">ss.marginal</span></code></pre>
 <p>and again using the path sampler</p>
-<pre><code>ps = pathSampler(file="model_uniform.out", powerColumnName="power", likelihoodColumnName="likelihood")
-ps.marginal</code></pre>
+<pre><code><span class="va">ps</span> <span class="op">=</span> <span class="fu">pathSampler</span><span class="op">(</span>file<span class="op">=</span><span class="st">"model_uniform.out"</span>, powerColumnName<span class="op">=</span><span class="st">"power"</span>, likelihoodColumnName<span class="op">=</span><span class="st">"likelihood"</span><span class="op">)</span>
+<span class="va">ps.marginal</span></code></pre>
 </li>
 </ol>
 </div>
@@ -441,11 +440,13 @@ ps.marginal</code></pre>
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p></p>
+<p>Developed by The package maintainer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -453,6 +454,8 @@ ps.marginal</code></pre>
 
   
 
+
+  
 
   </body>
 </html>

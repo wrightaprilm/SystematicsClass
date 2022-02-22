@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">SystematicsClass</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../../reference/index.html">Reference</a>
 </li>
@@ -102,6 +98,9 @@
       <a href="../../articles/14_Final/index.html">FinalExam</a>
     </li>
     <li>
+      <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
+    </li>
+    <li>
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
@@ -120,13 +119,13 @@
 
       
 
-      </header><script src="index_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Genome-Scale Homology</h1>
-                        <h4 class="author">April Wright</h4>
+                        <h4 data-toc-skip class="author">April Wright</h4>
             
-            <h4 class="date">1/20/2022</h4>
+            <h4 data-toc-skip class="date">1/20/2022</h4>
       
       
       <div class="hidden name"><code>index.Rmd</code></div>
@@ -135,14 +134,14 @@
 
     
     
-<div id="homology-in-massive-datasets" class="section level1">
-<h1 class="hasAnchor">
-<a href="#homology-in-massive-datasets" class="anchor"></a>Homology in massive datasets</h1>
-<p>Homology is difficult to assess in massive datasets, particularly those from genomic data. For example, ddRAD sequencing is common in the life sciences. It is common because it’s fairly cost effective and obtains a sample of loci from across the genome. If you’re working with this data, I really do recommend having a look at <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135">this</a> paper describing the method. The salient figure is below:</p>
+<div class="section level2">
+<h2 id="homology-in-massive-datasets">Homology in massive datasets<a class="anchor" aria-label="anchor" href="#homology-in-massive-datasets"></a>
+</h2>
+<p>Homology is difficult to assess in massive datasets, particularly those from genomic data. For example, ddRAD sequencing is common in the life sciences. It is common because it’s fairly cost effective and obtains a sample of loci from across the genome. If you’re working with this data, I really do recommend having a look at <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0037135" class="external-link">this</a> paper describing the method. The salient figure is below:</p>
 <div class="figure">
 <img src="fig/ddRAD.png" alt=""><p class="caption">ddRAD from Peterson et al.</p>
 </div>
-<p>We’ll be using the iPyRad software from Deren Eaton’s lab. You can see the <a href="https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/btz966/5697088?redirectedFrom=fulltext">paper</a> for the software, or look at the <a href="https://github.com/dereneaton/ipyrad/">source code.</a> On the board, let’s draw the workflow of iPyRad. This tutorial heavily borrows from one of Deren’s.</p>
+<p>We’ll be using the iPyRad software from Deren Eaton’s lab. You can see the <a href="https://academic.oup.com/bioinformatics/advance-article-abstract/doi/10.1093/bioinformatics/btz966/5697088?redirectedFrom=fulltext" class="external-link">paper</a> for the software, or look at the <a href="https://github.com/dereneaton/ipyrad/" class="external-link">source code.</a> On the board, let’s draw the workflow of iPyRad. This tutorial heavily borrows from one of Deren’s.</p>
 <pre><code># The curl command is used to download the installer from the web. Take note
 # that the -O flag is a capital o not a zero.
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
@@ -198,16 +197,16 @@ ipyrad -p params-iptest.txt -s 2
 <pre><code>ipyrad -p params-iptest.txt -s 7</code></pre>
 <p>This sounds like t should be an easy step, but it can actually be quite challenging. There are a number of parameters in the params file that apply here - number of SNPs, number of indels, accepted number of alleles at a locus. You may want to examine these values for your data. The final files will be in iptest_outfiles. Have a look at the .phy file. Does it look familiar?</p>
 </div>
-<div id="massive-scale-homology-homework" class="section level1">
-<h1 class="hasAnchor">
-<a href="#massive-scale-homology-homework" class="anchor"></a>Massive scale homology homework</h1>
+<div class="section level2">
+<h2 id="massive-scale-homology-homework">Massive scale homology homework<a class="anchor" aria-label="anchor" href="#massive-scale-homology-homework"></a>
+</h2>
 <ol style="list-style-type: decimal">
 <li><p>Step 2 allows you to adjust the phred score. Try doing this. Does this alter how much data you retain?</p></li>
 <li><p>Step 3 allows you to change how many errors you allow. Try changing this. How does your output change with it?</p></li>
 </ol>
 <p>1/2 a. You may choose a different variable to alter if neither of the above interest you.</p>
 <ol start="3" style="list-style-type: decimal">
-<li>Have a look at the <a href="http://catchenlab.life.illinois.edu/stacks/">Stacks</a> software. Briefly compare and contrast Stacks and PyRad.</li>
+<li>Have a look at the <a href="http://catchenlab.life.illinois.edu/stacks/" class="external-link">Stacks</a> software. Briefly compare and contrast Stacks and PyRad.</li>
 </ol>
 </div>
   </div>
@@ -223,11 +222,13 @@ ipyrad -p params-iptest.txt -s 2
 
 
       <footer><div class="copyright">
-  <p>Developed by The package maintainer.</p>
+  <p></p>
+<p>Developed by The package maintainer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -235,6 +236,8 @@ ipyrad -p params-iptest.txt -s 2
 
   
 
+
+  
 
   </body>
 </html>

@@ -1,0 +1,138 @@
+---
+title: "LikelihoodCalc"
+author: "April Wright"
+date: "2/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Let us create a Rate Matrix 
+
+
+```{r}
+row1 <- c(0.0, 1.0, 1.33, 1.0)
+row2 <- c(1.0, 0.0, 1.0, 1.33)
+row3 <- c(1.33, 1.0, 0.0, 1.0)
+row4 <- c(1.0, 1.33, 1.0, 0.0)
+rate_mat <- matrix(rbind(c(row1, row2, row3, row4)), nrow = 4)
+
+colnames(rate_mat) <- c("A","C", "G", "T")
+rownames(rate_mat) <- c("A","C","G", "T")
+rate_mat
+
+```
+
+These are the rates of change. You may see these called exchangeabilities. Now, let's create a vector of base compositions.
+
+```{r}
+Pi = c(.4, .1, .2, .3)
+diagonal_pi <- diag(Pi)
+```
+
+Now we make what is called the Q matrix:
+
+
+```{r}
+Q_unscaled <- rate_mat * Pi
+Q_unscaled
+```
+
+Next, we want to scale the Q matrix such that the rows sum to zero. 
+
+
+```{r}
+rowsums <- rowSums(Q_unscaled)
+rowsums
+for (i in 1:4){
+  Q_unscaled[i, i] <- -rowsums[1]
+}
+
+Q_unscaled
+```
+
+Next, we compute a diagonal sum for the matrix. This is used to normalize your Q matrix.
+
+```{r}
+offdiags <- function(mat = matrix){
+diag_sum <- sum(diag(mat))
+off_diag_sum <- sum(i) - diag_sum
+return(off_diag_sum)
+}
+
+
+```
+
+
+First we transform by the matrix diagonal of pi.
+```{r}
+b <- Q_unscaled * diagonal_pi
+b
+```
+
+
+And this gives us a scaling constant.
+```{r}
+
+scaling <- offdiags(b)
+
+scaledQ <- Q_unscaled/scaling
+
+
+```
+
+
+Now we use this to calculate a likelihood of observing a particular branch length per site:
+
+Pr(Branch Length per site) = scaledQ * BranchLength. For example, if we have our Q matrix, and the branch length is .1, the below are the probabilities of seeing a change between those characters on that branch:
+
+```{r}
+longish_branch <- scaledQ*.05
+
+```
+
+
+Now lets imagine we have two taxa, and we have an alignment like so:
+
+Taxon1 = CCAT
+Taxon2 = CCGT
+
+The probability will look like this:
+
+
+```
+Likelihood(Data | Model) = Probability(C) * Pr(C --> C) * Pr(C) * Pr(C-->C) * Pr(A) * Pr(A --> G) * Pr(T)* Pr(T-->T) 
+```
+
+In code, this will be
+
+```{r}
+Pi[2]*longish_branch[2,2] * Pi[2]*longish_branch[2,2] * Pi[1] * scaledQ[1,3]*Pi[4]*longish_branch[4,4]
+
+```
+
+
+# Priors
+
+Priors reflect a prior belief about a variable in the analysis. In this case, for example, we may believe a branch length to be drawn from an exponential distribution. Take a look here at the exponential: 
+
+```{r}
+
+branch_length_prior <- rexp(1000000, 10)
+hist(branch_length_prior)
+
+```
+
+Let's try the above calculation with a prior included.
+
+```{r}
+
+branch_length_prior <- rexp(1, 10)
+
+prior_branch <- scaledQ*branch_length_prior
+Pi[2]*prior_branch[2,2] * Pi[2]*prior_branch[2,2] * Pi[1] * scaledQ[1,3]*Pi[4]*prior_branch[4,4]
+
+```
+
