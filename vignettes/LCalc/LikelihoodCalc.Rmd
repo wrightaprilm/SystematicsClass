@@ -136,3 +136,57 @@ Pi[2]*prior_branch[2,2] * Pi[2]*prior_branch[2,2] * Pi[1] * scaledQ[1,3]*Pi[4]*p
 
 ```
 
+## Homework
+
+1. Add a couple nucleotides to the alignment. Recalculate the likelihood. 
+
+```{r}
+
+# Work goes here
+
+```
+
+
+2. What happens to your likelihood when you make the branch lengths very long or very short? 
+
+
+```{r}
+
+# Code here
+
+```
+
+
+3. Reason out why that happens to your likelihood. 
+
+
+
+
+4. In class, we used this loop to generate new branch lengths to connect our two taxa. Figure out how to only view the likelihoods of the invariant characters as you change the branch lengths. What happens to the probability of observing invariant characters as you change the branch lenghts?  
+
+
+```{r}
+
+
+for (i in 1:10){
+     branch_length <- rexp(1, 10)
+     print(branch_length)
+     prior_branch <- scaledQ * branch_length
+     total_likelihood <- Pi[2]*prior_branch[2, 2] + Pi[2]*prior_branch[2,2] + Pi[1]*prior_branch[1,3] + Pi[4]*prior_branch[4,4]
+     print( total_likelihood)
+ }
+
+
+
+```
+
+
+5. Parsimony typically measures branch lengths as changes in the data implied by the tree. Likelihood and related methods typically measure them as expected changes per character. A time-scaled tree will express branch legnths in millions of years. What information do you think you need to go from an undated likelihood or parsimony tree to a dated tree? 
+
+
+```{r}
+
+
+
+```
+
