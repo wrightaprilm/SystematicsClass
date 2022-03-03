@@ -7,8 +7,6 @@ articles:
   index: 02_molecular_homology/index.html
   index: 03_massive_homology/index.html
   index: 04_ParsimonyAndModels/index.html
-  index: 05_CTMC/index.html
-  index: 05_models/index.html
   index: 06_Bayes_and_MCMC/index.html
   index: 07_molecular_data/index.html
   index: 08_Discrete_Morphology/index.html
@@ -21,5 +19,5 @@ articles:
   LikelihoodCalc: LCalc/LikelihoodCalc.html
   index: ModelsHomework/index.html
   index: PaupHomework/index.html
-last_built: 2022-03-03T21:28Z
+last_built: 2022-03-03T21:43Z
 

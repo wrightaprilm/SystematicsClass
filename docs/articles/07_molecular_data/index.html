@@ -65,12 +65,6 @@
       <a href="../../articles/04_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a>
     </li>
     <li>
-      <a href="../../articles/05_CTMC/index.html">Nucleotide substitution models</a>
-    </li>
-    <li>
-      <a href="../../articles/05_models/index.html">Nucleotide substitution models</a>
-    </li>
-    <li>
       <a href="../../articles/06_Bayes_and_MCMC/index.html">Introduction to MCMC using RevBayes</a>
     </li>
     <li>
@@ -335,7 +329,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <span class="co">## Phylogenetic tree with 23 tips and 21 internal nodes.</span>
 <span class="co">## </span>
 <span class="co">## Tip labels:</span>
-<span class="co">##   Aotus_trivirgatus, Colobus_guereza, Pan_paniscus, Tarsius_syrichta, Chlorocebus_aethiops, Lepilemur_hubbardorum, ...</span>
+<span class="co">##   Lemur_catta, Colobus_guereza, Perodicticus_potto, Galago_senegalensis, Microcebus_murinus, Daubentonia_madagascariensis, ...</span>
 <span class="co">## </span>
 <span class="co">## Unrooted; no branch lengths.</span></code></pre>
 <p>We can plot this tree, too, in R:</p>
@@ -362,7 +356,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">TL</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">br_lens</span><span class="op">)</span>
 <span class="va">TL</span></code></pre></div>
-<pre><code><span class="co">## [1] 4.88069</span></code></pre>
+<pre><code><span class="co">## [1] 4.02095</span></code></pre>
 <p>Finally, we can create a <em>phylogram</em> (a phylogeny in which the branch lengths are proportional to the expected number of substitutions/site) by combining the tree topology and branch lengths. We do this using the <code>treeAssembly()</code> function, which applies the value of the <span class="math inline">\(i^{th}\)</span> member of the <code>br_lens</code> vector to the branch leading to the <span class="math inline">\(i^{th}\)</span> node in <code>topology</code>. Thus, the <code>psi</code> variable is a deterministic node:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">psi</span> <span class="op">:=</span> <span class="fu">treeAssembly</span><span class="op">(</span><span class="va">topology</span>, <span class="va">br_lens</span><span class="op">)</span></code></pre></div>
@@ -476,11 +470,11 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <span class="co">##  [9] "_dagType = Stochastic node (distribution)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </span>
 <span class="co">## [10] "_distribution = dnPhyloCTMC(Tree&lt;any&gt; tree, RateGenerator|RateGenerator[]&lt;any&gt; Q, Simplex&lt;any&gt; rootFrequencies, RealPos|RealPos[]&lt;any&gt; branchRates,Simplex|Bool&lt;any&gt; siteMatrices, RealPos[]&lt;any&gt; siteRates, Simplex&lt;any&gt; siteRatesProbs, Probability&lt;any&gt; pInv, Natural&lt;any&gt; nSites, String&lt;any&gt; type {validoptions: \"DNA\"|\"RNA\"|\"AA\"|\"Codon\"|\"Doublet\"|\"PoMo\"|\"Protein\"|\"Standard\"|\"NaturalNumbers\"|\"Binary\"|\"Restriction\"}, Bool&lt;any&gt; treatAmbiguousAsGap, String&lt;any&gt;coding, Bool&lt;any&gt; storeInternalNodes, Bool&lt;any&gt; gapMatchClamped)"</span>
 <span class="co">## [11] "_clamped = TRUE"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
-<span class="co">## [12] "_lnProb = -34178.7"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
+<span class="co">## [12] "_lnProb = -33592.7"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
 <span class="co">## [13] "_parents = [ psi, seq.pInv, seq.branchRates, Q ]"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
 <span class="co">## [14] "_children = [ ]"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
 <span class="co">## [15] "psi :"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-<span class="co">## [16] "_value = ((((Microcebus_murinus[&amp;index=23]:7.078503,(Otolemu..._dagType = Stochastic node (distribution)_distribution = dnUniformTimeTree(RealPos&lt;any&gt; rootAge, Taxon[]&lt;any&gt; taxa)_clamped = FALSE_lnProb = -2.97415_parents = [ root_age ]_children = [ seq ]root_age :_value = 10_dagType = Constant node_children = [ psi ]seq.pInv :_value = 0_dagType = Constant node_children = [ seq ]seq.branchRates :_value = 1_dagType = Constant node_children = [ seq ]"</span></code></pre>
+<span class="co">## [16] "_value = ((((Cheirogaleus_major[&amp;index=23]:5.873892,(Lepilem..._dagType = Stochastic node (distribution)_distribution = dnUniformTimeTree(RealPos&lt;any&gt; rootAge, Taxon[]&lt;any&gt; taxa)_clamped = FALSE_lnProb = -2.97415_parents = [ root_age ]_children = [ seq ]root_age :_value = 10_dagType = Constant node_children = [ psi ]seq.pInv :_value = 0_dagType = Constant node_children = [ seq ]seq.branchRates :_value = 1_dagType = Constant node_children = [ seq ]"</span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="specifying-monitors-and-output-files">Specifying Monitors and Output Files<a class="anchor" aria-label="anchor" href="#specifying-monitors-and-output-files"></a>

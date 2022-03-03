@@ -65,12 +65,6 @@
       <a href="../../articles/04_ParsimonyAndModels/index.html">PAUP, parsimony, and nucletoide substitution models</a>
     </li>
     <li>
-      <a href="../../articles/05_CTMC/index.html">Nucleotide substitution models</a>
-    </li>
-    <li>
-      <a href="../../articles/05_models/index.html">Nucleotide substitution models</a>
-    </li>
-    <li>
       <a href="../../articles/06_Bayes_and_MCMC/index.html">Introduction to MCMC using RevBayes</a>
     </li>
     <li>
@@ -230,7 +224,7 @@
 
 <span class="va">prior_branch</span> <span class="op">&lt;-</span> <span class="va">scaledQ</span><span class="op">*</span><span class="va">branch_length_prior</span>
 <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">scaledQ</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">]</span><span class="op">*</span><span class="va">Pi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">]</span></code></pre></div>
-<pre><code><span class="co">## [1] -7.247212e-10</span></code></pre>
+<pre><code><span class="co">## [1] -1.043937e-07</span></code></pre>
 <div class="section level3">
 <h3 id="homework">Homework<a class="anchor" aria-label="anchor" href="#homework"></a>
 </h3>
@@ -256,26 +250,26 @@
      <span class="va">total_likelihood</span> <span class="op">&lt;-</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">]</span>
      <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="va">total_likelihood</span><span class="op">)</span>
  <span class="op">}</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.01056306</span>
-<span class="co">## [1] -0.0008978202</span>
-<span class="co">## [1] 0.01949346</span>
-<span class="co">## [1] -0.001656871</span>
-<span class="co">## [1] 0.009426402</span>
-<span class="co">## [1] -0.0008012088</span>
-<span class="co">## [1] 0.1072574</span>
-<span class="co">## [1] -0.009116475</span>
-<span class="co">## [1] 0.02735877</span>
-<span class="co">## [1] -0.002325393</span>
-<span class="co">## [1] 0.1735606</span>
-<span class="co">## [1] -0.014752</span>
-<span class="co">## [1] 0.3153612</span>
-<span class="co">## [1] -0.02680452</span>
-<span class="co">## [1] 0.04901601</span>
-<span class="co">## [1] -0.004166177</span>
-<span class="co">## [1] 0.01148099</span>
-<span class="co">## [1] -0.0009758407</span>
-<span class="co">## [1] 0.05733601</span>
-<span class="co">## [1] -0.004873346</span></code></pre>
+<pre><code><span class="co">## [1] 0.03708812</span>
+<span class="co">## [1] -0.003152351</span>
+<span class="co">## [1] 0.08932877</span>
+<span class="co">## [1] -0.00759261</span>
+<span class="co">## [1] 0.2563793</span>
+<span class="co">## [1] -0.02179128</span>
+<span class="co">## [1] 0.01760858</span>
+<span class="co">## [1] -0.001496664</span>
+<span class="co">## [1] 0.1161336</span>
+<span class="co">## [1] -0.009870921</span>
+<span class="co">## [1] 0.00391079</span>
+<span class="co">## [1] -0.0003324025</span>
+<span class="co">## [1] 0.006686605</span>
+<span class="co">## [1] -0.0005683364</span>
+<span class="co">## [1] 0.2404115</span>
+<span class="co">## [1] -0.02043408</span>
+<span class="co">## [1] 0.1242154</span>
+<span class="co">## [1] -0.01055784</span>
+<span class="co">## [1] 0.02903845</span>
+<span class="co">## [1] -0.002468159</span></code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Parsimony typically measures branch lengths as changes in the data implied by the tree. Likelihood and related methods typically measure them as expected changes per character. A time-scaled tree will express branch legnths in millions of years. What information do you think you need to go from an undated likelihood or parsimony tree to a dated tree?</li>
 </ol>
