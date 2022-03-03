@@ -1,0 +1,54 @@
+.titlebar {
+  margin-bottom: 2em;
+  text-align: left;
+  font-family: 'Raleway';
+
+  .subtitle {
+    font-size: 1.8em;
+    font-style: italic;
+  }
+
+  .authors {
+    font-size: 1em;
+  }
+}
+
+h2.section, h2.references {
+  margin-top: 30pt;
+  margin-bottom: 0pt;
+  font-size: 1.85em;
+}
+
+hr.section, hr.references {
+  margin: 5pt 0pt 5pt 0pt;
+}
+
+h3.subsection {
+  font-size: 1.6em;
+}
+
+hr.subsection {
+  display: none;
+}
+
+h4.subsubsection {
+  margin-top: 15pt;
+  font-size: 1.2em;
+}
+
+hr.subsubsection {
+  display: none;
+}
+
+.sidebar {
+    width: 22em;
+    float: left;
+    font-size: 0.9em;
+    margin-right: 1em;
+    margin-top: 0em;
+    padding: 8px;
+}
+
+.MathJax_Display {
+    pointer-events:none;
+}

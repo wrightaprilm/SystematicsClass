@@ -10,16 +10,16 @@ articles:
   index: 05_CTMC/index.html
   index: 05_models/index.html
   index: 06_Bayes_and_MCMC/index.html
-  index: 07_Discrete_Morphology/index.html
-  index: 08_Partitioned_data/index.html
-  index: 08_final/index.html
-  index: 09_Molecular_Clock/index.html
-  RB_Total_Evidence_Tutorial: 10_FBD/RB_Total_Evidence_Tutorial.html
-  index: 12_Comparative_Methods/index.html
-  index: 13_biogeography/index.html
-  index: 14_Final/index.html
+  index: 07_molecular_data/index.html
+  index: 08_Discrete_Morphology/index.html
+  index: 09_Partitioned_data/index.html
+  index: 10_Molecular_Clock/index.html
+  RB_Total_Evidence_Tutorial: 11_FBD/RB_Total_Evidence_Tutorial.html
+  index: 13_Comparative_Methods/index.html
+  index: 14_biogeography/index.html
+  index: 15_Final/index.html
   LikelihoodCalc: LCalc/LikelihoodCalc.html
   index: ModelsHomework/index.html
   index: PaupHomework/index.html
-last_built: 2022-02-25T15:47Z
+last_built: 2022-03-03T21:28Z
 

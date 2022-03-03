@@ -46,6 +46,12 @@
     <loc>/articles/07_blast/index.html</loc>
   </url>
   <url>
+    <loc>/articles/07_molecular_data/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/08_Discrete_Morphology/index.html</loc>
+  </url>
+  <url>
     <loc>/articles/08_Partitioned_data/index.html</loc>
   </url>
   <url>
@@ -55,16 +61,34 @@
     <loc>/articles/09_Molecular_Clock/index.html</loc>
   </url>
   <url>
+    <loc>/articles/09_Partitioned_data/index.html</loc>
+  </url>
+  <url>
     <loc>/articles/10_FBD/RB_Total_Evidence_Tutorial.html</loc>
   </url>
   <url>
+    <loc>/articles/10_Molecular_Clock/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/11_FBD/RB_Total_Evidence_Tutorial.html</loc>
+  </url>
+  <url>
     <loc>/articles/12_Comparative_Methods/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/13_Comparative_Methods/index.html</loc>
   </url>
   <url>
     <loc>/articles/13_biogeography/index.html</loc>
   </url>
   <url>
     <loc>/articles/14_Final/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/14_biogeography/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/15_Final/index.html</loc>
   </url>
   <url>
     <loc>/articles/Homework/Homework3.html</loc>

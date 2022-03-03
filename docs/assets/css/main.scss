@@ -1,0 +1,85 @@
+---
+---
+
+body {
+  display:none;
+  font-family: HelveticaNeue,"Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+  font-size: 16px;
+  counter-reset: figures;
+  counter-reset: tables;
+  padding-top: 70px;
+}
+
+html {
+  overflow:   scroll;
+}
+
+@media print
+{    
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
+
+@import 'colors';
+@import 'home';
+@import 'code';
+@import 'blockquote';
+@import 'tutorial';
+@import 'tutorial-index';
+@import 'figure';
+@import 'keywords';
+@import 'bibliography';
+@import 'help';
+
+//----------------------------------------
+// Globals
+//----------------------------------------
+
+.footertext {
+  text-align: center;
+}
+
+img.navbar-logo {
+  height: 40px; // synchronize with height of navbar
+  padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 40px;
+}
+
+ul,
+ol {
+  padding-left: 1em;
+}
+
+//----------------------------------------
+// Override Bootstrap settings.
+//----------------------------------------
+
+blockquote div:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+code {
+  padding: 0 0;
+  color: inherit;
+  background-color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+.navbar .navbar-collapse {
+  text-align: right;
+}
+
+.pull-left {
+  float: left;
+  margin-left: 10px;
+}
+
+.navbar-toggle {
+  float: right;
+}

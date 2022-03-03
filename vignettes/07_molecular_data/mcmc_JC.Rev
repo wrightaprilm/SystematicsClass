@@ -1,0 +1,43 @@
+setwd("/Users/april/Documents/Systematics2022/vignettes/07_molecular_data")
+
+#START
+getwd()
+data <- readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data <- readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data <- readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data
+num_taxa <- data.ntaxa()
+num_branches <- 2 * num_taxa - 3
+taxa <- data.taxa()
+moves    = VectorMoves()
+monitors = VectorMonitors()
+Q <- fnJC(4)
+Q <- fnJC(4)
+Q
+out_group = clade("Galeopterus_variegatus")
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+out_group = clade("Galeopterus_variegatus")
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+topology
+topology
+
+moves.append( mvNNI(topology, weight=num_taxa) )
+moves.append( mvSPR(topology, weight=num_taxa/10.0) )
+for (i in 1:num_branches) {
+   br_lens[i] ~ dnExponential(10.0)
+   moves.append( mvScale(br_lens[i]) )
+}
+TL := sum(br_lens)
+TL
+psi := treeAssembly(topology, br_lens)
+seq ~ dnPhyloCTMC(tree=psi, Q=Q, type="DNA")
+seq.clamp(data)
+mymodel = model(Q)
+mymodel
+monitors.append( mnModel(filename="output/primates_cytb_JC.log", printgen=10) )
+monitors.append( mnFile(filename="output/primates_cytb_JC.trees", printgen=10, psi) )
+monitors.append( mnScreen(printgen=100, TL) )
+mymcmc = mcmc(mymodel, monitors, moves, nruns=2, combine="mixed")
+mymcmc.run(generations=20000)
+
+q()

@@ -74,28 +74,28 @@
       <a href="../../articles/06_Bayes_and_MCMC/index.html">Introduction to MCMC using RevBayes</a>
     </li>
     <li>
-      <a href="../../articles/07_Discrete_Morphology/index.html">Discrete morphology - Models and Tree Inference</a>
+      <a href="../../articles/07_molecular_data/index.html">Nucleotide substitution models</a>
     </li>
     <li>
-      <a href="../../articles/08_Partitioned_data/index.html">Partitioned data analysis</a>
+      <a href="../../articles/08_Discrete_Morphology/index.html">Discrete morphology - Models and Tree Inference</a>
     </li>
     <li>
-      <a href="../../articles/08_final/index.html">Final Project</a>
+      <a href="../../articles/09_Partitioned_data/index.html">Partitioned data analysis</a>
     </li>
     <li>
-      <a href="../../articles/09_Molecular_Clock/index.html">Tripartite Model 2 - Clock Models for Character Data</a>
+      <a href="../../articles/10_Molecular_Clock/index.html">Tripartite Model 2 - Clock Models for Character Data</a>
     </li>
     <li>
-      <a href="../../articles/10_FBD/RB_Total_Evidence_Tutorial.html">RevBayes Total Evidence Tree Estimation</a>
+      <a href="../../articles/11_FBD/RB_Total_Evidence_Tutorial.html">RevBayes Total Evidence Tree Estimation</a>
     </li>
     <li>
-      <a href="../../articles/12_Comparative_Methods/index.html">Phylogenetic Comparative Methods for Paleobiology</a>
+      <a href="../../articles/13_Comparative_Methods/index.html">Phylogenetic Comparative Methods for Paleobiology</a>
     </li>
     <li>
-      <a href="../../articles/13_biogeography/index.html">Introduction to Phylogenetic Models of Discrete Biogeography</a>
+      <a href="../../articles/14_biogeography/index.html">Introduction to Phylogenetic Models of Discrete Biogeography</a>
     </li>
     <li>
-      <a href="../../articles/14_Final/index.html">FinalExam</a>
+      <a href="../../articles/15_Final/index.html">FinalExam</a>
     </li>
     <li>
       <a href="../../articles/LCalc/LikelihoodCalc.html">LikelihoodCalc</a>
@@ -145,7 +145,7 @@
 <span class="va">rate_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">row1</span>, <span class="va">row2</span>, <span class="va">row3</span>, <span class="va">row4</span><span class="op">)</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rate_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"C"</span>, <span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">rate_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"C"</span>,<span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">rate_mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>,<span class="st">"C"</span>,<span class="st">"G"</span>, <span class="st">"T"</span><span class="op">)</span>
 <span class="va">rate_mat</span></code></pre></div>
 <pre><code><span class="co">##      A    C    G    T</span>
 <span class="co">## A 0.00 1.00 1.33 1.00</span>
@@ -230,7 +230,7 @@
 
 <span class="va">prior_branch</span> <span class="op">&lt;-</span> <span class="va">scaledQ</span><span class="op">*</span><span class="va">branch_length_prior</span>
 <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="va">scaledQ</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">]</span><span class="op">*</span><span class="va">Pi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">]</span></code></pre></div>
-<pre><code><span class="co">## [1] -6.399806e-08</span></code></pre>
+<pre><code><span class="co">## [1] -7.247212e-10</span></code></pre>
 <div class="section level3">
 <h3 id="homework">Homework<a class="anchor" aria-label="anchor" href="#homework"></a>
 </h3>
@@ -256,26 +256,26 @@
      <span class="va">total_likelihood</span> <span class="op">&lt;-</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">]</span> <span class="op">+</span> <span class="va">Pi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span><span class="op">*</span><span class="va">prior_branch</span><span class="op">[</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">]</span>
      <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span> <span class="va">total_likelihood</span><span class="op">)</span>
  <span class="op">}</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.0206543</span>
-<span class="co">## [1] -0.001755538</span>
-<span class="co">## [1] 0.096123</span>
-<span class="co">## [1] -0.008170094</span>
-<span class="co">## [1] 0.01566204</span>
-<span class="co">## [1] -0.001331214</span>
-<span class="co">## [1] 0.01287369</span>
-<span class="co">## [1] -0.001094215</span>
-<span class="co">## [1] 0.005959079</span>
-<span class="co">## [1] -0.0005064993</span>
-<span class="co">## [1] 0.09924226</span>
-<span class="co">## [1] -0.00843522</span>
-<span class="co">## [1] 0.005415123</span>
-<span class="co">## [1] -0.0004602651</span>
-<span class="co">## [1] 0.3079145</span>
-<span class="co">## [1] -0.02617158</span>
-<span class="co">## [1] 0.01858009</span>
-<span class="co">## [1] -0.001579238</span>
-<span class="co">## [1] 0.1111194</span>
-<span class="co">## [1] -0.009444736</span></code></pre>
+<pre><code><span class="co">## [1] 0.01056306</span>
+<span class="co">## [1] -0.0008978202</span>
+<span class="co">## [1] 0.01949346</span>
+<span class="co">## [1] -0.001656871</span>
+<span class="co">## [1] 0.009426402</span>
+<span class="co">## [1] -0.0008012088</span>
+<span class="co">## [1] 0.1072574</span>
+<span class="co">## [1] -0.009116475</span>
+<span class="co">## [1] 0.02735877</span>
+<span class="co">## [1] -0.002325393</span>
+<span class="co">## [1] 0.1735606</span>
+<span class="co">## [1] -0.014752</span>
+<span class="co">## [1] 0.3153612</span>
+<span class="co">## [1] -0.02680452</span>
+<span class="co">## [1] 0.04901601</span>
+<span class="co">## [1] -0.004166177</span>
+<span class="co">## [1] 0.01148099</span>
+<span class="co">## [1] -0.0009758407</span>
+<span class="co">## [1] 0.05733601</span>
+<span class="co">## [1] -0.004873346</span></code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Parsimony typically measures branch lengths as changes in the data implied by the tree. Likelihood and related methods typically measure them as expected changes per character. A time-scaled tree will express branch legnths in millions of years. What information do you think you need to go from an undated likelihood or parsimony tree to a dated tree?</li>
 </ol>
