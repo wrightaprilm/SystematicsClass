@@ -132,7 +132,12 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#remotes::install_github("revbayes/Revticulate")</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">Revticulate</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/knitRev.html" class="external-link">knitRev</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/knitRev.html" class="external-link">knitRev</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu">usethis</span><span class="fu">::</span><span class="fu"><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">edit_r_environ</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## <span style="color: #BB0000;">•</span> Edit <span style="color: #0000BB;">'/Users/april/.Renviron'</span></span>
+<span class="co">## <span style="color: #BB0000;">•</span> Restart R for changes to take effect</span></code></pre>
+<p>This will open the Renviron file. You will add the following to it:</p>
+<pre><code>rb=/cloud/project/software/rb</code></pre>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -247,19 +252,19 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <blockquote>
 <p>To check your current working directory, use the function <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd()</a></code>.</p>
 </blockquote>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "/Users/april/Documents/Systematics2022/vignettes/07_molecular_data"</span></code></pre>
 <pre><code>/Users/tombayes/Work</code></pre>
 <blockquote>
 <p>If you want to change the directory, enter the path to your directory in the arguments of the function <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code>.</p>
 </blockquote>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"vignettes/07_molecular_data"</span><span class="op">)</span></code></pre></div>
 <blockquote>
 <p>Now check your directory again to make sure you are where you want to be:</p>
 </blockquote>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "/Users/april/Documents/Systematics2022/vignettes/07_molecular_data"</span></code></pre>
 <pre><code>/Users/tombayes/vignettes/07_molecular_data</code></pre>
@@ -268,7 +273,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <h3 id="loading-in-the-data">Loading in the data<a class="anchor" aria-label="anchor" href="#loading-in-the-data"></a>
 </h3>
 <p>First load in the sequences using the <code>readDiscreteCharacterData()</code> function.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/primates_and_galeopterus_cytb.nex"</span><span class="op">)</span>
 <span class="va">data</span></code></pre></div>
 <pre><code><span class="co">## [1] "Successfully read one character matrix from file 'data/primates_and_galeopterus_cytb.nex'"</span>
@@ -282,13 +287,13 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <span class="co">## [9] "Datatype: DNA"</span></code></pre>
 <p>Executing these lines initializes the data matrix as the respective Rev variables. To report the current value of any variable, simply type the variable name and press enter. For the <code>data</code> matrix, this provides information about the alignment.</p>
 <p>Next we will specify some useful variables based on our dataset. The variable <code>data</code> has <em>member functions</em> that we can use to retrieve information about the dataset. These include, for example, the number of species and the taxa. We will need that taxon information for setting up different parts of our model.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">num_taxa</span> <span class="op">&lt;-</span> <span class="fu">data.ntaxa</span><span class="op">(</span><span class="op">)</span>
 <span class="va">num_branches</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">num_taxa</span> <span class="op">-</span> <span class="fl">3</span>
 <span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu">data.taxa</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Additionally, we set up a (vector) variable that holds all the moves for our analysis. Recall that moves are algorithms used to propose new parameter values during the MCMC simulation. Similarly, we set up a variable for the monitors. Monitors print the values of model parameters to the screen and/or log files during the MCMC analysis.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">moves</span>    <span class="op">=</span> <span class="fu">VectorMoves</span><span class="op">(</span><span class="op">)</span>
 <span class="va">monitors</span> <span class="op">=</span> <span class="fu">VectorMonitors</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
@@ -306,7 +311,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <img src="https://youtu.be/S1XTkUOWTLo" alt=""><p class="caption">Walkthrough video</p>
 </div>
 <p>A given substitution model is defined by its corresponding instantaneous-rate matrix, <span class="math inline">\(Q\)</span>. The Jukes-Cantor substitution model does not have any free parameters (as the substitution rates are all assumed to be equal, and there is a separate parameter that scales their overall magnitude), so we can define it as a constant variable. The function <code>fnJC(n)</code> will create an instantaneous-rate matrix for a character with <span class="math inline">\(n\)</span> states. Since we use DNA data here, we create a 4x4 instantaneous-rate matrix:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Q</span> <span class="op">&lt;-</span> <span class="fu">fnJC</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>
 <span class="va">Q</span></code></pre></div>
 <pre><code><span class="co">##         [,1]    [,2]    [,3]    [,4]</span>
@@ -321,7 +326,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 </h4>
 <p>The tree topology and branch lengths are stochastic nodes in our phylogenetic model. In the Jukes-Cantor graphical model, the tree topology is denoted <span class="math inline">\(\Psi\)</span> and the length of the branch leading to node <span class="math inline">\(i\)</span> is <span class="math inline">\(bl_i\)</span>.</p>
 <p>We will assume that all possible labeled, unrooted tree topologies have equal probability. This is the <code>dnUniformTopology()</code> distribution in RevBayes. Note that in RevBayes it is advisable to specify the outgroup for your study system if you use an unrooted tree prior, whereas other software, <em>e.g.</em>, MrBayes uses the first taxon in the data matrix file as the outgroup. Providing RevBayes with an outgroup clade will enable the monitor writing the trees to file to orient the topologies with the outgroup clade at the base, thus making the trees easier to visualize. Specify the <code>topology</code> stochastic node by passing in the list of <code>taxa</code> to the <code>dnUniformTopology()</code> distribution:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">out_group</span> <span class="op">=</span> <span class="fu">clade</span><span class="op">(</span><span class="st">"Galeopterus_variegatus"</span><span class="op">)</span>
 <span class="va">topology</span> <span class="op">~</span> <span class="fu">dnUniformTopology</span><span class="op">(</span><span class="va">taxa</span>, outgroup<span class="op">=</span><span class="va">out_group</span><span class="op">)</span>
 <span class="va">topology</span></code></pre></div>
@@ -329,40 +334,40 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <span class="co">## Phylogenetic tree with 23 tips and 21 internal nodes.</span>
 <span class="co">## </span>
 <span class="co">## Tip labels:</span>
-<span class="co">##   Lemur_catta, Colobus_guereza, Perodicticus_potto, Galago_senegalensis, Microcebus_murinus, Daubentonia_madagascariensis, ...</span>
+<span class="co">##   Callicebus_donacophilus, Lemur_catta, Cebus_albifrons, Pan_paniscus, Lepilemur_hubbardorum, Cheirogaleus_major, ...</span>
 <span class="co">## </span>
 <span class="co">## Unrooted; no branch lengths.</span></code></pre>
 <p>We can plot this tree, too, in R:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">topology</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/doRev.html" class="external-link">doRev</a></span><span class="op">(</span><span class="st">"topology"</span><span class="op">)</span>
 
 <span class="fu">phytools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phytools/man/plotTree.html" class="external-link">plotTree</a></span><span class="op">(</span><span class="va">topology</span><span class="op">)</span></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>Some types of stochastic nodes can be updated by a number of alternative moves. Different moves may explore parameter space in different ways, and it is possible to use multiple different moves for a given parameter to improve mixing (the efficiency of the MCMC simulation). In the case of our unrooted tree topology, for example, we can use both a nearest-neighbor interchange move (<code>mvNNI</code>) and a subtree-prune and regrafting move (<code>mvSPR</code>). These moves do not have tuning parameters associated with them, thus you only need to pass in the <code>topology</code> node and proposal <code>weight</code>.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNNI</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvSPR</span><span class="op">(</span><span class="va">topology</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">/</span><span class="fl">10.0</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The weight specifies how often the move will be applied either on average per iteration or relative to all other moves. Have a look at the MCMC Diagnosis tutorial for more details about moves and MCMC strategies (found in {% page_ref tutorials ).</p>
 <p>Next we have to create a stochastic node representing the length of each of the <span class="math inline">\(2N - 3\)</span> branches in our tree (where <span class="math inline">\(N=\)</span> <code>n_species</code>). We can do this using a <code>for</code> loop — this is a plate in our graphical model. In this loop, we can create each of the branch-length nodes and assign each move. Copy this entire block of Rev code into the console:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">num_branches</span><span class="op">)</span> <span class="op">{</span>
    <span class="va">br_lens</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnExponential</span><span class="op">(</span><span class="fl">10.0</span><span class="op">)</span>
    <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">br_lens</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>It is convenient for monitoring purposes to add the tree length as deterministic variable. The tree length is simply the sum of all branch lengths. Accordingly, the tree length can be computed using the <code><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum()</a></code> function, which calculates the sum of any vector of values.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">TL</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">br_lens</span><span class="op">)</span>
 <span class="va">TL</span></code></pre></div>
-<pre><code><span class="co">## [1] 4.02095</span></code></pre>
+<pre><code><span class="co">## [1] 3.727045</span></code></pre>
 <p>Finally, we can create a <em>phylogram</em> (a phylogeny in which the branch lengths are proportional to the expected number of substitutions/site) by combining the tree topology and branch lengths. We do this using the <code>treeAssembly()</code> function, which applies the value of the <span class="math inline">\(i^{th}\)</span> member of the <code>br_lens</code> vector to the branch leading to the <span class="math inline">\(i^{th}\)</span> node in <code>topology</code>. Thus, the <code>psi</code> variable is a deterministic node:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">psi</span> <span class="op">:=</span> <span class="fu">treeAssembly</span><span class="op">(</span><span class="va">topology</span>, <span class="va">br_lens</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p><strong>Alternative tree priors</strong> &gt;For large phylogenetic trees, i.e., with more than 200 taxa, it might be easier to specify a combined topology and branch length prior distribution. We can achieve this by simple using the distribution <code>dnUniformTopologyBranchLength()</code></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">br_len_lambda</span> <span class="op">&lt;-</span> <span class="fl">10.0</span>
 <span class="va">psi</span> <span class="op">~</span> <span class="fu">dnUniformTopologyBranchLength</span><span class="op">(</span><span class="va">taxa</span>, branchLengthDistribution<span class="op">=</span><span class="fu">dnExponential</span><span class="op">(</span><span class="va">br_len_lambda</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNNI</span><span class="op">(</span><span class="va">psi</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">)</span> <span class="op">)</span>
@@ -374,20 +379,20 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <blockquote>
 <p>First, specify a prior distribution on the tree length with your desired mean. For example, we use a gamma distribution as our prior on the tree length.</p>
 </blockquote>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">TL</span> <span class="op">~</span> <span class="fu">dnGamma</span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">TL</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <blockquote>
 <p>Now we create a random variable for the relative branch lengths.</p>
 </blockquote>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rel_branch_lengths</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1.0</span>,<span class="va">num_branches</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">rel_branch_lengths</span>, weight<span class="op">=</span><span class="va">num_branches</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">rel_branch_lengths</span>, weight<span class="op">=</span><span class="va">num_branches</span><span class="op">/</span><span class="fl">10.0</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Finally, transform the relative branch lengths into actual branch lengths</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">br_lens</span> <span class="op">:=</span> <span class="va">rel_branch_lengths</span> <span class="op">*</span> <span class="va">TL</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p><strong>Alternative Prior on Time-Trees:</strong> &gt;Tree Topology and Node Ages: Alternatively, you may want to specify a prior on time-trees. Here we will briefly indicate how to specify such an prior which will lead to inference of time trees.</p>
@@ -400,19 +405,19 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <blockquote>
 <p>First, we need to specify the age of the tree:</p>
 </blockquote>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">root_age</span> <span class="op">&lt;-</span> <span class="fl">10.0</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <blockquote>
 <p>Here we simply assumed that the tree is 10.0 time units old. We could also specify a prior on the root age if we have fossil calibrations (see {% page_ref clocks ). Next, we specify the <code>tree</code> stochastic variable by passing in the taxon information <code>taxa</code> to the <code>dnUniformTimeTree()</code> distribution:</p>
 </blockquote>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">psi</span> <span class="op">~</span> <span class="fu">dnUniformTimeTree</span><span class="op">(</span>rootAge<span class="op">=</span><span class="va">root_age</span>, taxa<span class="op">=</span><span class="va">taxa</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <blockquote>
 <p>Some types of stochastic nodes can be updated by a number of alternative moves. Different moves may explore parameter space in different ways,and it is possible to use multiple different moves for a given parameter to improve mixing (the efficiency of the MCMC simulation). In the case of our rooted tree, for example, we can use both a nearest-neighbor interchange move without and with changing the node ages (<code>mvNarrow</code> and <code>mvNNI</code>) and a fixed-node-height subtree-prune and regrafting move (<code>mvFNPR</code>) and its Metropolized-Gibbs variant (<code>mvGPR</code>) {% cite Hoehna2008 Hoehna2012 . We also need moves that change the ages of the internal nodes, for example, <code>mvSubtreeScale</code> and <code>mvNodeTimeSlideUniform</code>. These moves do not have tuning parameters associated with them, thus you only need to pass in the <code>psi</code> node and proposal <code>weight</code>.</p>
 </blockquote>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNarrow</span><span class="op">(</span><span class="va">psi</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvNNI</span><span class="op">(</span><span class="va">psi</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">/</span><span class="fl">5.0</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvFNPR</span><span class="op">(</span><span class="va">psi</span>, weight<span class="op">=</span><span class="va">num_taxa</span><span class="op">/</span><span class="fl">5.0</span><span class="op">)</span> <span class="op">)</span>
@@ -428,7 +433,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <h4 id="molecular-clock">Molecular Clock<a class="anchor" aria-label="anchor" href="#molecular-clock"></a>
 </h4>
 <p>Additionally, in the case of time-calibrated trees, we need to add a molecular clock rate parameter. For example, we know from empirical estimates that the molecular clock rate is about 0.01 (=1%) per million years per site. Nevertheless, we can estimate it here because we fixed the root age. We use a uniform prior on the log-transform clock rate. This specifies our lack of prior knowledge on the magnitude of the clock rate.</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="va">log_clock_rate</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>,<span class="fl">1</span><span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvSlide</span><span class="op">(</span><span class="va">log_clock_rate</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span>
@@ -444,20 +449,20 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 </div>
 <p>We have fully specified all of the parameters of our phylogenetic model—the tree topology with branch lengths, and the substitution model that describes how the sequence data evolved over the tree with branch lengths. Collectively, these parameters comprise a distribution called the <em>phylogenetic continuous-time Markov chain</em>, and we use the <code>dnPhyloCTMC</code> constructor function to create this node. This distribution requires several input arguments: 1. the <code>tree</code> with branch lengths; 2. the instantaneous-rate matrix <code>Q</code>; 3. the <code>type</code> of character data.</p>
 <p>Build the random variable for the character data (sequence alignment).</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">seq</span> <span class="op">~</span> <span class="fu">dnPhyloCTMC</span><span class="op">(</span>tree<span class="op">=</span><span class="va">psi</span>, Q<span class="op">=</span><span class="va">Q</span>, type<span class="op">=</span><span class="st">"DNA"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Once the <code>PhyloCTMC</code> model has been created, we can attach our sequence data to the tip nodes in the tree.</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">seq.clamp</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Note that although we assume that our sequence data are random variables—they are realizations of our phylogenetic model—for the purposes of inference, we assume that the sequence data are “clamped” to their observed values. When this function is called, RevBayes sets each of the stochastic nodes representing the tips of the tree to the corresponding nucleotide sequence in the alignment. This essentially tells the program that we have observed data for the sequences at the tips.</p>
 <p>Finally, we wrap the entire model in a single object to provide convenient access to the DAG. To do this, we only need to give the <code>model()</code> function a single node. With this node, the <code>model()</code> function can find all of the other nodes by following the arrows in the graphical model:</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mymodel</span> <span class="op">=</span> <span class="fu">model</span><span class="op">(</span><span class="va">Q</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Now we have specified a simple phylogenetic analysis—each parameter of the model will be estimated from every site in our alignment. If we inspect the contents of <code>mymodel</code> we can review all of the nodes in the DAG:</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mymodel</span></code></pre></div>
 <pre><code><span class="co">##  [1] "Model with 6 nodes"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
 <span class="co">##  [2] "=================="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
@@ -470,25 +475,25 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <span class="co">##  [9] "_dagType = Stochastic node (distribution)"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      </span>
 <span class="co">## [10] "_distribution = dnPhyloCTMC(Tree&lt;any&gt; tree, RateGenerator|RateGenerator[]&lt;any&gt; Q, Simplex&lt;any&gt; rootFrequencies, RealPos|RealPos[]&lt;any&gt; branchRates,Simplex|Bool&lt;any&gt; siteMatrices, RealPos[]&lt;any&gt; siteRates, Simplex&lt;any&gt; siteRatesProbs, Probability&lt;any&gt; pInv, Natural&lt;any&gt; nSites, String&lt;any&gt; type {validoptions: \"DNA\"|\"RNA\"|\"AA\"|\"Codon\"|\"Doublet\"|\"PoMo\"|\"Protein\"|\"Standard\"|\"NaturalNumbers\"|\"Binary\"|\"Restriction\"}, Bool&lt;any&gt; treatAmbiguousAsGap, String&lt;any&gt;coding, Bool&lt;any&gt; storeInternalNodes, Bool&lt;any&gt; gapMatchClamped)"</span>
 <span class="co">## [11] "_clamped = TRUE"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
-<span class="co">## [12] "_lnProb = -33592.7"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
+<span class="co">## [12] "_lnProb = -34855.6"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </span>
 <span class="co">## [13] "_parents = [ psi, seq.pInv, seq.branchRates, Q ]"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
 <span class="co">## [14] "_children = [ ]"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
 <span class="co">## [15] "psi :"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-<span class="co">## [16] "_value = ((((Cheirogaleus_major[&amp;index=23]:5.873892,(Lepilem..._dagType = Stochastic node (distribution)_distribution = dnUniformTimeTree(RealPos&lt;any&gt; rootAge, Taxon[]&lt;any&gt; taxa)_clamped = FALSE_lnProb = -2.97415_parents = [ root_age ]_children = [ seq ]root_age :_value = 10_dagType = Constant node_children = [ psi ]seq.pInv :_value = 0_dagType = Constant node_children = [ seq ]seq.branchRates :_value = 1_dagType = Constant node_children = [ seq ]"</span></code></pre>
+<span class="co">## [16] "_value = (((((Perodicticus_potto[&amp;index=23]:4.953064,Microce..._dagType = Stochastic node (distribution)_distribution = dnUniformTimeTree(RealPos&lt;any&gt; rootAge, Taxon[]&lt;any&gt; taxa)_clamped = FALSE_lnProb = -2.97415_parents = [ root_age ]_children = [ seq ]root_age :_value = 10_dagType = Constant node_children = [ psi ]seq.pInv :_value = 0_dagType = Constant node_children = [ seq ]seq.branchRates :_value = 1_dagType = Constant node_children = [ seq ]"</span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="specifying-monitors-and-output-files">Specifying Monitors and Output Files<a class="anchor" aria-label="anchor" href="#specifying-monitors-and-output-files"></a>
 </h4>
 <p>For our MCMC analysis, we need to set up a vector of <em>monitors</em> to record the states of our Markov chain. The monitor functions are all called <code>mn\*</code>, where <code>\*</code> is the wild-card representing the monitor type. First, we will initialize the model monitor using the <code>mnModel</code> function. This creates a new monitor variable that will output the states for all model parameters when passed into a MCMC function.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnModel</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/primates_cytb_JC.log"</span>, printgen<span class="op">=</span><span class="fl">10</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The <code>mnFile</code> monitor will record the states for only the parameters passed in as arguments. We use this monitor to specify the output for our sampled trees and branch lengths.</p>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnFile</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/primates_cytb_JC.trees"</span>, printgen<span class="op">=</span><span class="fl">10</span>, <span class="va">psi</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Finally, create a screen monitor that will report the states of specified variables to the screen with <code>mnScreen</code>:</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">monitors.append</span><span class="op">(</span> <span class="fu">mnScreen</span><span class="op">(</span>printgen<span class="op">=</span><span class="fl">100</span>, <span class="va">TL</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>This monitor mostly helps us to see the progress of the MCMC run.</p>
@@ -497,16 +502,16 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <h4 id="initializing-and-running-the-mcmc-simulation">Initializing and Running the MCMC Simulation<a class="anchor" aria-label="anchor" href="#initializing-and-running-the-mcmc-simulation"></a>
 </h4>
 <p>With a fully specified model, a set of monitors, and a set of moves, we can now set up the MCMC algorithm that will sample parameter values in proportion to their posterior probability. The <code>mcmc()</code> function will create our MCMC object:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mymcmc</span> <span class="op">=</span> <span class="fu">mcmc</span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">monitors</span>, <span class="va">moves</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">mymcmc</span> <span class="op">=</span> <span class="fu">mcmc</span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">monitors</span>, <span class="va">moves</span>, nruns<span class="op">=</span><span class="fl">2</span>, combine<span class="op">=</span><span class="st">"mixed"</span><span class="op">)</span></code></pre></div>
 <p>Notice that we also specified <code>nruns=2</code> which means that RevBayes will automatically run 2 independent MCMC runs. You will find that the output is created in two files with extension <code>_run_1</code> and <code>_run_2</code> for each replicate and additionally the samples from both runs are combined into one file for more convenient post-processing.</p>
 <p>Now, run the MCMC:</p>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">mymcmc.run</span><span class="op">(</span>generations<span class="op">=</span><span class="fl">20000</span><span class="op">)</span></code></pre></div>
 <p>This times out. So what we will do is save our Rev commands to a file and run them via the command <code><a href="https://rdrr.io/pkg/Revticulate/man/callRevFromTerminal.html" class="external-link">callRevFromTerminal()</a></code>.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/saveRev.html" class="external-link">saveRev</a></span><span class="op">(</span><span class="st">"mcmc_JC.Rev"</span>, use_wd <span class="op">=</span> <span class="cn">TRUE</span>, use_quit <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/callRevFromTerminal.html" class="external-link">callRevFromTerminal</a></span><span class="op">(</span><span class="st">"mcmc_JC.Rev"</span><span class="op">)</span></code></pre></div>
 <p>When the analysis is complete, you will have the monitored files in your output directory.</p>
@@ -544,14 +549,14 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <h3 id="exercise-1">Exercise 1<a class="anchor" aria-label="anchor" href="#exercise-1"></a>
 </h3>
 <p>We are interested in the phylogenetic relationship of the Tarsiers. Therefore, we need to summarize the trees sampled from the posterior distribution. RevBayes can summarize the sampled trees by reading in the tree-trace file:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">treetrace</span> <span class="op">=</span> <span class="fu">readTreeTrace</span><span class="op">(</span><span class="st">"output/primates_cytb_JC.trees"</span>, treetype<span class="op">=</span><span class="st">"non-clock"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "Processing file \"/Users/april/Documents/Systematics2022/vignettes/07_molecular_data/output/primates_cytb_JC.trees\""</span>
 <span class="co">## [2] "Progress:"                                                                                                           </span>
 <span class="co">## [3] "0---------------25---------------50---------------75--------------100"                                               </span>
 <span class="co">## [4] "********************************************************************"</span></code></pre>
 <p>The <code>mapTree()</code> function will summarize the tree samples and write the maximum <em>a posteriori</em> tree to file:</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">map_tree</span> <span class="op">=</span> <span class="fu">mapTree</span><span class="op">(</span><span class="va">treetrace</span>,<span class="st">"output/primates_cytb_JC_MAP.tree"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] "Compiling maximum a posteriori tree from 3002 trees."                 </span>
 <span class="co">## [2] "Summarizing clades ..."                                               </span>
@@ -617,7 +622,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 </tbody>
 </table>
 <p>Note, you can query the posterior probability of a clade being monophyletic using the following command:</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Lemuroidea</span> <span class="op">&lt;-</span> <span class="fu">clade</span><span class="op">(</span><span class="st">"Cheirogaleus_major"</span>,
                     <span class="st">"Daubentonia_madagascariensis"</span>,
                     <span class="st">"Lemur_catta"</span>,
@@ -787,7 +792,7 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
                   \frac{1}{4} &amp; \frac{\kappa}{4}    &amp; \frac{1}{4} &amp; -
 \end{pmatrix} \]</span></p>
 <p>Now, add the parameter <span class="math inline">\(\kappa\)</span> to the substitution model, and create a K80 rate matrix:</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kappa</span> <span class="op">~</span> <span class="fu">dnExp</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">kappa</span>, weight<span class="op">=</span><span class="fl">1.0</span><span class="op">)</span> <span class="op">)</span>
 
@@ -811,25 +816,25 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <p>where the diagonal <span class="math inline">\({\cdot}\)</span> entries are equal to the negative sum of the elements in the corresponding row.</p>
 <p>Use the file <code>mcmc_JC.Rev</code> as a starting point for the HKY analysis.</p>
 <p>Note that we are adding two new variables to our model. We can define a variable <code>pi</code> for the stationary frequencies that are drawn from a flat Dirichlet distribution by</p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pi_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
 <span class="va">pi</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">pi_prior</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Since <code>pi</code> is a stochastic variable, we need to specify a move to propose updates to it. A good move on variables drawn from a Dirichlet distribution is the <code>mvBetaSimplex</code>. This move randomly takes an element from the simplex, proposes a new value for it drawn from a Beta distribution, and then rescales all values of the simplex to sum to 1 again.</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The second new variable is <span class="math inline">\(\kappa\)</span>, which specifies the ratio of transition-transversion rates. The <span class="math inline">\(\kappa\)</span> parameter must be a positive-real number and a natural choice as the prior distribution is the lognormal distribution:</p>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">kappa</span> <span class="op">~</span> <span class="fu">dnLognormal</span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">1.0</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Again, we need to specify a move for this new stochastic variable. A simple scaling move should do the job.</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">kappa</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Finally, we need to create the HKY instantaneous-rate matrix using the <code>fnHKY</code> function:</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Q</span> <span class="op">:=</span> <span class="fu">fnHKY</span><span class="op">(</span><span class="va">kappa</span>,<span class="va">pi</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>This should be all for the HKY model. Don’t forget to change the output file names, otherwise your old analyses files will be overwritten.</p>
@@ -865,11 +870,11 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <p>where the six exchangeability parameters, <span class="math inline">\(r_{ij}\)</span>, specify the relative rates of change between states <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>.</p>
 <p><img src="figures/gtr_graphical_model.png"> Graphical model representation of the general-time reversible (GTR) phylogenetic model.</p>
 <p>The GTR model requires that we define and specify a prior on the six exchangeability rates, which we will describe using a flat Dirichlet distribution. As we did previously for the Dirichlet prior on base frequencies, we first define a constant node specifying the vector of concentration-parameter values using the <code>v()</code> function:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">er_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>This node defines the concentration-parameter values of the Dirichlet prior distribution on the exchangeability rates. Now, we can create a stochastic node for the exchangeability rates using the <code>dnDirichlet()</code> function, which takes the vector of concentration-parameter values as an argument and the <code>~</code> operator. Together, these create a stochastic node named <code>er</code> (<span class="math inline">\(\theta\)</span> in {% ref gtr_graphical_model ):</p>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">er</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">er_prior</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The Dirichlet distribution assigns probability densities to a group of parameters: <em>e.g.</em>, those that measure proportions and must sum to 1. Here, we have specified a six-parameter Dirichlet prior, where each value describes one of the six relative rates of the GTR model: (1) <span class="math inline">\(A\leftrightarrows C\)</span>; (2) <span class="math inline">\(A\leftrightarrows G\)</span>; (3) <span class="math inline">\(A\leftrightarrows T\)</span>; (4) <span class="math inline">\(C\leftrightarrows G\)</span>; (5) <span class="math inline">\(C\leftrightarrows T\)</span>; (6) <span class="math inline">\(G\leftrightarrows T\)</span>. The input parameters of a Dirichlet distribution are called shape (or concentration) parameters. The expectation and variance for each variable are related to the sum of the shape parameters. The prior we specified above is a ‘flat’ or symmetric Dirichlet distribution; all of the shape parameters are equal (1,1,1,1,1,1). This describes a model that allows for equal rates of change between nucleotides, such that the expected rate for each is equal to <span class="math inline">\(\frac{1}{6}\)</span> ({% ref dirichletFig a).</p>
@@ -878,22 +883,22 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <p>Yet another asymmetric prior could specify that each of the six GTR rates had a different value conforming to a Dirichlet(2,4,6,8,10,12). This would lead to a different prior probability density for each rate parameter ({% ref dirichletFig d). Without strong prior knowledge about the pattern of relative rates, however, we can better reflect our uncertainty by using a vague prior on the GTR rates. Notably, all patterns of relative rates have the same probability density under <code>er_prior &lt;- v(1,1,1,1,1,1)</code>.</p>
 <p><img src="figures/dirichlet_rates.png" width="600"> Four different examples of Dirichlet priors on exchangeability rates.</p>
 <p>For each stochastic node in our model, we must also specify a proposal mechanism if we wish to estimate that parameter. The Dirichlet prior on our parameter <code>er</code> creates a <a href="http://en.wikipedia.org/wiki/Simplex" class="external-link"><em>simplex</em></a> of values that sum to 1.</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">er</span>, weight<span class="op">=</span><span class="fl">3</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">er</span>, weight<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>We can use the same type of distribution as a prior on the 4 stationary frequencies (<span class="math inline">\(\pi_A, \pi_C, \pi_G, \pi_T\)</span>) since these parameters also represent proportions. Specify a flat Dirichlet prior density on the base frequencies:</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pi_prior</span> <span class="op">&lt;-</span> <span class="fu">v</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>
 <span class="va">pi</span> <span class="op">~</span> <span class="fu">dnDirichlet</span><span class="op">(</span><span class="va">pi_prior</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The node <code>pi</code> represents the <span class="math inline">\(\pi\)</span> node in {% ref gtr_graphical_model . Now add the simplex scale move on the stationary frequencies to the moves vector:</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvBetaSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op">)</span>
 <span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvDirichletSimplex</span><span class="op">(</span><span class="va">pi</span>, weight<span class="op">=</span><span class="fl">1</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>We can finish setting up this part of the model by creating a deterministic node for the GTR instantaneous-rate matrix <code>Q</code>. The <code>fnGTR()</code> function takes a set of exchangeability rates and a set of base frequencies to compute the instantaneous-rate matrix used when calculating the likelihood of our model.</p>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Q</span> <span class="op">:=</span> <span class="fu">fnGTR</span><span class="op">(</span><span class="va">er</span>,<span class="va">pi</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <div class="section level3">
@@ -921,26 +926,26 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <h4 id="setting-up-the-gamma-model-in-revbayes">Setting up the Gamma Model in RevBayes<a class="anchor" aria-label="anchor" href="#setting-up-the-gamma-model-in-revbayes"></a>
 </h4>
 <p>Then create a stochastic node called <code>alpha</code> with a uniform prior distribution between 0.0 and <span class="math inline">\(10\)</span> (this represents the stochastic node for the <span class="math inline">\(\alpha\)</span>-shape parameter in</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alpha</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span> <span class="fl">0.0</span>, <span class="fl">10</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Then create a stochastic node called <code>alpha</code> with a uniform prior distribution between 0.0 and <span class="math inline">\(10^8\)</span> (this represents the stochastic node for the <span class="math inline">\(\alpha\)</span>-shape parameter in</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">alpha</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span> <span class="fl">0.0</span>, <span class="fl">1E8</span> <span class="op">)</span>
 <span class="fu">alpha.setValue</span><span class="op">(</span><span class="fl">1.0</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Note that we initialized the value of <code>alpha</code> to <span class="math inline">\(1.0\)</span>. This is strictly speaking not necessary but helps tremendously the MCMC to converge. As a general rule, it is possible to initialize starting values for the MCMC using the <em>setValue( xx )</em> function, which is available for every stochastic variable, but it might also make your replicated MCMC runs to be more likely to get stuck in the same local area of parameters.</p>
 <p>The way the ASRV model is implemented involves discretizing the mean-one gamma distribution into a set number of rate categories, <span class="math inline">\(k\)</span>. Thus, we can analytically marginalize over the uncertainty in the rate at each site. The likelihood of each site is averaged over the <span class="math inline">\(k\)</span> rate categories, where the rate multiplier is the mean (or median) of each of the discrete <span class="math inline">\(k\)</span> categories. To specify this, we need a deterministic node that is a vector that will hold the set of <span class="math inline">\(k\)</span> rates drawn from the gamma distribution with <span class="math inline">\(k\)</span> rate categories. The <code>fnDiscretizeGamma()</code> function returns this deterministic node and takes three arguments: the shape and rate of the gamma distribution and the number of categories. Since we want to discretize a mean-one gamma distribution, we can pass in <code>alpha</code> for both the shape and rate.</p>
 <p>Initialize the <code>sr</code> deterministic node vector using the <code>fnDiscretizeGamma()</code> function with <code>4</code> bins:</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sr</span> <span class="op">:=</span> <span class="fu">fnDiscretizeGamma</span><span class="op">(</span> <span class="va">alpha</span>, <span class="va">alpha</span>, <span class="fl">4</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Note that here, by convention, we set <span class="math inline">\(k = 4\)</span>. The random variable that controls the rate variation is the stochastic node <code>alpha</code>. We will apply a simple scale move to this parameter.</p>
-<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvScale</span><span class="op">(</span><span class="va">alpha</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Remember that you need to call the <code>PhyloCTMC</code> constructor to include the new site-rate parameter:</p>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">seq</span> <span class="op">~</span> <span class="fu">dnPhyloCTMC</span><span class="op">(</span>tree<span class="op">=</span><span class="va">psi</span>, Q<span class="op">=</span><span class="va">Q</span>, siteRates<span class="op">=</span><span class="va">sr</span>, type<span class="op">=</span><span class="st">"DNA"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 </div>
@@ -963,21 +968,21 @@ p_{TA}(t) &amp; p_{TC}(t) &amp; p_{TG}(t) &amp; p_{TT}(t)
 <p>All of the substitution models described so far assume that the sequence data are potentially variable. That is, we assume that the sequence data are random variables; specifically, we assume that they are realizations of the specified <code>PhyloCTMC</code> distribution. However, some sites may not be free to vary—when the substitution rate of a site is zero, it is said to be <em>invariable</em>. Invariable sites are often confused with <em>invariant</em> sites—when each species exhibits the same state, it is said to be invariant. The concepts are related but distinct. If a site is truly invariable, it will necessarily give rise to an invariant site pattern, as such sites will always have a zero substitution rate. However, an invariant site pattern may be achieved via multiple substitutions that happen to end in the same state for every species.</p>
 <p>Here we describe an extension to our phylogenetic model to accommodate invariable sites. Under the invariable-sites model {% cite Hasegawa1985 , each site is invariable with probability <code>p_inv</code>, and variable with probability <span class="math inline">\(1-\)</span><code>p_inv</code>.</p>
 <p>First, let’s have a look at the data and see how many invariant sites we have:</p>
-<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">data.getNumInvariantSites</span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] 432</span></code></pre>
 <p>There seem to be a substantial number of invariant sites.</p>
 <p>Now let’s specify the invariable-sites model in RevBayes. We need to specify the prior probability that a site is invariable. A Beta distribution is a common choice for parameters representing probabilities.</p>
-<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p_inv</span> <span class="op">~</span> <span class="fu">dnBeta</span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The <code>Beta(1,1)</code> distribution is a flat prior distribution that specifies equal probability for all values between 0 and 1.</p>
 <p>Then, as usual, we add a move to change this stochastic variable; we’ll use a simple sliding window move.</p>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">moves.append</span><span class="op">(</span> <span class="fu">mvSlide</span><span class="op">(</span><span class="va">p_inv</span><span class="op">)</span> <span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Finally, you need to call the <code>PhyloCTMC</code> constructor to include the new <code>p_inv</code> parameter:</p>
-<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">seq</span> <span class="op">~</span> <span class="fu">dnPhyloCTMC</span><span class="op">(</span>tree<span class="op">=</span><span class="va">psi</span>, Q<span class="op">=</span><span class="va">Q</span>, siteRates<span class="op">=</span><span class="va">sr</span>, pInv<span class="op">=</span><span class="va">p_inv</span>, type<span class="op">=</span><span class="st">"DNA"</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## [1] ""</span></code></pre>
 <div class="section level3">

@@ -21,8 +21,14 @@ Additionally, we will be using the R package Revticulate to run RevBayes from RS
 #remotes::install_github("revbayes/Revticulate")
 library(Revticulate)
 knitRev()
+usethis::edit_r_environ()
 ```
 
+This will open the Renviron file. You will add the following to it:
+
+```
+rb=/cloud/project/software/rb
+```
 
 # Overview 
 [![Walkthrough video](https://youtu.be/x4ADIyqbYGM)
