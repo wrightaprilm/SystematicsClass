@@ -1,0 +1,46 @@
+---
+title: "MolecularModelsHomework"
+author: "April Wright"
+date: "3/11/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Using the data set we downloaded at the end of class (primates_and_galeopterus_cytb.nex ), do the following.
+
+## Exercise One
+
+Make two copies of the MCMC_JC.Rev file. Call one MCMC_HKY.Rev, and MCMC_GTR.Rev. 
+
+Following the instructions in the Molecular Models [lesson](https://wrightaprilm.github.io/SystematicsClass/articles/07_molecular_data/index.html#the-hasegawa-kishino-yano-hky-1985-substitution-model), edit the two model files you just made to correspond to the HKY and GTR models. 
+
+Run them in RevBayes and compute a summary tree. 
+
+# Exercise Two
+
+Fill in the following table as you go through the tutorial.
+
+Posterior probabilities under different analyses
+
+ |    **Model**   |   **Lemuroidea**   |   **Lorisoidea**   |   **Platyrrhini**   |   **Catarrhini**    |
+  ---------------:|:------------------:|:------------------:|:-------------------:|:-------------------:|
+ |  Jukes-Cantor  |                    |                    |                     |                     |
+ |     HKY85      |                    |                    |                     |                     |
+ |     GTR        |                    |                    |                     |                     |
+
+
+# Exercise Three
+
+Looking at your tree trace in Tracer, answer the following:
+
+In your HKY model, is the inferred rate of transition substitutions higher than the rate of transversion substitutions? If so, by how much?
+
+In your HKY model, are the resulting estimates of the base frequencies equal? If not, how much do they differ? 
+
+Under your GTR model, are the resulting estimates of the base frequencies equal? If not, how much do they differ? 
+
+Under your GTR model, are you able to tell which substitutions are more likley than others? If so, which? 
+

@@ -80,7 +80,8 @@ All command-line text, including all Rev syntax, are given in
 
 
 ```{r}
-    getwd()
+library(Revticulate)
+knitRev()
 ```
 
 It is important to be aware that some PDF viewers may render some characters given as differently. Thus, if you copy and paste text from this PDF, you may introduce some incorrect characters. Because of this, we recommend that you type the instructions in this tutorial or copy them from the scripts provided.
@@ -108,7 +109,8 @@ RevBayes uses the function `readDiscreteCharacterData()` to load a data matrix t
 
 
 ```{rb}
-    morpho <- readDiscreteCharacterData("data/Cinctans_for_RevBayes.nex")
+morpho <- readDiscreteCharacterData("Cinctans.nex")
+morpho
 ```
 
 **Create Helper Variables**
@@ -281,7 +283,7 @@ Once we have set up our model, moves, and monitors, we can now create the worksp
 The MCMC object that we named `mymcmc` has a member method called `.run()`. This will execute our analysis and we will set the chain length to `10000` cycles using the `generations` option.
 
 
-```{rb}
+```{rb, eval=FALSE}
     mymcmc.run(generations=10000, tuningInterval=200)
 ```
 
@@ -292,43 +294,45 @@ Once our Markov chain has terminated, we will want RevBayes to close. Tell the p
     q()
 ```
 
-## You made it! Save all of your files.
+## Running the estimation
 
-With all the parameters specified and all analysis components in place, you are now ready to run your analysis. RevBayes cannot run inside the RStudio window. So we will need to copy our code out of RStudio. Luckily, the knitr package makes this very easy. Run the following in the console:
+We can  automate convergence assessment using the R package convenience [@fabreti2021]. First, we will save our Rev session to a .Rev Script. In this case, we will set `use_quit = FALSE` because we typed the quit command in the above cell. We use the command `callRevFromTerminal` to run the file, then diagnose convergence with the convenience package. Because this is a longer computation, it is not directly run in this tutorial, but can be run on the user's computer.
 
-```{r eval=FALSE}
-knitr::purl("module_05_TripartiteModel1_morph_change_models/RB_Discrete_Morphology/RB_MCMC_Discrete_Morph.Rmd")
+```{r, eval = FALSE, echo = TRUE}
+library(convenience)
+saveRev("scripts/mcmc_Morpho.Rev", use_quit=FALSE)
+callRevFromTerminal("scripts/mcmc_Morpho.Rev")
+checkConvergence(path = "output/")
 ```
 
-This will create a .R file containing our analysis script. Move it into the `scripts` folder and rename it to mk_gamma.Rev
+We can also use RevGadgets [@tribble2021revgadgets] to visualize our tree with a geological time scale. In this example, we use RevBayes to compute a summary tree, then export to RevGadets. Because this can be a long computation, the summarizing is not run here, but is provided. We can also use functions in ggplot2 [@wickham1pkgdown] to export figures. In this way, Revticulate can enable full reproducibility of results and graphics generation.
+```{rb, eval=FALSE}
 
->Begin by running the RevBayes executable. In Unix systems, type the
->following in your terminal (if the RevBayes binary is in your path):
->rb
+library(RevGadgets)
+library(ggplot2)
 
+#doRev('trace = readTreeTrace("output/cinc_dated.trees", burnin=.25)
+#      mccTree(trace, "sample.tre")', timeout=60)
 
+tree <- readTrees("sample.tre")
+tree_output <- plotFBDTree(tree = tree, 
+            timeline = T, 
+            geo_units = "epochs",
+            time_bars = T,
+            tip_labels_italics = T,
+            tip_labels_remove_underscore = T,
+            tip_labels_size = 3, 
+            node_pp = T,
+            tip_age_bars = T,
+            node_age_bars = T, 
+            age_bars_colored_by = "posterior")
 
-Provided that you started RevBayes from the correct directory, you can then use the `source()`
-function to feed RevBayes your Rev-script file (`mk_gamma.Rev`).
+tree_output
+ggsave("Cinctans_maximum_clade_credibility.png", tree_output)
 
-
-```{bash eval = FALSE, include = TRUE}
-    source("scripts/mk_gamma.Rev")
 ```
 
-When the analysis is complete, RevBayes will quit and you will have a new directory called `output` that will contain all of the files you specified with the monitors.
-
-We can look at the log files in the software `Tracer`. We can also calculate several different types of summary trees: 
-
-```
-# Read in the tree trace and construct the maximum clade credibility (MCC) tree #
-trace = readTreeTrace("output/mk_gamma.trees")
-
-# Summarize tree trace and save MCC tree to file
-mccTree(trace, file="output/mk_gamma.mcc.tre" )
-```
-
-RevBayes can calculate MCC trees, MAP trees, and concensus trees. Have each person at your table try one, and see how they differ.
+RevBayes can calculate MCC trees, MAP trees, and consensus trees. Have each person at your table try one, and see how they differ.
 
 # Choose Your Own Adventure
 
