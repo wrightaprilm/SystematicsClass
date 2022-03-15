@@ -187,12 +187,10 @@
 <span class="fu"><a href="https://rdrr.io/pkg/Revticulate/man/knitRev.html" class="external-link">knitRev</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>It is important to be aware that some PDF viewers may render some characters given as differently. Thus, if you copy and paste text from this PDF, you may introduce some incorrect characters. Because of this, we recommend that you type the instructions in this tutorial or copy them from the scripts provided.</p>
 <p><strong>Data and Files</strong></p>
-<blockquote>
-<p>On your own computer, there should be a directory called <strong>Systematics2020</strong>. The data for this tutorial are in the subdirectory <strong>Systematics2020/vignettes/data</strong> This directory should contain: <a href="data/Cinctans_for_RevBayes.nex"><code>Cinctans_for_RevBayes.nex</code></a>.</p>
-</blockquote>
+<p>Download the data from <a href="https://revbayes.github.io/tutorials/morph_tree/" class="external-link">here</a>. The data file is called Cinctans.nex.</p>
 <p><strong>Getting Started</strong></p>
 <blockquote>
-<p>Create a new directory (in <code>Systematics2020</code>) called <strong>scripts</strong>.</p>
+<p>Create a new directory your RStudio called “DiscreteMorphologyLab.”</p>
 </blockquote>
 <p>When you execute RevBayes in this exercise, you will do so within the main directory (<code>Systematics2020</code>), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the working directory to, for example, <strong>Systematics2020</strong> if this is the directory you stored the scripts and data in.</p>
 <p><strong>Creating Rev Files</strong></p>
@@ -353,7 +351,7 @@
 <span class="co">## [3] "The simulator uses 5 different moves in a random move schedule with 87.2 moves per iteration"        </span>
 <span class="co">## [4] "Iter | Posterior | Likelihood | Prior | elapsed | ETA |"                                             </span>
 <span class="co">## [5] "----------------------------------------------------------------------------------------------------"</span>
-<span class="co">## [6] "0 | -1263.34 | -1076.7 | -186.642 | 00:00:00 | --:--:-- |"</span></code></pre>
+<span class="co">## [6] "0 | -1238.84 | -1075.11 | -163.728 | 00:00:00 | --:--:-- |"</span></code></pre>
 <p>Once our Markov chain has terminated, we will want RevBayes to close. Tell the program to quit using the <code><a href="https://rdrr.io/r/base/quit.html" class="external-link">q()</a></code> function.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R">    <span class="fu"><a href="https://rdrr.io/r/base/quit.html" class="external-link">q</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -452,7 +450,7 @@
 <p>Next, we set the categories to each represent a quadrant of the beta distribution specified by <code>beta_scale</code>.</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cats</span> <span class="op">:=</span> <span class="fu">fnDiscretizeBeta</span><span class="op">(</span><span class="va">beta_scale</span>, <span class="va">beta_scale</span>, <span class="va">num_cats</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] NA</span></code></pre>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>If you were to print the <code>cats</code> variable, you would see a list of state frequencies like so:</p>
 <pre><code>[ 0.011, 0.236, 0.764, 0.989 ]</code></pre>
 <p>Using these state frequencies, we will generate a new vector of Q-matrices. Because we are varying the state frequencies, we must use a Q-matrix generation function that allows for state frequencies to vary as a parameter. We will, therefore, use the <code>fnF81</code> function.</p>

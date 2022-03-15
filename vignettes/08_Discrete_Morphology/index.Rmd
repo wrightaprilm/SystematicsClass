@@ -88,12 +88,11 @@ It is important to be aware that some PDF viewers may render some characters giv
 
 **Data and Files**
 
->On your own computer, there should be a directory called **Systematics2020**. The data for this tutorial are in the subdirectory **Systematics2020/vignettes/data**
->This directory should contain: [`Cinctans_for_RevBayes.nex`](data/Cinctans_for_RevBayes.nex).
+Download the data from [here](https://revbayes.github.io/tutorials/morph_tree/). The data file is called Cinctans.nex.
 
 **Getting Started**
 
->Create a new directory (in `Systematics2020`) called **scripts**.
+>Create a new directory your RStudio called "DiscreteMorphologyLab."
 
 When you execute RevBayes in this exercise, you will do so within the main directory  (`Systematics2020`), thus, if you are using a Unix-based operating system, we recommend that you add the RevBayes binary to your path. Alternatively make sure that you set the  working directory to, for example, **Systematics2020** if this is the directory you stored the scripts and data in.
 
