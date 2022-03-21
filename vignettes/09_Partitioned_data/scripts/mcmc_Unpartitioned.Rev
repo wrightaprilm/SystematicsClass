@@ -1,0 +1,53 @@
+setwd("/Users/april/Documents/Systematics2022/vignettes/09_Partitioned_data")
+
+#START
+
+data_cox2 = readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
+data_cytb = readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data_cox2 = readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
+data_cytb = readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data = concatenate( data_cox2, data_cytb )
+data = concatenate( data_cox2, data_cytb )
+data
+n_taxa <- data.ntaxa()
+num_branches <- 2 * n_taxa - 3
+taxa <- data.taxa()
+moves    = VectorMoves()
+monitors = VectorMonitors()
+er_prior <- v(1,1,1,1,1,1) 
+er ~ dnDirichlet( er_prior )
+moves.append( mvBetaSimplex(er, alpha=10, tune=true, weight=3) )
+moves.append( mvDirichletSimplex(er, alpha=10.0, tune=true, weight=1.0) )
+pi_prior <- v(1,1,1,1) 
+pi ~ dnDirichlet( pi_prior )
+moves.append( mvBetaSimplex(pi, alpha=10, tune=true, weight=2) )
+moves.append( mvDirichletSimplex(pi, alpha=10.0, tune=true, weight=1.0) )
+Q := fnGTR(er,pi)
+alpha ~ dnUniform( 0, 1E8 )
+gamma_rates := fnDiscretizeGamma( alpha, alpha, 4, false )
+moves.append( mvScale(alpha, lambda=0.1, tune=false, weight=4.0) )
+pinvar ~ dnBeta(1,1)
+moves.append( mvBetaProbability(pinvar, delta=10.0, tune=true, weight=2.0) )
+out_group = clade("Galeopterus_variegatus")
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+moves.append( mvNNI(topology, weight=n_taxa/2.0) )
+moves.append( mvSPR(topology, weight=n_taxa/10.0) )
+for (i in 1:num_branches) {
+    br_lens[i] ~ dnExponential(10.0)
+    moves.append( mvScale(br_lens[i]) )
+}
+TL := sum(br_lens)
+psi := fnTreeAssembly(topology, br_lens)
+seq ~ dnPhyloCTMC(tree=psi, Q=Q,  siteRates=gamma_rates, pInv=pinvar, type="DNA")
+
+seq.clamp(data)
+my_model = model(Q)
+monitors.append( mnModel(filename="output/PS_uniform.log",printgen=10) )
+monitors.append( mnFile(psi, filename="output/PS_uniform.trees", printgen=10) )
+monitors.append( mnScreen(alpha, pinvar, TL, printgen=1000) )
+mymcmc = mcmc(my_model, monitors, moves, nruns=2, combine="mixed")
+mymcmc.run(generations=30000, tuningInterval=200)
+treetrace = readTreeTrace("output/PS_uniform.trees", treetype="non-clock")
+treetrace.summarize
+
+q()

@@ -1,0 +1,79 @@
+setwd("/Users/april/Documents/Systematics2022/vignettes/09_Partitioned_data")
+
+#START
+filenames <- v("data/primates_and_galeopterus_cox2.nex", "data/primates_and_galeopterus_cytb.nex")
+n_data_subsets <- filenames.size()
+n_data_subsets
+for (i in 1:n_data_subsets){
+    data[i] = readDiscreteCharacterData(filenames[i])
+}
+taxa <- data[1].taxa()
+n_taxa <- data[1].ntaxa()
+num_branches <- 2 * n_taxa - 3
+
+moves    = VectorMoves()
+monitors = VectorMonitors()
+# specify the JC rate matrix
+Q[1] <- fnJC(4)
+pi_prior <- v(1,1,1,1) 
+pi ~ dnDirichlet(pi_prior)
+
+# specify a move to propose updates to on pi
+moves.append( mvBetaSimplex(pi, weight=2) )
+moves.append( mvDirichletSimplex(pi, weight=1) )
+
+# specify a lognormal distribution as the prior distribution on kappa
+kappa ~ dnLognormal(0.0,1.25)
+
+# a simple scaling move to update kappa
+moves.append( mvScale(kappa) )
+
+# Finally, create the HKY rate matrix
+Q[2] := fnHKY(kappa,pi)
+
+for (i in 1:n_data_subsets) {
+    alpha[i] ~ dnUniform( 0.0, 1E8 )
+    gamma_rates[i] := fnDiscretizeGamma( alpha[i], alpha[i], 4, false )
+
+    moves.append( mvScale(alpha[i],weight=2) )
+}
+out_group = clade("Galeopterus_variegatus")
+# Prior distribution on the tree topology	
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+moves.append( mvNNI(topology, weight=n_taxa/2.0) )
+moves.append( mvSPR(topology, weight=n_taxa/10.0) )
+
+# Branch length prior
+for (i in 1:num_branches) {
+    bl[i] ~ dnExponential(10.0)
+	moves.append( mvScale(bl[i]) )
+}
+
+for (i in 1:n_data_subsets) {
+    pinvar[i] ~ dnBeta(1,1)
+    moves.append( mvBetaProbability(pinvar[i], delta=10.0, tune=true, weight=2.0) )
+}
+
+TL := sum(bl)
+	
+psi := treeAssembly(topology, bl)
+# specify a rate multiplier for each partition
+part_rate_mult ~ dnDirichlet( rep(1.0, n_data_subsets) )
+moves.append( mvBetaSimplex(part_rate_mult, alpha=1.0, tune=true, weight=n_data_subsets) )
+moves.append( mvDirichletSimplex(part_rate_mult, alpha=1.0, tune=true, weight=2.0) )
+
+# note that we use here a vector multiplication, 
+# i.e., multiplying each element of part_rate_mult by n_data_subsets
+part_rate := part_rate_mult * n_data_subsets
+for (i in 1:n_data_subsets) {
+    seq[i] ~ dnPhyloCTMC(tree=psi, Q=Q[i], branchRates=part_rate_mult[i], siteRates=gamma_rates[i], pInv=pinvar[i], type="DNA")
+    seq[i].clamp(data[i])
+}
+my_model = model(psi)
+monitors.append( mnModel(filename="output/PS_gene.log",printgen=10) )
+monitors.append( mnFile(psi, filename="output/PS_gene.trees", printgen=100) )
+monitors.append( mnScreen(TL, printgen=1000) )
+mymcmc = mcmc(my_model, moves, monitors, nruns=2, combine="mixed")
+mymcmc.run(30000,tuningInterval=200)
+
+q()

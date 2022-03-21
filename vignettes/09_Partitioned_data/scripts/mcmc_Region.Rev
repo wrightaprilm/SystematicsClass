@@ -1,0 +1,72 @@
+setwd("/Users/april/Documents/Systematics2022/vignettes/09_Partitioned_data")
+
+#START
+filenames <- v("data/primates_and_galeopterus_cox2.nex", "data/primates_and_galeopterus_cytb.nex")
+n_data_subsets <- filenames.size()
+n_data_subsets
+for (i in 1:n_data_subsets){
+    data[i] = readDiscreteCharacterData(filenames[i])
+}
+taxa <- data[1].taxa()
+n_taxa <- data[1].ntaxa()
+num_branches <- 2 * n_taxa - 3
+
+moves    = VectorMoves()
+monitors = VectorMonitors()
+for (i in 1:n_data_subsets) {
+    er_prior[i] <- v(1,1,1,1,1,1)
+    er[i] ~ dnDirichlet(er_prior[i])
+    moves.append( mvBetaSimplex(er[i], alpha=10, tune=true, weight=3) )
+}
+for (i in 1:n_data_subsets) {
+    pi_prior[i] <- v(1,1,1,1)
+    pi[i] ~ dnDirichlet(pi_prior[i])
+    moves.append( mvBetaSimplex(pi[i], alpha=10, tune=true, weight=2) )
+}
+for (i in 1:n_data_subsets) {
+    Q[i] := fnGTR(er[i],pi[i]) 
+}
+for (i in 1:n_data_subsets) {
+    alpha[i] ~ dnUniform( 0.0, 1E8 )
+    gamma_rates[i] := fnDiscretizeGamma( alpha[i], alpha[i], 4, false )
+
+    moves.append( mvScale(alpha[i],weight=2) )
+}
+for (i in 1:n_data_subsets) {
+    pinvar[i] ~ dnBeta(1,1)
+    moves.append( mvBetaProbability(pinvar[i], delta=10.0, tune=true, weight=2.0) )
+}
+# specify a rate multiplier for each partition
+part_rate_mult ~ dnDirichlet( rep(1.0, n_data_subsets) )
+moves.append( mvBetaSimplex(part_rate_mult, alpha=1.0, tune=true, weight=n_data_subsets) )
+moves.append( mvDirichletSimplex(part_rate_mult, alpha=1.0, tune=true, weight=2.0) )
+
+# note that we use here a vector multiplication, 
+# i.e., multiplying each element of part_rate_mult by n_data_subsets
+part_rate := part_rate_mult * n_data_subsets
+out_group = clade("Galeopterus_variegatus")
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+moves.append( mvNNI(topology, weight=n_taxa/2.0) )
+moves.append( mvSPR(topology, weight=n_taxa/10.0) )
+for (i in 1:num_branches) {
+    br_lens[i] ~ dnExponential(10.0)
+    moves.append( mvScale(br_lens[i]) )
+}
+TL := sum(br_lens)
+psi := fnTreeAssembly(topology, br_lens)
+psi
+for (i in 1:n_data_subsets) {
+    seq[i] ~ dnPhyloCTMC(tree=psi, Q=Q[i], branchRates=part_rate_mult[i], siteRates=gamma_rates[i], pInv=pinvar[i], type="DNA")
+    seq[i].clamp(data[i])
+}
+my_model = model(psi)
+monitors.append( mnModel(filename="output/PS_region.log",printgen=10) )
+monitors.append( mnFile(psi, filename="output/PS_region.trees", printgen=10) )
+monitors.append( mnScreen(alpha, pinvar, TL, printgen=1000) )
+mymcmc = mcmc(my_model, monitors, moves, nruns=2, combine="mixed")
+mymcmc.run(generations=30000, tuningInterval=200)
+treetrace = readTreeTrace("output/PS_region.trees", treetype="non-clock")
+treetrace.summarize
+map_tree = mapTree(treetrace,"output/PS_region_map.tre")
+
+q()

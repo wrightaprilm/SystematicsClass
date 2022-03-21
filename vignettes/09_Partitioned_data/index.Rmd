@@ -9,16 +9,29 @@ prerequisites:
 - mcmc
 - ctmc
 index: true
+bibliography: ../refs.bib
 title-old: RB_Partition_Tutorial
 redirect: false
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, eval=FALSE)
+```
+
+
+
+```{r}
+library(Revticulate)
+knitRev()
+```
+
+### [Materials here](https://revbayes.github.io/tutorials/partition/)
 
 This tutorial comes with a recorded video walkthrough, available here: [Walkthrough playlist](https://youtu.be/LPPYGUP1FZc). The video corresponding to each section of the exercise is linked next to the section title.
 
 
 [Walkthrough video](https://youtu.be/LPPYGUP1FZc)
 
-This tutorial provides the second protocol from our recent publication (Hoehna2017a).
+This tutorial provides the second protocol from our recent publication [@Hoehna2017a].
 
 This tutorial demonstrates how to accommodate variation in the
 substitution process across sites of an alignment. In the preceding
@@ -63,7 +76,7 @@ pervasive feature of datasets composed of gene regions sampled from
 multiple loci and/or different genomes. Inference of phylogeny from
 these data demands that we adequately model the underlying process
 heterogeneity; failure to do so can lead to biased estimates of
-phylogeny and other parameters {% cite Brown2007 %}.
+phylogeny and other parameters [@Brown2007].
 
 Accounting for process heterogeneity involves adopting a partitioned
 data approach (sometimes also called a ‘mixed-model’ approach
@@ -104,7 +117,7 @@ partition-model selection is based on *Bayes factors*
 calculating the marginal likelihood under each candidate partition
 scheme and then comparing the ratio of the marginal likelihoods for the
 set of candidate partition schemes
-(Brandley2005, Nylander2004, Mcguire2007). 
+[@Brandley2005, Nylander2004, Mcguire2007]. 
 The analysis pipeline that we will use in this tutorial is depicted in Figure [fig:pipeline].
 
 > ![](figures/pipeline.png) 
@@ -139,59 +152,57 @@ Our first exercise is to construct a multi-gene analysis where all genes
 evolve under the same process and parameters.
 
 
-Setting up the model
+## Setting up the model
+
+First, clear RevBayes of any extra junk in the proverbial trunk:
+
+```{r}
+clearRev()
+```
 
 
-Loading and preparing the data
+### Loading and preparing the data
 
 To begin, load in the sequences using the ‘readDiscreteCharacterData‘
 function.
-```
-data_cox2 = readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
-data_cytb = readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+```{rb}
+data_cytb <- readDiscreteCharacterData("primates_and_galeopterus_cytb.nex")
+data_cox2 <- readDiscreteCharacterData("primates_and_galeopterus_cox2.nex")
 ```
 Since the first step in this exercise is to assume a single model across
 genes, we need to combine the two datasets using
 concatenate
-```
+```{rb}
 data = concatenate( data_cox2, data_cytb )
+data
 ```
 Typing ‘data‘ reports the dimensions of the concatenated matrix, this
 provides information about the alignment:
 
-```
-       DNA character matrix with 23 taxa and 1852 characters
-       =====================================================
-       Origination:                   primates_and_galeopterus_cox2.nex
-       Number of taxa:                23
-       Number of included taxa:       23
-       Number of characters:          1852
-       Number of included characters: 1852
-       Datatype:                      DNA
-```
+
 For later use, we will store the taxon information (‘taxa‘) and the
 number of taxa and branches.
-```
-n_taxa <- data.ntaxa
+```{rb}
+n_taxa <- data.ntaxa()
 num_branches <- 2 * n_taxa - 3
-taxa <- data.taxa
+taxa <- data.taxa()
 ```
 Additionally, we will create our move and monitor vectors.
-```
-moves    = VectorMoves
-monitors = VectorMonitors
+```{rb}
+moves    = VectorMoves()
+monitors = VectorMonitors()
 ```
 
 Substitution model
 
 Now we can proceed with building our GTR$+\Gamma$ model. First, we will
 define and specify a prior on the exchangeability rates of the GTR model
-```
+```{rb}
 er_prior <- v(1,1,1,1,1,1) 
 er ~ dnDirichlet( er_prior )
 ```
 and assign its moves
-```
+```{rb}
 moves.append( mvBetaSimplex(er, alpha=10, tune=true, weight=3) )
 moves.append( mvDirichletSimplex(er, alpha=10.0, tune=true, weight=1.0) )
 ```
@@ -199,13 +210,13 @@ We can use the same type of distribution as a prior on the 4 stationary
 frequencies ($\pi_A, \pi_C, \pi_G, \pi_T$) since these parameters also
 represent proportions. Specify a flat Dirichlet prior density on the
 base frequencies:
-```
+```{rb}
 pi_prior <- v(1,1,1,1) 
 pi ~ dnDirichlet( pi_prior )
 ```
 Now add the simplex scale move on the stationary frequencies to the
 moves vector
-```
+```{rb}
 moves.append( mvBetaSimplex(pi, alpha=10, tune=true, weight=2) )
 moves.append( mvDirichletSimplex(pi, alpha=10.0, tune=true, weight=1.0) )
 ```
@@ -214,20 +225,20 @@ deterministic node for the GTR rate matrix ‘Q‘. The ‘fnGTR‘ function
 takes a set of exchangeability rates and a set of base frequencies to
 compute the rate matrix used when calculating the likelihood of our
 model.
-```
+```{rb}
 Q := fnGTR(er,pi)
 ```
 
 
-{% subsubsection Among site rate variation %}
+## Among site rate variation 
 
 We will also assume that the substitution rates vary among sites
 according to an one-parametric gamma distribution,
 i.e., where the shape equals the rate
-($\alpha=\beta$) and thus with mean 1.0 {% cite Yang1994a %}. Since we do not
+($\alpha=\beta$) and thus with mean 1.0 [@Yang1994a . Since we do not
 have good prior knowledge about the variance in site rates, we apply a uniform distribution between $1$ and $10^8$.
 Then create a stochastic node called ‘alpha‘ with a uniform prior:
-```
+```{rb}
 alpha ~ dnUniform( 0, 1E8 )
 ```
 The way the ASRV model is implemented involves discretizing the mean-one
@@ -243,7 +254,7 @@ both the shape and rate.
 
 Initialize the ‘gamma_rates‘ deterministic node vector using the
 ‘fnDiscretizeGamma‘ function with ‘4‘ bins:
-```
+```{rb}
 gamma_rates := fnDiscretizeGamma( alpha, alpha, 4, false )
 ```
 The random variable that controls the rate variation is the stochastic
@@ -251,25 +262,25 @@ node ‘alpha‘. This variable is a single, real positive value (‘RevType =
 RealPos‘). We will apply a simple scale move to this parameter. The
 scale move’s tuning parameter is called ‘lambda‘ and this value dictates
 the size of the proposal.
-```
+```{rb}
 moves.append( mvScale(alpha, lambda=0.1, tune=false, weight=4.0) )
 ```
 
 
-{% section Invariant sites %}
+# Invariant sites 
 
 Invariant sites (sites that remain fixed throughout their evolutionary
 history) may be seen as an extreme case of among-site rate variation. In
 contrast to $+ \Gamma$ models, the $+I$ model allows site some
 probability of having substitution rate equal to zero. Here, we give the
 probability of a site being invariant with ‘pinvar‘
-```
+```{rb}
 pinvar ~ dnBeta(1,1)
 moves.append( mvBetaProbability(pinvar, delta=10.0, tune=true, weight=2.0) )
 ```
 
 
-Tree prior
+### Tree prior
 
 The tree topology and branch lengths are also stochastic nodes in our
 model. For simplicity, we will use the same prior distribution on the
@@ -284,7 +295,7 @@ whereas other software, e.g.,`MrBayes` uses the first
 taxon in the data matrix file as the outgroup. Specify the ‘topology‘
 stochastic node by passing in the tip labels ‘names‘ to the
 ‘dnUniformTopology‘ distribution:
-```
+```{rb}
 out_group = clade("Galeopterus_variegatus")
 topology ~ dnUniformTopology(taxa, outgroup=out_group)
 ```
@@ -293,7 +304,7 @@ interchange move (‘mvNNI‘) and a subtree-prune and regrafting move
 (‘mvSPR‘). These moves do not have tuning parameters associated with
 them, thus you only need to pass in the ‘topology‘ node and proposal
 ‘weight‘.
-```
+```{rb}
 moves.append( mvNNI(topology, weight=n_taxa/2.0) )
 moves.append( mvSPR(topology, weight=n_taxa/10.0) )
 ```
@@ -308,7 +319,7 @@ in our tree (where $N=$ ‘n_species‘). We can do this using a ‘for‘ loop
 — this is a plate in our graphical model. In this loop, we can create
 each of the branch-length nodes and assign each move. Copy this entire
 block of ‘Rev‘ code into the console:
-```
+```{rb}
 for (i in 1:num_branches) {
     br_lens[i] ~ dnExponential(10.0)
     moves.append( mvScale(br_lens[i]) )
@@ -318,7 +329,7 @@ It is convenient for monitoring purposes to add the tree length as
 deterministic variable. The tree length is simply the sum of all branch
 lengths. . Accordingly, the tree length can be computed using the
 ‘sum‘ function, which calculates the sum of any vector of values.
-```
+```{rb}
 TL := sum(br_lens)
 ```
 Finally, we can create a *phylogram* (a phylogeny in which the branch
@@ -327,27 +338,27 @@ by combining the tree topology and branch lengths. We do this using the
 ‘treeAssembly‘ function, which applies the value of the $i^{th}$
 member of the ‘br_lens‘ vector to the branch leading to the $i^{th}$
 node in ‘topology‘. Thus, the ‘psi‘ variable is a deterministic node:
-```
+```{rb}
 psi := fnTreeAssembly(topology, br_lens)
+psi
 ```
 
-
-{% subsection Putting it All Together %}
+## Putting it All Together 
 
 
 We now have all the parameters needed to model the phylogenetic
 molecular substitution process
-```
+```{rb}
 seq ~ dnPhyloCTMC(tree=psi, Q=Q,  siteRates=gamma_rates, pInv=pinvar, type="DNA")
 ```
 To compute the likelihood, we condition the process on the data observed
 at the tips of the tree
-```
+```{rb}
 seq.clamp(data)
 ```
 Since the model is now specified, we wrap the components in a
 Model object.
-```
+```{rb}
 my_model = model(Q)
 ```
 
@@ -360,37 +371,37 @@ the states of our Markov chain. The monitor functions are all called
 we will initialize the model monitor using the ‘mnModel‘ function. This
 creates a new monitor variable that will output the states for all model
 parameters when passed into a MCMC function.
-```
+```{rb}
 monitors.append( mnModel(filename="output/PS_uniform.log",printgen=10) )
 ```
 The ‘mnFile‘ monitor will record the states for only the parameters
 passed in as arguments. We use this monitor to specify the output for
 our sampled trees and branch lengths.
-```
+```{rb}
 monitors.append( mnFile(psi, filename="output/PS_uniform.trees", printgen=10) )
 ```
 Finally, create a screen monitor that will report the states of
 specified variables to the screen with ‘mnScreen‘:
-```
+```{rb}
 monitors.append( mnScreen(alpha, pinvar, TL, printgen=1000) )
 ```
 
 
 
-{% subsubsection Initializing and Running the MCMC Simulation %}
+## Initializing and Running the MCMC Simulation 
 
 With a fully specified model, a set of monitors, and a set of moves, we
 can now set up the MCMC algorithm that will sample parameter values in
 proportion to their posterior probability. The ‘mcmc‘ function will
 create our MCMC object:
-```
+```{rb}
 mymcmc = mcmc(my_model, monitors, moves, nruns=2, combine="mixed")
 ```
 Note that this will automatically run two independent replicated MCMC
 simulations because we specified ‘nruns=2‘.
 
 Now, run the MCMC:
-```
+```{rb}
 mymcmc.run(generations=30000, tuningInterval=200)
 ```
 When the analysis is complete, you will have the monitor files in your
@@ -398,23 +409,27 @@ output directory.
 
 ‘RevBayes‘ can also summarize the tree samples by reading in the
 tree-trace file:
-```
+```{rb, eval=FALSE}
 treetrace = readTreeTrace("output/PS_uniform.trees", treetype="non-clock")
 treetrace.summarize
 ```
 The ‘mapTree‘ function will summarize the tree samples and write the
 maximum a posteriori tree to file:
-```
+```{rb, eval=FALSE}
 map_tree = mapTree(treetrace,"output/PS_uniform_map.tre")
 ```
 This completes the uniform partition analysis. The next two sections
 will implement more complex partitioning schemes in a similar manner.
 
 
+```{r, eval=FALSE}
+
+saveRev("scripts/mcmc_Unpartitioned.Rev", use_quit=TRUE)
+callRevFromTerminal("scripts/mcmc_Unpartitioned.Rev")
+```
 
 
-
-## Partitioning by Gene Region
+# Partitioning by Gene Region
 [![Walkthrough video]{: height="36" width="36"}](https://youtu.be/LPPYGUP1FZc#t=17m06s)
 
 The uniform model used in the previous section assumes that all sites in
@@ -428,22 +443,23 @@ these two genes, then define an independent substitution model for each
 data partition.
 
 First, we’ll clear the workspace of all declared variables
-```
-clear
+```{r}
+clearRev()
 ```
 Since we wish to avoid individually specifying each parameter of the
 GTR+$\Gamma$ model for each of our data partitions, we can *loop* over
 our datasets and create vectors of nodes. To do this, we begin by
 creating a vector of data file names:
-```
+```{rb}
 filenames <- v("data/primates_and_galeopterus_cox2.nex", "data/primates_and_galeopterus_cytb.nex")
 ```
 Set a variable for the number of partitions:
-```
-n_data_subsets <- filenames.size
+```{rb}
+n_data_subsets <- filenames.size()
+n_data_subsets
 ```
 And create a vector of data matrices called ‘data‘:
-```
+```{rb}
 for (i in 1:n_data_subsets){
     data[i] = readDiscreteCharacterData(filenames[i])
 }
@@ -451,18 +467,18 @@ for (i in 1:n_data_subsets){
 Next, we can initialize some important variables. This does require,
 however, that both of our alignments have the same number of species and
 matching tip names.
-```
-taxa <- data[1].taxa
-n_taxa <- data[1].ntaxa
+```{rb}
+taxa <- data[1].taxa()
+n_taxa <- data[1].ntaxa()
 num_branches <- 2 * n_taxa - 3
 
-moves    = VectorMoves
-monitors = VectorMonitors
+moves    = VectorMoves()
+monitors = VectorMonitors()
 ```
 
 
 
-Specify the Parameters by Looping Over Partitions
+## Specify the Parameters by Looping Over Partitions
 
 We can avoid creating unique names for every node in our model if we use
 a ‘for‘ loop to iterate over our partitions. Thus, we will only have to
@@ -480,7 +496,7 @@ split the loop into smaller parts to achieve the same end.
 
 First, we will create the GTR rate matrix for partition $i$ by first
 creating exchangeability rates
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     er_prior[i] <- v(1,1,1,1,1,1)
     er[i] ~ dnDirichlet(er_prior[i])
@@ -488,7 +504,7 @@ for (i in 1:n_data_subsets) {
 }
 ```
 and stationary frequencies
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     pi_prior[i] <- v(1,1,1,1)
     pi[i] ~ dnDirichlet(pi_prior[i])
@@ -496,7 +512,7 @@ for (i in 1:n_data_subsets) {
 }
 ```
 then passing those parameters into a rate matrix function
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     Q[i] := fnGTR(er[i],pi[i]) 
 }
@@ -506,7 +522,7 @@ determined by the exchangeability rates (er[i]) and
 stationary frequencies (pi[i]) also defined for partition
 $i$. Following this format, we construct the remaining partition
 parameters: the $+\Gamma$ mixture model
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     alpha[i] ~ dnUniform( 0.0, 1E8 )
     gamma_rates[i] := fnDiscretizeGamma( alpha[i], alpha[i], 4, false )
@@ -515,14 +531,14 @@ for (i in 1:n_data_subsets) {
 }
 ```
 the $+I$ invariant sites model
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     pinvar[i] ~ dnBeta(1,1)
     moves.append( mvBetaProbability(pinvar[i], delta=10.0, tune=true, weight=2.0) )
 }
 ```
 and the per-partition substitution rate multipliers
-```
+```{rb}
 # specify a rate multiplier for each partition
 part_rate_mult ~ dnDirichlet( rep(1.0, n_data_subsets) )
 moves.append( mvBetaSimplex(part_rate_mult, alpha=1.0, tune=true, weight=n_data_subsets) )
@@ -533,10 +549,157 @@ moves.append( mvDirichletSimplex(part_rate_mult, alpha=1.0, tune=true, weight=2.
 part_rate := part_rate_mult * n_data_subsets
 ```
 
+### Tree prior
+
+The tree topology and branch lengths are also stochastic nodes in our
+model. For simplicity, we will use the same prior distribution on the
+tree topology, a uniform topology prior, and branch lengths, independent
+exponential prior distributions, as done in the The CTMC lesson.
+
+We will assume that all possible labeled, unrooted tree topologies have
+equal probability. This is the ‘dnUniformTopology‘ distribution in
+‘RevBayes‘. Note that in ‘RevBayes‘ it is advisable to specify the
+outgroup for your study system if you use an unrooted tree prior,
+whereas other software, e.g.,`MrBayes` uses the first
+taxon in the data matrix file as the outgroup. Specify the ‘topology‘
+stochastic node by passing in the tip labels ‘names‘ to the
+‘dnUniformTopology‘ distribution:
+```{rb}
+out_group = clade("Galeopterus_variegatus")
+topology ~ dnUniformTopology(taxa, outgroup=out_group)
+```
+To update the unrooted tree topology, we can use both a nearest-neighbor
+interchange move (‘mvNNI‘) and a subtree-prune and regrafting move
+(‘mvSPR‘). These moves do not have tuning parameters associated with
+them, thus you only need to pass in the ‘topology‘ node and proposal
+‘weight‘.
+```{rb}
+moves.append( mvNNI(topology, weight=n_taxa/2.0) )
+moves.append( mvSPR(topology, weight=n_taxa/10.0) )
+```
+The weight specifies how often the move will be applied either on
+average per iteration or relative to all other moves. Have a look at the
+[MCMC Diagnosis
+tutorial](https://github.com/revbayes/revbayes_tutorial/raw/master/tutorial_TeX/RB_MCMC_Tutorial/RB_MCMC_Tutorial.pdf)
+for more details about moves and MCMC strategies.
+
+Next we have to create a stochastic node for each of the $2N-3$ branches
+in our tree (where $N=$ ‘n_species‘). We can do this using a ‘for‘ loop
+— this is a plate in our graphical model. In this loop, we can create
+each of the branch-length nodes and assign each move. Copy this entire
+block of ‘Rev‘ code into the console:
+```{rb}
+for (i in 1:num_branches) {
+    br_lens[i] ~ dnExponential(10.0)
+    moves.append( mvScale(br_lens[i]) )
+}
+```
+It is convenient for monitoring purposes to add the tree length as
+deterministic variable. The tree length is simply the sum of all branch
+lengths. . Accordingly, the tree length can be computed using the
+‘sum‘ function, which calculates the sum of any vector of values.
+```{rb}
+TL := sum(br_lens)
+```
+Finally, we can create a *phylogram* (a phylogeny in which the branch
+lengths are proportional to the expected number of substitutions/site)
+by combining the tree topology and branch lengths. We do this using the
+‘treeAssembly‘ function, which applies the value of the $i^{th}$
+member of the ‘br_lens‘ vector to the branch leading to the $i^{th}$
+node in ‘topology‘. Thus, the ‘psi‘ variable is a deterministic node:
+```{rb}
+psi := fnTreeAssembly(topology, br_lens)
+psi
+```
 
 
 
-### Different Substitution Models for each Gene
+
+### Putting it All Together 
+
+
+We now have all the parameters needed to model the phylogenetic
+molecular substitution process
+```{rb}
+for (i in 1:n_data_subsets) {
+    seq[i] ~ dnPhyloCTMC(tree=psi, Q=Q[i], branchRates=part_rate_mult[i], siteRates=gamma_rates[i], pInv=pinvar[i], type="DNA")
+    seq[i].clamp(data[i])
+}
+```
+
+Since the model is now specified, we wrap the components in a
+Model object.
+```{rb}
+my_model = model(psi)
+```
+
+
+
+### Specifying Monitors 
+
+For our MCMC analysis we need to set up a vector of *monitors* to save
+the states of our Markov chain. The monitor functions are all called
+‘mn\*‘, where ‘\*‘ is the wildcard representing the monitor type. First,
+we will initialize the model monitor using the ‘mnModel‘ function. This
+creates a new monitor variable that will output the states for all model
+parameters when passed into a MCMC function.
+```{rb}
+monitors.append( mnModel(filename="output/PS_region.log",printgen=10) )
+```
+The ‘mnFile‘ monitor will record the states for only the parameters
+passed in as arguments. We use this monitor to specify the output for
+our sampled trees and branch lengths.
+```{rb}
+monitors.append( mnFile(psi, filename="output/PS_region.trees", printgen=10) )
+```
+Finally, create a screen monitor that will report the states of
+specified variables to the screen with ‘mnScreen‘:
+```{rb}
+monitors.append( mnScreen(alpha, pinvar, TL, printgen=1000) )
+```
+
+
+### Initializing and Running the MCMC Simulation 
+
+With a fully specified model, a set of monitors, and a set of moves, we
+can now set up the MCMC algorithm that will sample parameter values in
+proportion to their posterior probability. The ‘mcmc‘ function will
+create our MCMC object:
+```{rb}
+mymcmc = mcmc(my_model, monitors, moves, nruns=2, combine="mixed")
+```
+Note that this will automatically run two independent replicated MCMC
+simulations because we specified ‘nruns=2‘.
+
+Now, run the MCMC:
+```{rb}
+mymcmc.run(generations=30000, tuningInterval=200)
+```
+When the analysis is complete, you will have the monitor files in your
+output directory.
+
+‘RevBayes‘ can also summarize the tree samples by reading in the
+tree-trace file:
+```{rb, eval=FALSE}
+treetrace = readTreeTrace("output/PS_region.trees", treetype="non-clock")
+treetrace.summarize
+```
+The ‘mapTree‘ function will summarize the tree samples and write the
+maximum a posteriori tree to file:
+```{rb, eval=FALSE}
+map_tree = mapTree(treetrace,"output/PS_region_map.tre")
+```
+This completes the uniform partition analysis. The next two sections
+will implement more complex partitioning schemes in a similar manner.
+
+
+```{r, eval=FALSE}
+saveRev("scripts/mcmc_Region.Rev", use_quit=TRUE)
+callRevFromTerminal("scripts/mcmc_Region.Rev")
+```
+
+
+# Different Substitution Models for each Gene
 
 Alternatively, we might be interested in applying different substitution
 models for each gene independently instead of assuming the same
@@ -545,17 +708,50 @@ gene case this is rather simple to do by specifying the substitution
 model for each gene independently. For many genes this might become
 lengthy and you might want to write a script to generate this section
 (note: we may provide such scripts soon).
+First, we’ll clear the workspace of all declared variables
+```{r}
+clearRev()
+```
+Since we wish to avoid individually specifying each parameter of the
+GTR+$\Gamma$ model for each of our data partitions, we can *loop* over
+our datasets and create vectors of nodes. To do this, we begin by
+creating a vector of data file names:
+```{rb}
+filenames <- v("data/primates_and_galeopterus_cox2.nex", "data/primates_and_galeopterus_cytb.nex")
+```
+Set a variable for the number of partitions:
+```{rb}
+n_data_subsets <- filenames.size()
+n_data_subsets
+```
+And create a vector of data matrices called ‘data‘:
+```{rb}
+for (i in 1:n_data_subsets){
+    data[i] = readDiscreteCharacterData(filenames[i])
+}
+```
+Next, we can initialize some important variables. This does require,
+however, that both of our alignments have the same number of species and
+matching tip names.
+```{rb}
+taxa <- data[1].taxa()
+n_taxa <- data[1].ntaxa()
+num_branches <- 2 * n_taxa - 3
+
+moves    = VectorMoves()
+monitors = VectorMonitors()
+```
 
 For simplicity and sake of demonstration, we assume that the cytochrome
 b region evolves under a Jukes-Cantor substitution model and the COX-II
 gene under an HKY substitution model. We begin with the cytochrome b
 gene and the Jukes-Cantor substitution model:
-```
+```{rb}
 # specify the JC rate matrix
 Q[1] <- fnJC(4)
 ```
 Second, we specify the HKY substitution model for the COX-II gene:
-```
+```{rb}
 pi_prior <- v(1,1,1,1) 
 pi ~ dnDirichlet(pi_prior)
 
@@ -571,6 +767,13 @@ moves.append( mvScale(kappa) )
 
 # Finally, create the HKY rate matrix
 Q[2] := fnHKY(kappa,pi)
+
+for (i in 1:n_data_subsets) {
+    alpha[i] ~ dnUniform( 0.0, 1E8 )
+    gamma_rates[i] := fnDiscretizeGamma( alpha[i], alpha[i], 4, false )
+
+    moves.append( mvScale(alpha[i],weight=2) )
+}
 ```
 Note that we specified manually in this way our vector of rate matrices
 ‘Q‘. We can thus specify any substitution model manually for a given
@@ -588,12 +791,12 @@ probability for a site being invariant for this gene), or you create the
 
 
 
-Tree prior
+### Tree prior
 
 We assume that both genes evolve along the same tree. Hence, we need to
 specify a random variable for our tree parameter which is the same as
 was specified for mcmc_Partition_uniform.Rev.
-```
+```{rb}
 out_group = clade("Galeopterus_variegatus")
 # Prior distribution on the tree topology	
 topology ~ dnUniformTopology(taxa, outgroup=out_group)
@@ -601,16 +804,31 @@ moves.append( mvNNI(topology, weight=n_taxa/2.0) )
 moves.append( mvSPR(topology, weight=n_taxa/10.0) )
 
 # Branch length prior
-for (i in 1:n_branches) {
+for (i in 1:num_branches) {
     bl[i] ~ dnExponential(10.0)
 	moves.append( mvScale(bl[i]) )
+}
+
+for (i in 1:n_data_subsets) {
+    pinvar[i] ~ dnBeta(1,1)
+    moves.append( mvBetaProbability(pinvar[i], delta=10.0, tune=true, weight=2.0) )
 }
 
 TL := sum(bl)
 	
 psi := treeAssembly(topology, bl)
 ```
+nd the per-partition substitution rate multipliers
+```{rb}
+# specify a rate multiplier for each partition
+part_rate_mult ~ dnDirichlet( rep(1.0, n_data_subsets) )
+moves.append( mvBetaSimplex(part_rate_mult, alpha=1.0, tune=true, weight=n_data_subsets) )
+moves.append( mvDirichletSimplex(part_rate_mult, alpha=1.0, tune=true, weight=2.0) )
 
+# note that we use here a vector multiplication, 
+# i.e., multiplying each element of part_rate_mult by n_data_subsets
+part_rate := part_rate_mult * n_data_subsets
+```
 
 ## Putting it all together 
 
@@ -619,7 +837,7 @@ must create a phylogenetic CTMC for each gene. Additionally, we must fix
 the values of these nodes by attaching their respective data matrices.
 These two nodes are linked by the ‘psi‘ node and their log-likelihoods
 are added to get the likelihood of the whole DAG.
-```
+```{rb}
 for (i in 1:n_data_subsets) {
     seq[i] ~ dnPhyloCTMC(tree=psi, Q=Q[i], branchRates=part_rate_mult[i], siteRates=gamma_rates[i], pInv=pinvar[i], type="DNA")
     seq[i].clamp(data[i])
@@ -627,25 +845,32 @@ for (i in 1:n_data_subsets) {
 ```
 The remaining steps should be familiar: wrap the model components in a
 model object
-```
+```{rb}
 my_model = model(psi)
 ```
 
 ### Create monitors
 
 create the monitors
-```
+```{rb}
 monitors.append( mnModel(filename="output/PS_gene.log",printgen=10) )
 monitors.append( mnFile(psi, filename="output/PS_gene.trees", printgen=100) )
 monitors.append( mnScreen(TL, printgen=1000) )
 ```
 configure and run the MCMC analysis
-```
+```{rb}
 mymcmc = mcmc(my_model, moves, monitors, nruns=2, combine="mixed")
 mymcmc.run(30000,tuningInterval=200)
 ```
-and summarize the posterior density of trees with a MAP tree
+Export to RevBayes
+
+```{r, eval=FALSE}
+saveRev("scripts/mcmc_Gene.Rev", use_quit=TRUE)
+callRevFromTerminal("scripts/mcmc_Gene.Rev")
 ```
+
+and summarize the posterior density of trees with a MAP tree
+```{rb, eval=FALSE}
 treetrace = readTreeTrace("output/PS_gene.trees", treetype="non-clock")
 treetrace.summarize
 mapTree(treetrace,"output/PS_gene_MAP.tre")
@@ -654,7 +879,7 @@ mapTree(treetrace,"output/PS_gene_MAP.tre")
 
 
 
-{% section Partitioning by Codon Position and by Gene %}
+# section Partitioning by Codon Position and by Gene 
 [![Walkthrough video]{: height="36" width="36"}](https://youtu.be/LPPYGUP1FZc#t=25m37s)
 
 Because of the genetic code, we often find that different positions
@@ -664,8 +889,8 @@ approach that further partitions our alignment. For this exercise, we
 will partition sites within the cytB and cox2 gene by codon position.
 ```
 clear
-data_cox2 <- readDiscreteCharacterData("data/primates_and_galeopterus_cox2.nex")
-data_cytb <- readDiscreteCharacterData("data/primates_and_galeopterus_cytb.nex")
+data_cox2 <- readDiscreteCharacterData("primates_and_galeopterus_cox2.nex")
+data_cytb <- readDiscreteCharacterData("primates_and_galeopterus_cytb.nex")
 ```
 We must now add our codon-partitions to the ‘data‘ vector. The first and
 second elements in the data vector will describe cytB data,
@@ -744,8 +969,7 @@ Don’t forget to rename the output files!
     higher or lower clade support?
 
 3.  **Partitioned model selection.** Bayes factors are
-    computed as the ratio of marginal likelihoods (see {% page_ref model_selection_bayes_factors/bf_intro %}
-    for more details). Rather than constructing the analysis with an
+    computed as the ratio of marginal likelihoods (see [here](https://revbayes.github.io/tutorials/model_selection_bayes_factors/bf_intro.html) for more details). Rather than constructing the analysis with an
     mcmc object, marginal likelihood computations rely on
     output from a powerPosterior object.
 
@@ -773,3 +997,4 @@ ps = pathSampler(file="model_uniform.out", powerColumnName="power", likelihoodCo
 ps.marginal
 ```
 
+# References
