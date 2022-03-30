@@ -18,6 +18,8 @@ In the script we created in class ("partition_data_lab/mcmc_partition_morphology
 + Both data sources contribute to the tree
 + An MCC tree is computed
 
+Save the script on your RStudio. I will retrieve it from your RStudio after class April 5.
+
 Run the script to convergence. When I go to check this, I will be checking: 
 
 + That the script runs
