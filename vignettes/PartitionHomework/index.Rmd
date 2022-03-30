@@ -1,0 +1,25 @@
+---
+title: "PartitionHomework"
+author: "April Wright"
+date: "3/30/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We'll be doing something a little different for this week's homework. There will not be a question set to answer for this one. Download the files `bears.nex` and `bears.cytb` from [here](https://revbayes.github.io/tutorials/fbd/). 
+
+In the script we created in class ("partition_data_lab/mcmc_partition_morphology.Rev"), write a script in which:
+
++ Morphology is modeled via the Mk model
++ Molecules are modeled via GTR + G model
++ Both data sources contribute to the tree
++ An MCC tree is computed
+
+Run the script to convergence. When I go to check this, I will be checking: 
+
++ That the script runs
++ The mcmc converges
++ A tree file is there

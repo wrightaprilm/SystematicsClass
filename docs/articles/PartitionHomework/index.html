@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FinalExam • SystematicsClass</title>
+<title>PartitionHomework • SystematicsClass</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../../bootstrap-toc.css">
 <script src="../../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
-<script src="../../pkgdown.js"></script><meta property="og:title" content="FinalExam">
+<script src="../../pkgdown.js"></script><meta property="og:title" content="PartitionHomework">
 <meta property="og:description" content="SystematicsClass">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -125,10 +125,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>FinalExam</h1>
+      <h1 data-toc-skip>PartitionHomework</h1>
                         <h4 data-toc-skip class="author">April Wright</h4>
             
-            <h4 data-toc-skip class="date">1/25/2022</h4>
+            <h4 data-toc-skip class="date">3/30/2022</h4>
       
       
       <div class="hidden name"><code>index.Rmd</code></div>
@@ -137,57 +137,25 @@
 
     
     
-<div class="section level3">
-<h3 id="for-the-final">For the final:<a class="anchor" aria-label="anchor" href="#for-the-final"></a>
-</h3>
+<p>We’ll be doing something a little different for this week’s homework. There will not be a question set to answer for this one. Download the files <code>bears.nex</code> and <code>bears.cytb</code> from <a href="https://revbayes.github.io/tutorials/fbd/" class="external-link">here</a>.</p>
+<p>In the script we created in class (“partition_data_lab/mcmc_partition_morphology.Rev”), write a script in which:</p>
 <ul>
-<li>Estimate a phylogeny.
-<ul>
-<li>Group of your choosing</li>
-<li>Data of your choosing (molecular, morphological)</li>
+<li>Morphology is modeled via the Mk model</li>
+<li>Molecules are modeled via GTR + G model</li>
+<li>Both data sources contribute to the tree</li>
+<li>An MCC tree is computed</li>
 </ul>
-</li>
-<li>Do a more sophisticated analysis with it
+<p>Run the script to convergence. When I go to check this, I will be checking:</p>
 <ul>
-<li>Divergence time estimation</li>
-<li>Comparative method</li>
-<li>Something else</li>
-</ul>
-</li>
+<li>That the script runs</li>
+<li>The mcmc converges</li>
+<li>A tree file is there</li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="points-100-points">Points: 100 points<a class="anchor" aria-label="anchor" href="#points-100-points"></a>
-</h2>
-<div class="section level3">
-<h3 id="analysis">Analysis<a class="anchor" aria-label="anchor" href="#analysis"></a>
-</h3>
-<ul>
-<li>5 points: Topic choice</li>
-<li>20 points: Scripts: I will try to reproduce</li>
-<li>15 points: Data preparation (appropriate formats for the analysis)</li>
-<li>10 points: Appropriate notes that allow me to reproduce your work from your scripts/commands</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="presentation">Presentation<a class="anchor" aria-label="anchor" href="#presentation"></a>
-</h3>
-<ul>
-<li>10 points: Appropriate background given to understand your question and why it is good</li>
-<li>10 points: Method is described accruately and with enough information to understand.</li>
-<li>10 points: Results are contextualized so others can understand what they mean both for the analysis and for the group</li>
-<li>10 points: Presenter is well-prepared and speaks clearly</li>
-<li>10 points: Presenter is a conscientious and kind participant in others’ presentations</li>
-</ul>
-</div>
-</div>
-  </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
+      </div>
 
 </div>
 

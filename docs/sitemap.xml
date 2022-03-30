@@ -19,31 +19,7 @@
     <loc>/articles/04_ParsimonyAndModels/index.html</loc>
   </url>
   <url>
-    <loc>/articles/04_tutorial_structure/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/05_CTMC/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/05_models/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/05_pandemic_week/index.html</loc>
-  </url>
-  <url>
     <loc>/articles/06_Bayes_and_MCMC/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/06_Discrete_Morphology/05_RB_MCMC_Discrete_Morph.html</loc>
-  </url>
-  <url>
-    <loc>/articles/06_models/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/07_Discrete_Morphology/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/07_blast/index.html</loc>
   </url>
   <url>
     <loc>/articles/07_molecular_data/index.html</loc>
@@ -52,19 +28,7 @@
     <loc>/articles/08_Discrete_Morphology/index.html</loc>
   </url>
   <url>
-    <loc>/articles/08_Partitioned_data/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/08_final/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/09_Molecular_Clock/index.html</loc>
-  </url>
-  <url>
     <loc>/articles/09_Partitioned_data/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/10_FBD/RB_Total_Evidence_Tutorial.html</loc>
   </url>
   <url>
     <loc>/articles/10_Molecular_Clock/index.html</loc>
@@ -73,13 +37,7 @@
     <loc>/articles/11_FBD/RB_Total_Evidence_Tutorial.html</loc>
   </url>
   <url>
-    <loc>/articles/12_Comparative_Methods/index.html</loc>
-  </url>
-  <url>
     <loc>/articles/13_Comparative_Methods/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/13_biogeography/index.html</loc>
   </url>
   <url>
     <loc>/articles/14_Final/index.html</loc>
@@ -98,6 +56,15 @@
   </url>
   <url>
     <loc>/articles/ModelsHomework/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/MolecularModelsHomework/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/MorphologyHomework/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/PartitionHomework/index.html</loc>
   </url>
   <url>
     <loc>/articles/PaupHomework/index.html</loc>
