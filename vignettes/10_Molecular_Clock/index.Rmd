@@ -1,10 +1,20 @@
 ---
 title: "Tripartite Model 2 - Clock Models for Character Data"
-author: "David F. Wright"
+author: David F. Wright, with April Wright, Dave Bapst and Pete Wagner
 output:
-  html_document: default
+  html_document: 
+    theme: spacelab
   pdf_document: default
 ---
+
+```{r include =  FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(Revticulate)
+knitRev()
+```
 
 # Introduction  
 
@@ -82,7 +92,8 @@ In RevBayes, use the function `readDiscreteCharacterData()` to load the cinctan 
 
 
 ```{rb}
-    morpho <- readDiscreteCharacterData("data/Cinctans.nex")
+    morpho <- readDiscreteCharacterData("Cinctans.nex")
+    morpho
 ```
 
 
@@ -92,7 +103,7 @@ RevBayes uses the function `readTaxonData()` to load fossil age data to the work
 
 
 ```{rb}
-    taxonData <- readTaxonData(file="data/cincta_fossil_intervals_FA.tsv")
+    taxonData <- readTaxonData(file="cincta_fossil_intervals_FA.tsv")
 ```
 
 This file contains the names of each species in the dataset and the approximate time of their first appearance, according to their occurrences in trilobite biostratigraphic zones. This is the First Appearance Datum, or FAD, for each species. If you examine the dates in the .tsv file, you may notice these ages do not look like they represent accurate ages for Cambrian echinoderms. They do--sort of. We'll get to what they represent later when setting a prior distribution on the tree age. 
