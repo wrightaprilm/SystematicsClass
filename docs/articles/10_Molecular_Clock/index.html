@@ -126,7 +126,7 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tripartite Model 2 - Clock Models for Character Data</h1>
-                        <h4 data-toc-skip class="author">David F. Wright</h4>
+                        <h4 data-toc-skip class="author">David F. Wright, with April Wright, Dave Bapst and Pete Wagner</h4>
             
       
       
@@ -136,6 +136,11 @@
 
     
     
+<div class="section level2">
+<h2 id="download-data">Download Data<a class="anchor" aria-label="anchor" href="#download-data"></a>
+</h2>
+<p><a href="https://dwbapst.github.io/PaleoSoc_phylo_short_course_2019/articles/downloads.html" class="external-link">The data are here</a></p>
+</div>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -191,65 +196,43 @@
 </blockquote>
 <p><strong>Load Data Matrices</strong></p>
 <p>In RevBayes, use the function <code>readDiscreteCharacterData()</code> to load the cinctan matrix to the workspace and assign it to the variable <code>morpho</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">morpho</span> <span class="op">&lt;-</span> <span class="fu">readDiscreteCharacterData</span><span class="op">(</span><span class="st">"data/Cinctans.nex"</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "Successfully read one character matrix from file 'Cinctans.nex'"</span>
+<span class="co">## [2] "Standard character matrix with 27 taxa and 60 characters"       </span>
+<span class="co">## [3] "========================================================"       </span>
+<span class="co">## [4] "Origination: Cinctans.nex"                                      </span>
+<span class="co">## [5] "Number of taxa: 27"                                             </span>
+<span class="co">## [6] "Number of included taxa: 27"                                    </span>
+<span class="co">## [7] "Number of characters: 60"                                       </span>
+<span class="co">## [8] "Number of included characters: 60"                              </span>
+<span class="co">## [9] "Datatype: Standard"</span></code></pre>
 <p><strong>Load Fossil Age Data</strong></p>
 <p>RevBayes uses the function <code>readTaxonData()</code> to load fossil age data to the workspace from a formatted file. Import the fossil age data and assign it to the variable <code>taxonData</code>.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">taxonData</span> <span class="op">&lt;-</span> <span class="fu">readTaxonData</span><span class="op">(</span>file<span class="op">=</span><span class="st">"data/cincta_fossil_intervals_FA.tsv"</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>This file contains the names of each species in the dataset and the approximate time of their first appearance, according to their occurrences in trilobite biostratigraphic zones. This is the First Appearance Datum, or FAD, for each species. If you examine the dates in the .tsv file, you may notice these ages do not look like they represent accurate ages for Cambrian echinoderms. They do–sort of. We’ll get to what they represent later when setting a prior distribution on the tree age.</p>
 <p>Although we’re using the approximate time of first appearances for this analysis, please note that this assumption is not required by RevBayes and may not be appropriate for all (or even most) paleontological datasets! In fact, you can place a probability distribution on fossil occurrence times, such as a uniform distribution, or even incorporate the stratigraphic range of a taxon directly into the analysis. But in this example, keep in mind we’re using FADs to constrain fossil ages.</p>
 <p><strong>Create Helper Variables and MCMC move iterators</strong></p>
 <p>Recall in the previous module we had to create helper variables that are used in our MCMC analysis, but are not model parameters. We will assign these variables with the constant node assignment operator, <code>&lt;-</code>. Even though these values are used in our scripts, they are not parameters of the model.</p>
 <p>We will first create a constant node called <code>num_taxa</code> that is equal to the number of species in our analysis. We will also create a constant node called <code>num_branches</code> representing the number of branches in the tree, and one of the taxon names. This list will be used to initialize the tree.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># Get the names and number of species in the analysis</span>
-    <span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu">morpho.names</span><span class="op">(</span><span class="op">)</span>
-    <span class="va">num_taxa</span> <span class="op">&lt;-</span> <span class="fu">morpho.size</span><span class="op">(</span><span class="op">)</span> 
-    <span class="co"># Number of branches in a rooted tree = 2*(number of taxa) - 2</span>
-    <span class="va">num_branches</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">num_taxa</span> <span class="op">-</span> <span class="fl">2</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Next, we need to set up workspace variables called <code>mvi</code> and <code>mni</code> to use as iterators during the MCMC analysis.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># MCMC iterator variables</span>
-    <span class="va">moves</span> <span class="op">=</span> <span class="fu">VectorMoves</span><span class="op">(</span><span class="op">)</span>
-    <span class="va">monitors</span> <span class="op">=</span> <span class="fu">VectorMonitors</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p><strong>Place a prior on the root age of the tree</strong></p>
 <p>Because this analysis will use temporal data to co-estimate divergence times and phylogenetic relationships, we need to specify a prior distribution for the origin of our focal clade (i.e., the root age of the tree).</p>
 <p>Cinctan echinoderms occur throughout middle Cambrian (Miaolingian) rocks, so the clade must have diverged at some point earlier in time. But how much earlier did they diverge? Because we do not know with certainty or have any other information on their divergence (and because this workshop is focused on RevBayes), we’re going to be good Bayesians and treat the root age of the tree as a random variable that we can estimate. Estimating the root age will add an additional parameter to the analysis.</p>
 <p>Node ages for time-calibrated trees are intuitive: they increase from the tips toward the root (i.e., backwards in time), with the root being the oldest node in the tree. However, it is important to note that in RevBayes, the “end” of the tree generating process ends at time, <em>(t)</em> = 0. This makes sense for analyses including extant species because the youngest time unit is the present day. For paleontologists, this is awkward because many of us study lineages that are completely extinct, such as for cinctan echinoderms. However, it is straightforward to rescale our age dates relative to the end of time of interest.</p>
 <p>The youngest taxon in our analysis is <em>Sucocystis acrofera</em>, which has its FAD at ~498.8 Ma. Since this is the youngest occurrence in the analysis, we can effectively treat it as “extant”. To obtain the dates listed in the variable <code>taxonData</code>, we rescaled the absolute ages such that RevBayes treats <em>Sucocystis acrofera</em> as “extant” (i.e., 498.8 Ma = 0 Ma).</p>
 <p>Given their fossil record, cinctans diverged from other echinoderms by at least the middle Cambrian Miaolingian Series, but probably do not have “deep” roots in the early Cambrian or Precambrian. We will place a uniform distribution on the root age to correspond to Cambrian <em>Stage 4</em>, spanning 509 Ma to 514 Ma. Rescaling these to relative time units, we find 509 Ma = 10.2 Ma and 514 Ma = 15.2 Ma.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">origin_time</span> <span class="op">~</span> <span class="fu">dnUnif</span><span class="op">(</span><span class="fl">10.2</span>, <span class="fl">15.2</span><span class="op">)</span>;
-    <span class="co"># Set MCMC move on the parameter</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvSlide</span><span class="op">(</span><span class="va">origin_time</span>, delta<span class="op">=</span><span class="fl">0.01</span>, weight<span class="op">=</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span>
-    <span class="co"># Set up a monitor for the root age of the tree</span>
-    <span class="va">Root_age</span> <span class="op">:=</span> <span class="va">origin_time</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Although these rescaled ages may seem awkward to us paleontologists accustomed to working in units of absolute time, note that the relative timescale (in millions of years), and therefore the relative divergences, are unchanged by this translation. Moreover, the divergence times can be rescaled back to their correct absolute time after the analysis. For example, if the root age of the cinctan tree was estimated to be 14.8 Ma on the relative scale, the “corrected” root age would be 14.8 Ma + 498.8 Ma = 513.6 Ma.</p>
 <p><strong>Place a prior distribution on the tree</strong></p>
 <p>Now that we have a prior on the root age, we need to place a prior distribution on the tree topology. We’ll use the function <code>dnUniformTimeTree()</code> to set a time tree prior that is a function of the root age and places equal probability on all possible phylogenies.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R">   <span class="va">phylogeny</span> <span class="op">~</span> <span class="fu">dnUniformTimeTree</span><span class="op">(</span>rootAge<span class="op">=</span><span class="va">origin_time</span>, taxa<span class="op">=</span><span class="va">taxa</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Next, we will place MCMC moves on both the topology and node ages of the time tree, as well as set a deterministic node to monitor the tree length.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">   <span class="co"># Set MCMC moves for tree topology</span>
-   <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvFNPR</span><span class="op">(</span><span class="va">phylogeny</span>, weight<span class="op">=</span><span class="va">num_branches</span><span class="op">/</span><span class="fl">2.0</span><span class="op">)</span><span class="op">)</span>
-   <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvNNI</span><span class="op">(</span><span class="va">phylogeny</span>, weight<span class="op">=</span><span class="va">num_branches</span><span class="op">/</span><span class="fl">2.0</span><span class="op">)</span><span class="op">)</span>
-  
-   <span class="co"># Set MCMC moves for node ages</span>
-   <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvNodeTimeSlideUniform</span><span class="op">(</span><span class="va">phylogeny</span>, weight<span class="op">=</span><span class="va">num_branches</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span>
-   <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvRootTimeSlideUniform</span><span class="op">(</span><span class="va">phylogeny</span>, <span class="va">origin_time</span>, weight<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-
-   <span class="co"># Set MCMC monitor for tree length</span>
-   <span class="va">tree_length</span> <span class="op">:=</span> <span class="fu">phylogeny.treeLength</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The uniform time tree prior, which considers all possible tree topologies to be equally likely, is very simplistic and <em>makes very unrealistic assumptions about fossil sampling</em>. In the next module, Tripartite Model 3: Fossilized Birth Death, you will learn more about tree priors and how to incorporate paleontologically-inspired methods into your analysis, such as integrating diversification and/or sampling through time. So you’ll hear more on this topic later!</p>
 <p><strong>Place a prior distribution on Mk model: rate variation among characters</strong></p>
 <p>We will be using the Mk model of morphological character evolution, which we will specify further below. For now, we will set up a Gamma-distributed rate variation to the Mk model and specify moves on the parameters of the Gamma distribution.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">alpha_morpho</span> <span class="op">~</span> <span class="fu">dnUniform</span><span class="op">(</span> <span class="fl">0</span>, <span class="fl">1E6</span> <span class="op">)</span>
-    <span class="va">rates_morpho</span> <span class="op">:=</span> <span class="fu">fnDiscretizeGamma</span><span class="op">(</span> <span class="va">alpha_morpho</span>, <span class="va">alpha_morpho</span>, <span class="fl">4</span> <span class="op">)</span>
-    <span class="co">#Moves on the parameters to the Gamma distribution.</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvScale</span><span class="op">(</span><span class="va">alpha_morpho</span>, lambda<span class="op">=</span><span class="fl">1</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>As discussed in the previous module, this allows for rate variation <em>among characters</em> (i.e., different characters may evolve at different rates). Next, we will set up a clock model that allows for rate variation <em>among lineages</em>.</p>
 <div class="section level3">
 <h3 id="the-uncorrelated-lognormal-relaxed-clock">The Uncorrelated Lognormal Relaxed Clock<a class="anchor" aria-label="anchor" href="#the-uncorrelated-lognormal-relaxed-clock"></a>
@@ -264,69 +247,27 @@
 <p>Because it can be difficult to interpret a hyperprior placed on the location parameter <span class="math inline">\(\mu\)</span>, it is preferable to place a hyperprior on the mean <span class="math inline">\((M)\)</span> of the lognormal distribution (Heath and Moore, 2014). The expected value (i.e., the arithmetic mean) of a lognormally distributed random variable is related to the location and scale parameters by:</p>
 <p><span class="math display">\[M = e^{\mu +\frac{\sigma^2}{2}}. \]</span></p>
 <p>Here, we’ll set hyperpriors by assuming that both <span class="math inline">\(M\)</span> and <span class="math inline">\(\sigma\)</span> follow an exponential distribution. Then, we’ll set a deterministic node to monitor <span class="math inline">\(\sigma^2\)</span>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># M</span>
-    <span class="va">ucln_mean</span> <span class="op">~</span> <span class="fu">dnExponential</span><span class="op">(</span><span class="fl">2.0</span><span class="op">)</span>
-    <span class="co"># sigma</span>
-    <span class="va">ucln_sigma</span> <span class="op">~</span> <span class="fu">dnExponential</span><span class="op">(</span><span class="fl">3.0</span><span class="op">)</span> 
-    <span class="co"># Set a deterministic node on sigma^2 </span>
-    <span class="va">ucln_var</span> <span class="op">:=</span> <span class="va">ucln_sigma</span> <span class="op">*</span> <span class="va">ucln_sigma</span> </code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>Now that we’ve placed hyperpriors on <span class="math inline">\(M\)</span> and <span class="math inline">\(\sigma^2\)</span>, we can rearrange the equation above in terms of <span class="math inline">\(\mu\)</span>,</p>
 <p><span class="math display">\[\mu = ln(M) - \frac{\sigma^2}{2}.\]</span></p>
 <p>Using this relationship, we can set a deterministic node that records the parameter <span class="math inline">\(\mu\)</span> of the lognormal distribution.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># set deterministic parameter giving mu on branch rates</span>
-    <span class="va">ucln_mu</span> <span class="op">:=</span> <span class="fu">ln</span><span class="op">(</span><span class="va">ucln_mean</span><span class="op">)</span> <span class="op">-</span> <span class="op">(</span><span class="va">ucln_var</span> <span class="op">*</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>As usual, we need to set MCMC moves on parameters. In this case, because <span class="math inline">\(\mu\)</span> is a function of <span class="math inline">\(M\)</span> and <span class="math inline">\(\sigma\)</span>, we need to place MCMC moves on these parameters.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># Set MCMC moves</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvScale</span><span class="op">(</span><span class="va">ucln_mean</span>, lambda<span class="op">=</span><span class="fl">1.0</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">4.0</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvScale</span><span class="op">(</span><span class="va">ucln_sigma</span>, lambda<span class="op">=</span><span class="fl">0.5</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">4.0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <div style="page-break-after: always;"></div>
 <p><strong>Assigning rates to branches</strong></p>
 <p>Now, we have all the relevant parameters for drawing branch rates. Using <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, we can write a loop to draw a rate for all branches in the tree. In the loop, we’ll place the branch rates in a vector called <code>branch_rate_var</code> and set a MCMC move to tune the branch rates.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># assign rates to branches and add mcmc move</span>
-    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">num_branches</span><span class="op">)</span><span class="op">{</span>
-        <span class="va">branch_rate_var</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">~</span> <span class="fu">dnLognormal</span><span class="op">(</span><span class="va">ucln_mu</span>, <span class="va">ucln_sigma</span><span class="op">)</span>
-        <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvScale</span><span class="op">(</span><span class="va">branch_rate_var</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, lambda<span class="op">=</span><span class="fl">1</span>, tune<span class="op">=</span><span class="va">true</span>, weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span><span class="op">)</span>
-    <span class="op">}</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>We’ve already placed a MCMC move on branch rate variation, but it is often helpful to place additional moves to improve MCMC mixing and obtain better parameter estimates. Let’s add two additonal moves.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="co"># As usual, we need to set MCMC moves on these parameters.</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvVectorScale</span><span class="op">(</span><span class="va">branch_rate_var</span>,lambda<span class="op">=</span><span class="fl">1.0</span>,tune<span class="op">=</span><span class="va">true</span>,weight<span class="op">=</span><span class="fl">2.0</span><span class="op">)</span><span class="op">)</span>
-    <span class="fu">moves.append</span><span class="op">(</span><span class="fu">mvVectorSingleElementScale</span><span class="op">(</span><span class="va">branch_rate_var</span>,lambda<span class="op">=</span><span class="fl">30.0</span>,tune<span class="op">=</span><span class="va">true</span>,weight<span class="op">=</span><span class="fl">1.0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="putting-it-all-together">Putting it all together<a class="anchor" aria-label="anchor" href="#putting-it-all-together"></a>
 </h3>
 <p>Finally, we combine each the Mk model of character evolution, gamma-distributed rate heterogeneity (describing variation among characters), the uncorrelated relaxed clock model (describing variation among lineages), and the uniform tree model together into a <code>phyloCTMC</code> object. The following loop will apply these model parameters to all morphological character partitions with the same number of states.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode rb"><code class="sourceCode ruby"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>n_max_states &lt;- <span class="dv">3</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>idx = <span class="dv">1</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>morpho_bystate[<span class="dv">1</span>] &lt;- morpho</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="kw">for</span> (c <span class="kw">in</span> <span class="dv">1</span><span class="st">:n_max_states</span>) {</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>    <span class="co"># make local tmp copy of data</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>    <span class="co"># only keep character blocks with state space equal to size i</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>    morpho_bystate[c] &lt;- morpho</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a>    morpho_bystate[c].setNumStatesPartition(c)</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a>    nc = morpho_bystate[c].nchar()</span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true"></a>    <span class="co"># for non-empty character blocks</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true"></a>    <span class="kw">if</span> (nc &gt; <span class="dv">0</span>) {</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true"></a>        <span class="co"># make i-by-i rate matrix</span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true"></a>        q[idx] &lt;- fnJC(c)</span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true"></a>        <span class="co"># create model of evolution for the character block</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true"></a>        m_morph[idx] ~ dnPhyloCTMC(tree=phylogeny,</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true"></a>                                Q=q[idx],</span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true"></a>                                nSites=nc,</span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true"></a>                                siteRates=rates_morpho,</span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true"></a>                                branchRates=branch_rate_var,</span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true"></a>                                type=<span class="st">"Standard"</span>)</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true"></a>        <span class="co"># attach the data</span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true"></a>        m_morph[idx].clamp(morpho_bystate[c])</span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true"></a>        <span class="co"># increment counter</span></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true"></a>        idx = idx + <span class="dv">1</span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true"></a>  }</span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code><span class="co">## [1] "NOTE: setNumStatesPartition() partitions by the maximum observed state, not the total number of observed states."</span>
+<span class="co">## [2] "NOTE: setNumStatesPartition() partitions by the maximum observed state, not the total number of observed states."</span>
+<span class="co">## [3] "NOTE: setNumStatesPartition() partitions by the maximum observed state, not the total number of observed states."</span></code></pre>
 <p>Note that this script is very similar to the one used in in the previous module (Tripartite Model 1 - Discrete Morphology). Can you spot the difference? It’s subtle, but very important!</p>
 <p>Now that all of the components of the model are specified, we can run an analysis!</p>
 </div>
@@ -335,43 +276,37 @@
 </h3>
 <p><strong>Create Model Object</strong></p>
 <p>Create our workspace model variable with the <code>model()</code> function and provide a single node in the graph (<code>phylogeny</code>).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">mymodel</span> <span class="op">=</span> <span class="fu">model</span><span class="op">(</span><span class="va">phylogeny</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p><strong>Specify Monitors and Output Filenames</strong></p>
 <p>We often want to monitor every named random variable in our model graph. This step will write all numerical parameters to a tab-separated text file that can be opened by other programs for evaluating parameters and assessing convergence. We will also name the output file and state how often we would like to record parameter values.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="fu">monitors.append</span><span class="op">(</span><span class="fu">mnModel</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/ucnl_relaxed_clock.log"</span>, printgen<span class="op">=</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>We use the function <code>mnFile()</code> to save phylogenies sampled in the analysis.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="fu">monitors.append</span><span class="op">(</span><span class="fu">mnFile</span><span class="op">(</span>filename<span class="op">=</span><span class="st">"output/ucln_relaxed_clock.trees"</span>, printgen<span class="op">=</span><span class="fl">10</span>, <span class="va">phylogeny</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>If you’re like me, you’ll want to print information to the screen to monitor the results as the MCMC is running.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="fu">monitors.append</span><span class="op">(</span><span class="fu">mnScreen</span><span class="op">(</span>printgen<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <div class="section level4">
 <h4 id="set-up-the-mcmc">Set-Up the MCMC<a class="anchor" aria-label="anchor" href="#set-up-the-mcmc"></a>
 </h4>
-<p>Once we have set up our model, moves, and monitors, we can now create the workspace variable that defines our MCMC run. We do this using the <code><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc()</a></code> function that simply takes the three main analysis components as arguments.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">mymcmc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">monitors</span>, <span class="va">moves</span>, nruns<span class="op">=</span><span class="fl">2</span>, combine<span class="op">=</span><span class="st">"mixed"</span><span class="op">)</span></code></pre></div>
+<p>Once we have set up our model, moves, and monitors, we can now create the workspace variable that defines our MCMC run. We do this using the <code>mcmc()</code> function that simply takes the three main analysis components as arguments.</p>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 <p>The MCMC object that we named <code>mymcmc</code> has a member method called <code>.run()</code>. This will execute our analysis and we will set the chain length to <code>10000</code> cycles using the <code>generations</code> option.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="fu">mymcmc.run</span><span class="op">(</span>generations<span class="op">=</span><span class="fl">1000</span>, tuningInterval<span class="op">=</span><span class="fl">200</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] "Running MCMC simulation"                                                                             </span>
+<span class="co">## [2] "This simulation runs 2 independent replicates."                                                      </span>
+<span class="co">## [3] "The simulator uses 62 different moves in a random move schedule with 183.2 moves per iteration"      </span>
+<span class="co">## [4] "Iter | Posterior | Likelihood | Prior | elapsed | ETA |"                                             </span>
+<span class="co">## [5] "----------------------------------------------------------------------------------------------------"</span></code></pre>
 <p>Once our Markov chain has terminated, we will want RevBayes to close. Tell the program to quit using the <code><a href="https://rdrr.io/r/base/quit.html" class="external-link">q()</a></code> function.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="fu"><a href="https://rdrr.io/r/base/quit.html" class="external-link">q</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code><span class="co">## [1] ""</span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="youve-finished-dont-forget-to-save-all-of-your-files-">You’ve finished! Don’t forget to save all of your files.<a class="anchor" aria-label="anchor" href="#youve-finished-dont-forget-to-save-all-of-your-files-"></a>
 </h4>
 <p>With all the parameters specified and all analysis components in place, you are now ready to run your analysis. RevBayes cannot run inside the RStudio window. So we will need to copy our code out of RStudio. Luckily, the knitr package makes this very easy. Run the following in the console:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit.html" class="external-link">purl</a></span><span class="op">(</span><span class="st">"Clock_models_for_character_data.Rmd"</span><span class="op">)</span></code></pre></div>
 <p>This will create a .R file containing our analysis script. Move it into the <code>scripts</code> folder and rename it <code>ucln_rel_clock.Rev</code>.</p>
 <blockquote>
 <p>Begin by running the RevBayes executable.</p>
 </blockquote>
 <p>Provided that you started RevBayes from the correct directory, you can then use the <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> function to feed RevBayes your Rev-script file (<code>ucln_rel_clock.Rev</code>).</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>    <span class="bu">source</span>(<span class="st">"scripts/ucln_rel_clock.Rev"</span>)</span></code></pre></div>
 <p>When the analysis is complete, RevBayes will quit and all of the associated files will be in the directory <code>output</code>.</p>
 <p>We can look at the log files in the software <code>Tracer</code>. We can also calculate several different types of summary trees:</p>
 <pre><code><span class="co"># Read in the tree trace and construct different kinds of summary trees </span>
