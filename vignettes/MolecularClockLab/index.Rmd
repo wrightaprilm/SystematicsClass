@@ -1,0 +1,32 @@
+---
+title: "Molecular Clocks Homework"
+author: "April Wright"
+date: "4/6/2022"
+output: html_document
+---
+
+```{r}
+library(Revticulate)
+knitRev()
+```
+
+
+# Molecular clock homework
+
+Make a copies of the mcmc_Morpho.Rev file we worked with in class in your molecular_clock_lab directory. Call the file `clock_strict.Rev`.
+
+In this file: 
+
++ Change from a releaxed, uncorrelated clock to a strict clock
++ Add the code to summarize the tree
++ Run the code until it converges. To make comparisons, you may also want to rerun the relaxed clock to convergence. If you do this, save the log and tree traces under a new name.
+
+# Questions
+
+1. How does the root age of the tree change when we have a strict clock vs. a relaxed one?
+
+2. Compare an unconverged run to a converged one. Do the model parameters change much?
+
+3. Choose one analysis (strict clock or relaxed). Compare the MCC tree to the consensus tree. What do you notice about the two different trees in relationships and resolution?
+
+
