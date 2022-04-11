@@ -7,7 +7,7 @@ output:
 bibliography: ../refs.bib
 ---
 
-This tutorial builds upon the previous three tutorials to estimate a dated phylogeny from discrete morphological data using the Fossilized Birth-Death Model (FBD) [@stadler2010; @heath2014]. Broadly, the FBD model is a "total-evidence" model and can incorporate fossil ages, molecular data, and morphological data to estimate a tree with branch lengths in units of absolute time.
+This tutorial builds upon the previous three tutorials to estimate a dated phylogeny from discrete morphological data using the Fossilized Birth-Death Model (FBD) (Stadler 2010, Heath et al 2014). Broadly, the FBD model is a "total-evidence" model and can incorporate fossil ages, molecular data, and morphological data to estimate a tree with branch lengths in units of absolute time.
 In this tutorial, we will focus on fossil ages and morphological data to estimate our phylogeny. Using an example from a 2013 by Zamora et al., we will estimate a total evidence phylogeny of the Cinctans.
 
 
@@ -51,8 +51,8 @@ from your own paleontological expertise. |
 First, we will load in a list of all the taxa that will be in our analysis. This includes taxa for which we have morphological data, and taxa for which we only have ages. We will load the `cinctans_taxa.tsv` file using the `readTaxonData()`
 function.
 
-```{rb, freshHistoryRB=TRUE}
-    taxa <- readTaxonData("data/cincta_fossil_intervals_FA.tsv")
+```{rb}
+    taxa <- readTaxonData("data/cincta_intervals.tsv")
 ```
 
 This function reads a tab-delimited file and creates a variable called
@@ -361,4 +361,5 @@ conTree(trace, file = "output/conTree.tre")
 ```
 
 The resultant tree files can be viewed in popular tree viewers such as [FigTree](https://github.com/rambaut/figtree/releases) or [IcyTree](https://icytree.org/).
+
 ## References

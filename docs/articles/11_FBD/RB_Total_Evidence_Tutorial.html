@@ -98,6 +98,9 @@
       <a href="../../articles/ModelsHomework/index.html">Models Homework</a>
     </li>
     <li>
+      <a href="../../articles/MolecularClockLab/index.html">Molecular Clocks Homework</a>
+    </li>
+    <li>
       <a href="../../articles/MolecularModelsHomework/index.html">MolecularModelsHomework</a>
     </li>
     <li>
@@ -135,7 +138,7 @@
 
     
     
-<p>This tutorial builds upon the previous three tutorials to estimate a dated phylogeny from discrete morphological data using the Fossilized Birth-Death Model (FBD) <span class="citation">(<span class="citeproc-not-found" data-reference-id="stadler2010"><strong>???</strong></span>; <span class="citeproc-not-found" data-reference-id="heath2014"><strong>???</strong></span>)</span>. Broadly, the FBD model is a “total-evidence” model and can incorporate fossil ages, molecular data, and morphological data to estimate a tree with branch lengths in units of absolute time. In this tutorial, we will focus on fossil ages and morphological data to estimate our phylogeny. Using an example from a 2013 by Zamora et al., we will estimate a total evidence phylogeny of the Cinctans.</p>
+<p>This tutorial builds upon the previous three tutorials to estimate a dated phylogeny from discrete morphological data using the Fossilized Birth-Death Model (FBD) (Stadler 2010, Heath et al 2014). Broadly, the FBD model is a “total-evidence” model and can incorporate fossil ages, molecular data, and morphological data to estimate a tree with branch lengths in units of absolute time. In this tutorial, we will focus on fossil ages and morphological data to estimate our phylogeny. Using an example from a 2013 by Zamora et al., we will estimate a total evidence phylogeny of the Cinctans.</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -161,7 +164,7 @@
 </h4>
 <p>First, we will load in a list of all the taxa that will be in our analysis. This includes taxa for which we have morphological data, and taxa for which we only have ages. We will load the <code>cinctans_taxa.tsv</code> file using the <code>readTaxonData()</code> function.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R">    <span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu">readTaxonData</span><span class="op">(</span><span class="st">"data/cincta_fossil_intervals_FA.tsv"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R">    <span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu">readTaxonData</span><span class="op">(</span><span class="st">"data/cincta_intervals.tsv"</span><span class="op">)</span></code></pre></div>
 <p>This function reads a tab-delimited file and creates a variable called <code>taxa</code> that is a list of all of the taxon names relevant to this analysis. This list includes all of cinctans we are adding to the tree. Because fossils are data under the FBD model, even in the absence of phylogenetic characters, they are included in the file.</p>
 </div>
 <div class="section level4">
@@ -380,7 +383,7 @@
 <p>And then we initialize the model.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-     <span class="va">mymcmc</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/coda/man/mcmc.html" class="external-link">mcmc</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">monitors</span>, <span class="va">moves</span><span class="op">)</span></code></pre></div>
+     <span class="va">mymcmc</span> <span class="op">=</span> <span class="fu">mcmc</span><span class="op">(</span><span class="va">mymodel</span>, <span class="va">monitors</span>, <span class="va">moves</span><span class="op">)</span></code></pre></div>
 <p>And run it. In a real analysis, you would want to run this for far more than 1000 generations.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -397,7 +400,11 @@
 <code class="sourceCode R"><span class="va">trace</span> <span class="op">=</span> <span class="fu">readTreeTrace</span><span class="op">(</span><span class="st">"output/cinc_dated.trees"</span><span class="op">)</span>
 <span class="fu">mccTree</span><span class="op">(</span><span class="va">trace</span>, file <span class="op">=</span> <span class="st">"output/mccTree.tre"</span><span class="op">)</span>
 <span class="fu">conTree</span><span class="op">(</span><span class="va">trace</span>, file <span class="op">=</span> <span class="st">"output/conTree.tre"</span><span class="op">)</span></code></pre></div>
-<p>The resultant tree files can be viewed in popular tree viewers such as <a href="https://github.com/rambaut/figtree/releases" class="external-link">FigTree</a> or <a href="https://icytree.org/" class="external-link">IcyTree</a>. ## References</p>
+<p>The resultant tree files can be viewed in popular tree viewers such as <a href="https://github.com/rambaut/figtree/releases" class="external-link">FigTree</a> or <a href="https://icytree.org/" class="external-link">IcyTree</a>.</p>
+</div>
+<div class="section level3">
+<h3 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h3>
 <div id="refs" class="references hanging-indent">
 <div id="ref-Heath2014">
 <p>Heath, Tracy A, John P Huelsenbeck, and Tanja Stadler. 2014. “The fossilized birth-death process for coherent calibration of divergence-time estimates.” <em>Proceedings of the National Academy of Sciences</em> 111 (29): E2957–E2966.</p>
